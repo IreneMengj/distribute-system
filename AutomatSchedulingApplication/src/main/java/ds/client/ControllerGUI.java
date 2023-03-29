@@ -200,8 +200,13 @@ public class ControllerGUI implements ActionListener{
 
 			//retreving reply from service
 			ds.service1.ResponseMessage response = blockingStub.service1Do(request);
-			String message = response.getMessage();
-			reply1.setText(message);
+
+			int code = response.getLength();
+			if(code==1){
+			reply1.setText("Login successfully");}
+			else{
+				reply1.setText("Login unsuccessfully");
+			}
 
 		
 		}else if (label.equals("Invoke Service 2")) {
