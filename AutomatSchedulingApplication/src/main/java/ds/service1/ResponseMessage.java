@@ -89,6 +89,12 @@ private static final long serialVersionUID = 0L;
     return length_;
   }
 
+  private String message;
+  public String getMessage() {
+    return this.message;
+  }
+
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -417,6 +423,22 @@ private static final long serialVersionUID = 0L;
       onChanged();
       return this;
     }
+
+    private String message;
+    public String getMessage() {
+      return message;
+    }
+    public Builder setMessage(String message) {
+      this.message = message;
+      onChanged();
+      return this;
+    }
+    public Builder clearMessage() {
+      message = "";
+      onChanged();
+      return this;
+    }
+
     @java.lang.Override
     public final Builder setUnknownFields(
         final com.google.protobuf.UnknownFieldSet unknownFields) {

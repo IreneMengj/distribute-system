@@ -30,14 +30,21 @@ public class Service1 extends Service1ImplBase{
 
 	@Override
 	public void service1Do(RequestMessage request, StreamObserver<ResponseMessage> responseObserver) {
-
+		String username="irene";
+		String password="123456";
 		//prepare the value to be set back
-		int length = request.getText().length();
-		
+//		int length = request.getText().length();
+		String text = request.getText();
+		String[] s = text.split(" ");
 		//preparing the response message
-		ResponseMessage reply = ResponseMessage.newBuilder().setLength(length).build();
+		ResponseMessage reply=null;
+		if("irene".equals(s[0])&&"123456".equals(s[1])){
+			reply = ResponseMessage.newBuilder().setMessage("Log in successfully!").build();
 
-		responseObserver.onNext( reply ); 
+		}else{
+			reply = ResponseMessage.newBuilder().setMessage("Log in unsuccessfully!").build();
+		}
+		responseObserver.onNext( reply );
 
 		responseObserver.onCompleted();
 

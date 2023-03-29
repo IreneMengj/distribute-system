@@ -40,7 +40,7 @@ public class ControllerGUI implements ActionListener{
 		JLabel label = new JLabel("Enter value")	;
 		panel.add(label);
 		panel.add(Box.createRigidArea(new Dimension(10, 0)));
-		entry1 = new JTextField("",10);
+		entry1 = new JTextField("",12);
 		panel.add(entry1);
 		panel.add(Box.createRigidArea(new Dimension(10, 0)));
 
@@ -49,9 +49,9 @@ public class ControllerGUI implements ActionListener{
 		panel.add(button);
 		panel.add(Box.createRigidArea(new Dimension(10, 0)));
 
-		reply1 = new JTextField("", 10);
+		reply1 = new JTextField("", 12);
 		reply1 .setEditable(false);
-		panel.add(reply1 );
+        panel.add(reply1 );
 
 		panel.setLayout(boxlayout);
 
@@ -68,7 +68,7 @@ public class ControllerGUI implements ActionListener{
 		JLabel label = new JLabel("Enter value")	;
 		panel.add(label);
 		panel.add(Box.createRigidArea(new Dimension(10, 0)));
-		entry2 = new JTextField("",10);
+		entry2 = new JTextField("",12);
 		panel.add(entry2);
 		panel.add(Box.createRigidArea(new Dimension(10, 0)));
 
@@ -77,7 +77,7 @@ public class ControllerGUI implements ActionListener{
 		panel.add(button);
 		panel.add(Box.createRigidArea(new Dimension(10, 0)));
 
-		reply2 = new JTextField("", 10);
+		reply2 = new JTextField("", 12);
 		reply2 .setEditable(false);
 		panel.add(reply2 );
 
@@ -96,7 +96,7 @@ public class ControllerGUI implements ActionListener{
 		JLabel label = new JLabel("Enter value")	;
 		panel.add(label);
 		panel.add(Box.createRigidArea(new Dimension(10, 0)));
-		entry3 = new JTextField("",10);
+		entry3 = new JTextField("",12);
 		panel.add(entry3);
 		panel.add(Box.createRigidArea(new Dimension(10, 0)));
 
@@ -105,7 +105,7 @@ public class ControllerGUI implements ActionListener{
 		panel.add(button);
 		panel.add(Box.createRigidArea(new Dimension(10, 0)));
 
-		reply3 = new JTextField("", 10);
+		reply3 = new JTextField("", 12);
 		reply3 .setEditable(false);
 		panel.add(reply3 );
 
@@ -124,7 +124,7 @@ public class ControllerGUI implements ActionListener{
 		JLabel label = new JLabel("Enter value")	;
 		panel.add(label);
 		panel.add(Box.createRigidArea(new Dimension(10, 0)));
-		entry4 = new JTextField("",10);
+		entry4 = new JTextField("",12);
 		panel.add(entry4);
 		panel.add(Box.createRigidArea(new Dimension(10, 0)));
 
@@ -133,7 +133,7 @@ public class ControllerGUI implements ActionListener{
 		panel.add(button);
 		panel.add(Box.createRigidArea(new Dimension(10, 0)));
 
-		reply4 = new JTextField("", 10);
+		reply4 = new JTextField("", 12);
 		reply4 .setEditable(false);
 		panel.add(reply4 );
 
@@ -200,8 +200,9 @@ public class ControllerGUI implements ActionListener{
 
 			//retreving reply from service
 			ds.service1.ResponseMessage response = blockingStub.service1Do(request);
+			String message = response.getMessage();
+			reply1.setText(message);
 
-			reply1.setText( String.valueOf( response.getLength()) );
 		
 		}else if (label.equals("Invoke Service 2")) {
 			System.out.println("service 2 to be invoked ...");
@@ -224,9 +225,9 @@ public class ControllerGUI implements ActionListener{
 		}else if (label.equals("Invoke Service 3")) {
 			System.out.println("service 3 to be invoked ...");
 
-		
+
 			/*
-			 * 
+			 *
 			 */
 			ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 50053).usePlaintext().build();
 			Service3Grpc.Service3BlockingStub blockingStub = Service3Grpc.newBlockingStub(channel);
