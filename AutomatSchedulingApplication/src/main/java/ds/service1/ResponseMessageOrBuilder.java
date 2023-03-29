@@ -10,5 +10,6 @@ public interface ResponseMessageOrBuilder extends
   /**
    * <code>int32 length = 1;</code>
    */
+  String getMessage();
   int getLength();
 }

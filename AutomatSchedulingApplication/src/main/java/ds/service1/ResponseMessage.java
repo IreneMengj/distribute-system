@@ -16,7 +16,7 @@ private static final long serialVersionUID = 0L;
     super(builder);
   }
   private ResponseMessage() {
-    length_ = 0;
+    code_ = 0;
   }
 
   @java.lang.Override
@@ -45,7 +45,7 @@ private static final long serialVersionUID = 0L;
             break;
           case 8: {
 
-            length_ = input.readInt32();
+            code_ = input.readInt32();
             break;
           }
           default: {
@@ -81,12 +81,12 @@ private static final long serialVersionUID = 0L;
   }
 
   public static final int LENGTH_FIELD_NUMBER = 1;
-  private int length_;
+  private int code_;
   /**
    * <code>int32 length = 1;</code>
    */
   public int getLength() {
-    return length_;
+    return code_;
   }
 
   private String message;
@@ -109,8 +109,8 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
-    if (length_ != 0) {
-      output.writeInt32(1, length_);
+    if (code_ != 0) {
+      output.writeInt32(1, code_);
     }
     unknownFields.writeTo(output);
   }
@@ -121,9 +121,9 @@ private static final long serialVersionUID = 0L;
     if (size != -1) return size;
 
     size = 0;
-    if (length_ != 0) {
+    if (code_ != 0) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt32Size(1, length_);
+        .computeInt32Size(1, code_);
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -289,7 +289,7 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public Builder clear() {
       super.clear();
-      length_ = 0;
+      code_ = 0;
 
       return this;
     }
@@ -317,7 +317,7 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public ds.service1.ResponseMessage buildPartial() {
       ds.service1.ResponseMessage result = new ds.service1.ResponseMessage(this);
-      result.length_ = length_;
+      result.code_ = code_;
       onBuilt();
       return result;
     }
@@ -398,19 +398,19 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    private int length_ ;
+    private int code_ ;
     /**
      * <code>int32 length = 1;</code>
      */
     public int getLength() {
-      return length_;
+      return code_;
     }
     /**
      * <code>int32 length = 1;</code>
      */
     public Builder setLength(int value) {
       
-      length_ = value;
+      code_ = value;
       onChanged();
       return this;
     }
@@ -419,14 +419,14 @@ private static final long serialVersionUID = 0L;
      */
     public Builder clearLength() {
       
-      length_ = 0;
+      code_ = 0;
       onChanged();
       return this;
     }
 
     private String message;
     public String getMessage() {
-      return message;
+      return this.message;
     }
     public Builder setMessage(String message) {
       this.message = message;

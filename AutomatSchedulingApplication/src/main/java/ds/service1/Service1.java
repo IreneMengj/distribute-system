@@ -39,10 +39,10 @@ public class Service1 extends Service1ImplBase{
 		//preparing the response message
 		ResponseMessage reply=null;
 		if("irene".equals(s[0])&&"123456".equals(s[1])){
-			reply = ResponseMessage.newBuilder().setMessage("Log in successfully!").build();
+			reply = ResponseMessage.newBuilder().setLength(1).build();
 
 		}else{
-			reply = ResponseMessage.newBuilder().setMessage("Log in unsuccessfully!").build();
+			reply = ResponseMessage.newBuilder().setLength(0).build();
 		}
 		responseObserver.onNext( reply );
 
