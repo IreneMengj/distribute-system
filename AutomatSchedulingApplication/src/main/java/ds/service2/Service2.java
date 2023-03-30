@@ -7,7 +7,7 @@ import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
 
-
+//make an appointment
 public class Service2 extends Service2ImplBase{
 
 
