@@ -1,13 +1,13 @@
 syntax = "proto3";
 
-option java_multiple_files = true;
+option java_multiple_files = false;
 option java_package = "ds.service1";
 option java_outer_classname = "Service1Impl";
 
 package service1;
 
 // Interface exported by the server.
-service UserManagement {
+service Service1 {
   
   rpc service1_do(RequestMessage) returns (ResponseMessage) {}
     
@@ -15,9 +15,9 @@ service UserManagement {
 
 message RequestMessage {
   string username = 1;
-  string password=2;
+  string password = 2;
 }
 
 message ResponseMessage {
-  int32 Code = 1;
+  int32 code = 1;
 }
