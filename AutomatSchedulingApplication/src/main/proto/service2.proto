@@ -9,14 +9,22 @@ package service2;
 // Interface exported by the server.
 service Service2 {
   
-  rpc service2_do(RequestMessage) returns (ResponseMessage) {}
+  rpc service2_do(AppointmentRequest) returns (ResponseMessage) {}
     
 }
 
-message RequestMessage {
-  string text = 1;  
+message AppointmentRequest{
+  repeated Appointment appointments = 1;
+}
+
+message Appointment {
+  int32 id=1;
+  string title=2;
+  string detail=3;
+  int64 occurTime=4;
+
 }
 
 message ResponseMessage {
-  int32 length = 1;
+  int32 code = 1;
 }
