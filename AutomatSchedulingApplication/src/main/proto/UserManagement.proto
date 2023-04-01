@@ -7,17 +7,17 @@ option java_outer_classname = "Service1Impl";
 package service1;
 
 // Interface exported by the server.
-service Service1 {
+service UserManagement {
   
   rpc service1_do(RequestMessage) returns (ResponseMessage) {}
     
 }
 
 message RequestMessage {
-  string text = 1;
+  string username = 1;
   string password=2;
 }
 
 message ResponseMessage {
-  int32 successCode = 1;
+  int32 Code = 1;
 }
