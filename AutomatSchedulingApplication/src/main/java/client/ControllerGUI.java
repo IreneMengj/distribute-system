@@ -15,6 +15,8 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import ds.service1.Service1Grpc;
+import ds.service2.Appointment;
+import ds.service2.AppointmentOrBuilder;
 import ds.service2.Service2Grpc;
 import ds.service3.Service3Grpc;
 
@@ -25,31 +27,70 @@ import io.grpc.ManagedChannelBuilder;
 public class ControllerGUI implements ActionListener{
 
 
-	private JTextField entry1, reply1;
+	private JTextField entry1_1,entry1_2, reply1;
 	private JTextField entry2, reply2;
 	private JTextField entry3, reply3;
 	private JTextField entry4, reply4;
 
 
-	private JPanel getService1JPanel() {
+	private JPanel getService1Method1JPanel() {
 
 		JPanel panel = new JPanel();
 
 		BoxLayout boxlayout = new BoxLayout(panel, BoxLayout.X_AXIS);
 
-		JLabel label = new JLabel("Enter value")	;
-		panel.add(label);
+		JLabel label1 = new JLabel("Username")	;
+		panel.add(label1);
 		panel.add(Box.createRigidArea(new Dimension(10, 0)));
-		entry1 = new JTextField("",10);
-		panel.add(entry1);
-		panel.add(Box.createRigidArea(new Dimension(10, 0)));
+		entry1_1 = new JTextField("",10);
+		panel.add(entry1_1);
 
-		JButton button = new JButton("Invoke Service 1");
+		JLabel label2 = new JLabel("Password")	;
+		panel.add(label2);
+		panel.add(Box.createRigidArea(new Dimension(10, 0)));
+		entry1_2 = new JTextField("",10);
+		panel.add(entry1_2);
+
+		panel.add(Box.createRigidArea(new Dimension(10, 0)));
+		JButton button = new JButton("Log in");
 		button.addActionListener(this);
 		panel.add(button);
-		panel.add(Box.createRigidArea(new Dimension(10, 0)));
 
-		reply1 = new JTextField("", 10);
+		panel.add(Box.createRigidArea(new Dimension(10, 0)));
+		reply1 = new JTextField("", 20);
+		reply1 .setEditable(false);
+		panel.add(reply1 );
+
+		panel.setLayout(boxlayout);
+
+		return panel;
+
+	}
+	private JPanel getService1Method2JPanel() {
+
+		JPanel panel = new JPanel();
+
+		BoxLayout boxlayout = new BoxLayout(panel, BoxLayout.X_AXIS);
+
+		JLabel label1 = new JLabel("Username")	;
+		panel.add(label1);
+		panel.add(Box.createRigidArea(new Dimension(10, 0)));
+		entry1_1 = new JTextField("",10);
+		panel.add(entry1_1);
+
+		JLabel label2 = new JLabel("Password")	;
+		panel.add(label2);
+		panel.add(Box.createRigidArea(new Dimension(10, 0)));
+		entry1_2 = new JTextField("",10);
+		panel.add(entry1_2);
+
+		panel.add(Box.createRigidArea(new Dimension(10, 0)));
+		JButton button = new JButton("Sign up");
+		button.addActionListener(this);
+		panel.add(button);
+
+		panel.add(Box.createRigidArea(new Dimension(10, 0)));
+		reply1 = new JTextField("", 20);
 		reply1 .setEditable(false);
 		panel.add(reply1 );
 
@@ -151,7 +192,7 @@ public class ControllerGUI implements ActionListener{
 
 	private void build() { 
 
-		JFrame frame = new JFrame("Service Controller Sample");
+		JFrame frame = new JFrame("Automated Scheduling Application");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		// Set the panel to add buttons
@@ -165,13 +206,14 @@ public class ControllerGUI implements ActionListener{
 		// Set border for the panel
 		panel.setBorder(new EmptyBorder(new Insets(50, 100, 50, 100)));
 	
-		panel.add( getService1JPanel() );
+		panel.add( getService1Method1JPanel() );
+		panel.add( getService1Method2JPanel() );
 		panel.add( getService2JPanel() );
 		panel.add( getService3JPanel() );
 		panel.add( getService4JPanel() );
 
 		// Set size for the frame
-		frame.setSize(300, 300);
+		frame.setSize(500, 500);
 
 		// Set the window to be visible as the default to be false
 		frame.add(panel);
@@ -185,10 +227,8 @@ public class ControllerGUI implements ActionListener{
 		JButton button = (JButton)e.getSource();
 		String label = button.getActionCommand();  
 
-		if (label.equals("Invoke Service 1")) {
-			System.out.println("service 1 to be invoked ...");
-
-		
+		if (label.equals("Log in")) {
+			System.out.println("RPC LOGIN to be invoked ...");
 			/*
 			 * 
 			 */
@@ -196,19 +236,39 @@ public class ControllerGUI implements ActionListener{
 			Service1Grpc.Service1BlockingStub blockingStub = Service1Grpc.newBlockingStub(channel);
 
 			//preparing message to send
-			String text = entry1.getText();
-			String[] s = text.split(" ");
-			ds.service1.RequestMessage request = ds.service1.RequestMessage.newBuilder().setUsername(s[0]).build();
-			ds.service1.RequestMessage request = ds.service1.RequestMessage.newBuilder().setPassword(s[1]).build();
+			String username = entry1_1.getText();
+			String password = entry1_2.getText();
+			ds.service1.RequestMessage request = ds.service1.RequestMessage.newBuilder().setUsername(username).setPassword(password).build();
 			//retreving reply from service
 			ds.service1.ResponseMessage response = blockingStub.service1Do(request);
+			int code = response.getCode();
+			if(code==1) {
+				reply1.setText("Login successfully");
+			}else{
+				reply1.setText("Login unsuccessfully.");
+			}
+		}else if(label.equals("Sign up")){
+			System.out.println("RPC Signup to be invoked ...");
+			/*
+			 *
+			 */
+			ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 50051).usePlaintext().build();
+			Service1Grpc.Service1BlockingStub blockingStub = Service1Grpc.newBlockingStub(channel);
 
-			reply1.setText( String.valueOf( response.getCode()) );
-		
+			//preparing message to send
+			String username = entry1_1.getText();
+			String password = entry1_2.getText();
+			ds.service1.RequestMessage request = ds.service1.RequestMessage.newBuilder().setUsername(username).setPassword(password).build();
+			//retreving reply from service
+			ds.service1.ResponseMessage response = blockingStub.service1Do(request);
+			int code = response.getCode();
+			if(code==1) {
+				reply1.setText("Sign up successfully");
+			}else{
+				reply1.setText("Sign up unsuccessfully.");
+			}
 		}else if (label.equals("Invoke Service 2")) {
 			System.out.println("service 2 to be invoked ...");
-
-		
 			/*
 			 * 
 			 */
@@ -216,12 +276,12 @@ public class ControllerGUI implements ActionListener{
 			Service2Grpc.Service2BlockingStub blockingStub = Service2Grpc.newBlockingStub(channel);
 
 			//preparing message to send
-			ds.service2.RequestMessage request = ds.service2.RequestMessage.newBuilder().setText(entry2.getText()).build();
+			ds.service2.AppointmentRequest request = ds.service2.AppointmentRequest.newBuilder().setAppointments(1, Appointment.newBuilder().setId(1).setTitle("haha").setDetail("yingying").setOccurTime(202310122)).build();
 
 			//retreving reply from service
 			ds.service2.ResponseMessage response = blockingStub.service2Do(request);
 
-			reply2.setText( String.valueOf( response.get()) );
+			reply2.setText( String.valueOf( response.getCode()) );
 			
 		}else if (label.equals("Invoke Service 3")) {
 			System.out.println("service 3 to be invoked ...");
@@ -241,26 +301,6 @@ public class ControllerGUI implements ActionListener{
 
 			reply3.setText( String.valueOf( response.getLength()) );
 		
-		}else if (label.equals("Invoke Service 4")) {
-			System.out.println("service 4 to be invoked ...");
-
-		
-			/*
-			 * 
-			 */
-			ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 50054).usePlaintext().build();
-			Service4Grpc.Service4BlockingStub blockingStub = Service4Grpc.newBlockingStub(channel);
-
-			//preparing message to send
-			ds.service4.RequestMessage request = ds.service4.RequestMessage.newBuilder().setText(entry4.getText()).build();
-
-			//retreving reply from service
-			ds.service4.ResponseMessage response = blockingStub.service4Do(request);
-
-			reply4.setText( String.valueOf( response.getLength()) );
-		
-		}else{
-			
 		}
 
 	}

@@ -8,6 +8,9 @@ import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class Service1 extends Service1Grpc.Service1ImplBase {
     public static void main(String[] args) throws InterruptedException, IOException {
@@ -26,6 +29,10 @@ public class Service1 extends Service1Grpc.Service1ImplBase {
     }
     @Override
     public void service1Do(RequestMessage request, StreamObserver<ResponseMessage> responseObserver) {
+        //create a map to save username and password
+        HashMap<String,Integer> map=new HashMap<String, Integer>();
+        map.put("irene",123456);
+
         String username = request.getUsername();
         String password = request.getPassword();
         ResponseMessage reply;
