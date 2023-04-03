@@ -9,7 +9,8 @@ package service1;
 // Interface exported by the server.
 service Service1 {
   
-  rpc service1_do(RequestMessage) returns (ResponseMessage) {}
+  rpc login(RequestMessage) returns (ResponseMessage) {}
+  rpc signup(RequestMessage) returns (ResponseMessage){}
     
 }
 

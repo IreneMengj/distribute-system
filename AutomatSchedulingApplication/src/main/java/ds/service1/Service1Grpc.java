@@ -18,35 +18,66 @@ public final class Service1Grpc {
   public static final String SERVICE_NAME = "service1.Service1";
 
   // Static method descriptors that strictly reflect the proto.
-  private static volatile io.grpc.MethodDescriptor<RequestMessage,
-      ResponseMessage> getService1DoMethod;
+  private static volatile io.grpc.MethodDescriptor<ds.service1.RequestMessage,
+      ds.service1.ResponseMessage> getLoginMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
-      fullMethodName = SERVICE_NAME + '/' + "service1_do",
-      requestType = RequestMessage.class,
-      responseType = ResponseMessage.class,
+      fullMethodName = SERVICE_NAME + '/' + "login",
+      requestType = ds.service1.RequestMessage.class,
+      responseType = ds.service1.ResponseMessage.class,
       methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
-  public static io.grpc.MethodDescriptor<RequestMessage,
-      ResponseMessage> getService1DoMethod() {
-    io.grpc.MethodDescriptor<RequestMessage, ResponseMessage> getService1DoMethod;
-    if ((getService1DoMethod = Service1Grpc.getService1DoMethod) == null) {
+  public static io.grpc.MethodDescriptor<ds.service1.RequestMessage,
+      ds.service1.ResponseMessage> getLoginMethod() {
+    io.grpc.MethodDescriptor<ds.service1.RequestMessage, ds.service1.ResponseMessage> getLoginMethod;
+    if ((getLoginMethod = Service1Grpc.getLoginMethod) == null) {
       synchronized (Service1Grpc.class) {
-        if ((getService1DoMethod = Service1Grpc.getService1DoMethod) == null) {
-          Service1Grpc.getService1DoMethod = getService1DoMethod =
-              io.grpc.MethodDescriptor.<RequestMessage, ResponseMessage>newBuilder()
+        if ((getLoginMethod = Service1Grpc.getLoginMethod) == null) {
+          Service1Grpc.getLoginMethod = getLoginMethod =
+              io.grpc.MethodDescriptor.<ds.service1.RequestMessage, ds.service1.ResponseMessage>newBuilder()
               .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
-              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "service1_do"))
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "login"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  RequestMessage.getDefaultInstance()))
+                  ds.service1.RequestMessage.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  ResponseMessage.getDefaultInstance()))
-              .setSchemaDescriptor(new Service1MethodDescriptorSupplier("service1_do"))
+                  ds.service1.ResponseMessage.getDefaultInstance()))
+              .setSchemaDescriptor(new Service1MethodDescriptorSupplier("login"))
               .build();
         }
       }
     }
-    return getService1DoMethod;
+    return getLoginMethod;
+  }
+
+  private static volatile io.grpc.MethodDescriptor<ds.service1.RequestMessage,
+      ds.service1.ResponseMessage> getSignupMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "signup",
+      requestType = ds.service1.RequestMessage.class,
+      responseType = ds.service1.ResponseMessage.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<ds.service1.RequestMessage,
+      ds.service1.ResponseMessage> getSignupMethod() {
+    io.grpc.MethodDescriptor<ds.service1.RequestMessage, ds.service1.ResponseMessage> getSignupMethod;
+    if ((getSignupMethod = Service1Grpc.getSignupMethod) == null) {
+      synchronized (Service1Grpc.class) {
+        if ((getSignupMethod = Service1Grpc.getSignupMethod) == null) {
+          Service1Grpc.getSignupMethod = getSignupMethod =
+              io.grpc.MethodDescriptor.<ds.service1.RequestMessage, ds.service1.ResponseMessage>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "signup"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  ds.service1.RequestMessage.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  ds.service1.ResponseMessage.getDefaultInstance()))
+              .setSchemaDescriptor(new Service1MethodDescriptorSupplier("signup"))
+              .build();
+        }
+      }
+    }
+    return getSignupMethod;
   }
 
   /**
@@ -55,7 +86,7 @@ public final class Service1Grpc {
   public static Service1Stub newStub(io.grpc.Channel channel) {
     io.grpc.stub.AbstractStub.StubFactory<Service1Stub> factory =
       new io.grpc.stub.AbstractStub.StubFactory<Service1Stub>() {
-        @Override
+        @java.lang.Override
         public Service1Stub newStub(io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
           return new Service1Stub(channel, callOptions);
         }
@@ -70,7 +101,7 @@ public final class Service1Grpc {
       io.grpc.Channel channel) {
     io.grpc.stub.AbstractStub.StubFactory<Service1BlockingStub> factory =
       new io.grpc.stub.AbstractStub.StubFactory<Service1BlockingStub>() {
-        @Override
+        @java.lang.Override
         public Service1BlockingStub newStub(io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
           return new Service1BlockingStub(channel, callOptions);
         }
@@ -85,7 +116,7 @@ public final class Service1Grpc {
       io.grpc.Channel channel) {
     io.grpc.stub.AbstractStub.StubFactory<Service1FutureStub> factory =
       new io.grpc.stub.AbstractStub.StubFactory<Service1FutureStub>() {
-        @Override
+        @java.lang.Override
         public Service1FutureStub newStub(io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
           return new Service1FutureStub(channel, callOptions);
         }
@@ -102,20 +133,34 @@ public final class Service1Grpc {
 
     /**
      */
-    public void service1Do(RequestMessage request,
-                           io.grpc.stub.StreamObserver<ResponseMessage> responseObserver) {
-      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getService1DoMethod(), responseObserver);
+    public void login(ds.service1.RequestMessage request,
+        io.grpc.stub.StreamObserver<ds.service1.ResponseMessage> responseObserver) {
+      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getLoginMethod(), responseObserver);
     }
 
-    @Override public final io.grpc.ServerServiceDefinition bindService() {
+    /**
+     */
+    public void signup(ds.service1.RequestMessage request,
+        io.grpc.stub.StreamObserver<ds.service1.ResponseMessage> responseObserver) {
+      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getSignupMethod(), responseObserver);
+    }
+
+    @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
           .addMethod(
-            getService1DoMethod(),
+            getLoginMethod(),
             io.grpc.stub.ServerCalls.asyncUnaryCall(
               new MethodHandlers<
-                RequestMessage,
-                ResponseMessage>(
-                  this, METHODID_SERVICE1_DO)))
+                ds.service1.RequestMessage,
+                ds.service1.ResponseMessage>(
+                  this, METHODID_LOGIN)))
+          .addMethod(
+            getSignupMethod(),
+            io.grpc.stub.ServerCalls.asyncUnaryCall(
+              new MethodHandlers<
+                ds.service1.RequestMessage,
+                ds.service1.ResponseMessage>(
+                  this, METHODID_SIGNUP)))
           .build();
     }
   }
@@ -131,7 +176,7 @@ public final class Service1Grpc {
       super(channel, callOptions);
     }
 
-    @Override
+    @java.lang.Override
     protected Service1Stub build(
         io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
       return new Service1Stub(channel, callOptions);
@@ -139,10 +184,18 @@ public final class Service1Grpc {
 
     /**
      */
-    public void service1Do(RequestMessage request,
-                           io.grpc.stub.StreamObserver<ResponseMessage> responseObserver) {
+    public void login(ds.service1.RequestMessage request,
+        io.grpc.stub.StreamObserver<ds.service1.ResponseMessage> responseObserver) {
       io.grpc.stub.ClientCalls.asyncUnaryCall(
-          getChannel().newCall(getService1DoMethod(), getCallOptions()), request, responseObserver);
+          getChannel().newCall(getLoginMethod(), getCallOptions()), request, responseObserver);
+    }
+
+    /**
+     */
+    public void signup(ds.service1.RequestMessage request,
+        io.grpc.stub.StreamObserver<ds.service1.ResponseMessage> responseObserver) {
+      io.grpc.stub.ClientCalls.asyncUnaryCall(
+          getChannel().newCall(getSignupMethod(), getCallOptions()), request, responseObserver);
     }
   }
 
@@ -157,7 +210,7 @@ public final class Service1Grpc {
       super(channel, callOptions);
     }
 
-    @Override
+    @java.lang.Override
     protected Service1BlockingStub build(
         io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
       return new Service1BlockingStub(channel, callOptions);
@@ -165,9 +218,16 @@ public final class Service1Grpc {
 
     /**
      */
-    public ResponseMessage service1Do(RequestMessage request) {
+    public ds.service1.ResponseMessage login(ds.service1.RequestMessage request) {
       return io.grpc.stub.ClientCalls.blockingUnaryCall(
-          getChannel(), getService1DoMethod(), getCallOptions(), request);
+          getChannel(), getLoginMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public ds.service1.ResponseMessage signup(ds.service1.RequestMessage request) {
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getSignupMethod(), getCallOptions(), request);
     }
   }
 
@@ -182,7 +242,7 @@ public final class Service1Grpc {
       super(channel, callOptions);
     }
 
-    @Override
+    @java.lang.Override
     protected Service1FutureStub build(
         io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
       return new Service1FutureStub(channel, callOptions);
@@ -190,14 +250,23 @@ public final class Service1Grpc {
 
     /**
      */
-    public com.google.common.util.concurrent.ListenableFuture<ResponseMessage> service1Do(
-        RequestMessage request) {
+    public com.google.common.util.concurrent.ListenableFuture<ds.service1.ResponseMessage> login(
+        ds.service1.RequestMessage request) {
       return io.grpc.stub.ClientCalls.futureUnaryCall(
-          getChannel().newCall(getService1DoMethod(), getCallOptions()), request);
+          getChannel().newCall(getLoginMethod(), getCallOptions()), request);
+    }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<ds.service1.ResponseMessage> signup(
+        ds.service1.RequestMessage request) {
+      return io.grpc.stub.ClientCalls.futureUnaryCall(
+          getChannel().newCall(getSignupMethod(), getCallOptions()), request);
     }
   }
 
-  private static final int METHODID_SERVICE1_DO = 0;
+  private static final int METHODID_LOGIN = 0;
+  private static final int METHODID_SIGNUP = 1;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -212,21 +281,25 @@ public final class Service1Grpc {
       this.methodId = methodId;
     }
 
-    @Override
-    @SuppressWarnings("unchecked")
+    @java.lang.Override
+    @java.lang.SuppressWarnings("unchecked")
     public void invoke(Req request, io.grpc.stub.StreamObserver<Resp> responseObserver) {
       switch (methodId) {
-        case METHODID_SERVICE1_DO:
-          serviceImpl.service1Do((RequestMessage) request,
-              (io.grpc.stub.StreamObserver<ResponseMessage>) responseObserver);
+        case METHODID_LOGIN:
+          serviceImpl.login((ds.service1.RequestMessage) request,
+              (io.grpc.stub.StreamObserver<ds.service1.ResponseMessage>) responseObserver);
+          break;
+        case METHODID_SIGNUP:
+          serviceImpl.signup((ds.service1.RequestMessage) request,
+              (io.grpc.stub.StreamObserver<ds.service1.ResponseMessage>) responseObserver);
           break;
         default:
           throw new AssertionError();
       }
     }
 
-    @Override
-    @SuppressWarnings("unchecked")
+    @java.lang.Override
+    @java.lang.SuppressWarnings("unchecked")
     public io.grpc.stub.StreamObserver<Req> invoke(
         io.grpc.stub.StreamObserver<Resp> responseObserver) {
       switch (methodId) {
@@ -240,12 +313,12 @@ public final class Service1Grpc {
       implements io.grpc.protobuf.ProtoFileDescriptorSupplier, io.grpc.protobuf.ProtoServiceDescriptorSupplier {
     Service1BaseDescriptorSupplier() {}
 
-    @Override
+    @java.lang.Override
     public com.google.protobuf.Descriptors.FileDescriptor getFileDescriptor() {
-      return Service1Impl.getDescriptor();
+      return ds.service1.Service1Impl.getDescriptor();
     }
 
-    @Override
+    @java.lang.Override
     public com.google.protobuf.Descriptors.ServiceDescriptor getServiceDescriptor() {
       return getFileDescriptor().findServiceByName("Service1");
     }
@@ -265,7 +338,7 @@ public final class Service1Grpc {
       this.methodName = methodName;
     }
 
-    @Override
+    @java.lang.Override
     public com.google.protobuf.Descriptors.MethodDescriptor getMethodDescriptor() {
       return getServiceDescriptor().findMethodByName(methodName);
     }
@@ -281,7 +354,8 @@ public final class Service1Grpc {
         if (result == null) {
           serviceDescriptor = result = io.grpc.ServiceDescriptor.newBuilder(SERVICE_NAME)
               .setSchemaDescriptor(new Service1FileDescriptorSupplier())
-              .addMethod(getService1DoMethod())
+              .addMethod(getLoginMethod())
+              .addMethod(getSignupMethod())
               .build();
         }
       }

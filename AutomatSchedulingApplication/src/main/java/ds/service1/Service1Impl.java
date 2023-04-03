@@ -32,13 +32,15 @@ public final class Service1Impl {
   private static  com.google.protobuf.Descriptors.FileDescriptor
       descriptor;
   static {
-    String[] descriptorData = {
+    java.lang.String[] descriptorData = {
       "\n\016service1.proto\022\010service1\"4\n\016RequestMes" +
       "sage\022\020\n\010username\030\001 \001(\t\022\020\n\010password\030\002 \001(\t" +
-      "\"\037\n\017ResponseMessage\022\014\n\004code\030\001 \001(\0052P\n\010Ser" +
-      "vice1\022D\n\013service1_do\022\030.service1.RequestM" +
-      "essage\032\031.service1.ResponseMessage\"\000B\035\n\013d" +
-      "s.service1B\014Service1ImplP\001b\006proto3"
+      "\"\037\n\017ResponseMessage\022\014\n\004code\030\001 \001(\0052\213\001\n\010Se" +
+      "rvice1\022>\n\005login\022\030.service1.RequestMessag" +
+      "e\032\031.service1.ResponseMessage\"\000\022?\n\006signup" +
+      "\022\030.service1.RequestMessage\032\031.service1.Re" +
+      "sponseMessage\"\000B\035\n\013ds.service1B\014Service1" +
+      "ImplP\001b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -49,13 +51,13 @@ public final class Service1Impl {
     internal_static_service1_RequestMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_service1_RequestMessage_descriptor,
-        new String[] { "Username", "Password", });
+        new java.lang.String[] { "Username", "Password", });
     internal_static_service1_ResponseMessage_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_service1_ResponseMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_service1_ResponseMessage_descriptor,
-        new String[] { "Code", });
+        new java.lang.String[] { "Code", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)
