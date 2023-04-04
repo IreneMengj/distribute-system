@@ -1,8 +1,8 @@
-package service;
+package Login.service;
 
-import ds.service1.RequestMessage;
-import ds.service1.ResponseMessage;
-import ds.service1.Service1Grpc;
+import Login.ds.service1.RequestMessage;
+import Login.ds.service1.ResponseMessage;
+import Login.ds.service1.Service1Grpc;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
@@ -26,43 +26,46 @@ public class Service1 extends Service1Grpc.Service1ImplBase {
 
         server.awaitTermination();
     }
+
     //create a map to save username and password
-    HashMap<String, String> map=new HashMap<String, String>();
+    HashMap<String, String> map = new HashMap<String, String>();
 
 
     @Override
     public void login(RequestMessage request, StreamObserver<ResponseMessage> responseObserver) {
-        map.put("irene","123456");
+        map.put("irene", "123456");
 
         String username = request.getUsername();
         String password = request.getPassword();
         ResponseMessage reply;
 
         //preparing the response message
-        if("irene".equals(username)&&"123456".equals(password)) {
+        if ("irene".equals(username) && "123456".equals(password)) {
             reply = ResponseMessage.newBuilder().setCode(1).build();
-        }else{
+        } else {
             reply = ResponseMessage.newBuilder().setCode(0).build();
         }
-        responseObserver.onNext( reply );
+        responseObserver.onNext(reply);
 
         responseObserver.onCompleted();
     }
 
     @Override
     public void signup(RequestMessage request, StreamObserver<ResponseMessage> responseObserver) {
-        map.put("irene","123456");
+        map.put("irene", "123456");
         String username = request.getUsername();
         String password = request.getPassword();
         ResponseMessage reply;
         //preparing the response message
-        if(!map.containsKey("irene")){
-            map.put(username,password);
+
+        if (!map.containsKey(username)) {
+            map.put(username, password);
             reply = ResponseMessage.newBuilder().setCode(1).build();
-        } else{
+        } else {
             reply = ResponseMessage.newBuilder().setCode(0).build();
         }
-        responseObserver.onNext( reply );
+
+        responseObserver.onNext(reply);
 
         responseObserver.onCompleted();
 

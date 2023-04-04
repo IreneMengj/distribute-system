@@ -1,4 +1,4 @@
-package client;
+package Login.client;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -7,17 +7,13 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
-import ds.service1.Service1Grpc;
-import ds.service2.Appointment;
-import ds.service2.AppointmentOrBuilder;
-import ds.service2.Service2Grpc;
-import ds.service3.Service3Grpc;
+import Login.ds.service1.Service1Grpc;
 
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 
 
-public class ControllerGUI implements ActionListener {
+public class ControllerGUI extends JFrame implements ActionListener {
 
 
     private JTextField entry1, entry2, reply;
@@ -63,10 +59,13 @@ public class ControllerGUI implements ActionListener {
 
         gui.build();
     }
+    public void showGUI(boolean visible) {
+        setVisible(visible);
+    }
 
     private void build() {
 
-        JFrame frame = new JFrame("Automated Scheduling Application");
+        JFrame frame = new JFrame("Log in");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Set the panel to add buttons
@@ -102,15 +101,15 @@ public class ControllerGUI implements ActionListener {
         //preparing message to send
         String username = entry1.getText();
         String password = entry2.getText();
-        ds.service1.RequestMessage request = ds.service1.RequestMessage.newBuilder().setUsername(username).setPassword(password).build();
+        Login.ds.service1.RequestMessage request = Login.ds.service1.RequestMessage.newBuilder().setUsername(username).setPassword(password).build();
 
         if (selectedOption.equals("Log in")) {
             System.out.println("RPC LOGIN to be invoked ...");
             /*
              *
              */
-            ds.service1.ResponseMessage response = blockingStub.login(request);
-            //retreving reply from service
+            Login.ds.service1.ResponseMessage response = blockingStub.login(request);
+            //retreving reply from Login.service
             int code = response.getCode();
             if (code == 1) {
                 reply.setText("Login successfully");
@@ -122,8 +121,8 @@ public class ControllerGUI implements ActionListener {
             /*
              *
              */
-            //retreving reply from service
-            ds.service1.ResponseMessage response = blockingStub.signup(request);
+            //retreving reply from Login.service
+            Login.ds.service1.ResponseMessage response = blockingStub.signup(request);
             int code = response.getCode();
             if (code == 1) {
                 reply.setText("Sign up successfully");
