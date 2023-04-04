@@ -1,4 +1,3 @@
-import Login.client.ControllerGUI;
 import Login.ds.service1.Service1Grpc;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
@@ -10,14 +9,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 
-import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
-public class FirstGUI extends JFrame {
+public class MainGUI extends JFrame {
     private JButton openLoginGUIButton;
     private ControllerGUI controllerGUI;
 
-    public FirstGUI() {
+    public MainGUI() {
         setTitle("Main Menu");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -27,11 +25,11 @@ public class FirstGUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // create the Controller GUI
-                controllerGUI = new ControllerGUI(FirstGUI.this);
+                controllerGUI = new ControllerGUI(MainGUI.this);
                 // show the Controller GUI
                 controllerGUI.setVisible(true);
                 // hide the First GUI
-                FirstGUI.this.setVisible(false);
+                MainGUI.this.setVisible(false);
             }
         });
 
@@ -59,7 +57,7 @@ public class FirstGUI extends JFrame {
 
         private JTextField entry1, entry2, reply;
         private JComboBox<String> dropdown;
-        private FirstGUI firstGUI;
+        private MainGUI mainGUI;
 
         private JPanel getService1JPanel() {
             JPanel panel = new JPanel(new GridLayout(0, 2, 5, 5));
@@ -95,8 +93,8 @@ public class FirstGUI extends JFrame {
             return panel;
         }
 
-        public ControllerGUI(FirstGUI firstGUI) {
-            this.firstGUI = firstGUI;
+        public ControllerGUI(MainGUI mainGUI) {
+            this.mainGUI = mainGUI;
             setTitle("Login");
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -111,7 +109,7 @@ public class FirstGUI extends JFrame {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     // show the First GUI
-                    firstGUI.showFirstGUI();
+                    mainGUI.showFirstGUI();
                 }
             });
 
@@ -168,7 +166,7 @@ public class FirstGUI extends JFrame {
 
 
     public static void main(String[] args) {
-        new FirstGUI();
+        new MainGUI();
     }
 
 }
