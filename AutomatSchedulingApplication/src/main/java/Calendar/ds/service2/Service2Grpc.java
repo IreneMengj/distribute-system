@@ -1,10 +1,4 @@
-package Event.ds;
-
-import Calendar.ds.service2.AppointmentRequest;
-import Calendar.ds.service2.ResponseMessage;
-import Calendar.ds.service2.Service2Impl;
-import Calendar.ds.service2.eventId;
-import Calendar.ds.service2.eventIdList;
+package Calendar.ds.service2;
 
 import static io.grpc.MethodDescriptor.generateFullMethodName;
 

@@ -1,4 +1,5 @@
 package Login.client;
+import GUI.MainGUI;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -7,6 +8,7 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
+import GUI.MainGUI;
 import Login.ds.service1.Service1Grpc;
 
 import io.grpc.ManagedChannel;
@@ -18,8 +20,9 @@ public class ControllerGUI extends JFrame implements ActionListener {
 
     private JTextField entry1, entry2, reply;
     private JComboBox<String> dropdown;
+    private MainGUI mainGUI;
 
-    private JPanel getService1JPanel() {
+    public JPanel getService1JPanel() {
         JPanel panel = new JPanel(new GridLayout(0, 2, 5, 5));
 
         JLabel label1 = new JLabel("Username");
@@ -53,42 +56,32 @@ public class ControllerGUI extends JFrame implements ActionListener {
         return panel;
     }
 
-    public static void main(String[] args) {
+    public ControllerGUI(MainGUI mainGUI) {
+        this.mainGUI = mainGUI;
+        setTitle("Login");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        ControllerGUI gui = new ControllerGUI();
-
-        gui.build();
-    }
-    public void showGUI(boolean visible) {
-        setVisible(visible);
-    }
-
-    private void build() {
-
-        JFrame frame = new JFrame("Log in");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        // Set the panel to add buttons
         JPanel panel = new JPanel();
-
-        // Set the BoxLayout to be X_AXIS: from left to right
-        BoxLayout boxlayout = new BoxLayout(panel, BoxLayout.X_AXIS);
-
-        panel.setLayout(boxlayout);
-
-        // Set border for the panel
+        panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
         panel.setBorder(new EmptyBorder(new Insets(50, 100, 50, 100)));
-
         panel.add(getService1JPanel());
 
+        // create a button to go back to the First GUI
+        JButton backButton = new JButton("Back to Main Menu");
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // show the First GUI
+                mainGUI.showFirstGUI();
+            }
+        });
 
-        // Set size for the frame
-        frame.setSize(300, 300);
+        panel.add(backButton); // add the backButton to the panel
 
-        // Set the window to be visible as the default to be false
-        frame.add(panel);
-        frame.pack();
-        frame.setVisible(true);
+        add(panel);
+
+        setSize(600, 300);
+        setLocationRelativeTo(null);
     }
 
 
