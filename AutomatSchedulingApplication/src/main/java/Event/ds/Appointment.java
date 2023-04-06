@@ -162,12 +162,11 @@ private static final long serialVersionUID = 0L;
     if (id_ != 0) {
       output.writeInt32(1, id_);
     }
-    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(title_)) {
+
       com.google.protobuf.GeneratedMessageV3.writeString(output, 2, title_);
-    }
-    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(detail_)) {
+
       com.google.protobuf.GeneratedMessageV3.writeString(output, 3, detail_);
-    }
+
     if (occurTime_ != 0L) {
       output.writeInt64(4, occurTime_);
     }
@@ -184,12 +183,12 @@ private static final long serialVersionUID = 0L;
       size += com.google.protobuf.CodedOutputStream
         .computeInt32Size(1, id_);
     }
-    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(title_)) {
+
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, title_);
-    }
-    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(detail_)) {
+
+
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, detail_);
-    }
+
     if (occurTime_ != 0L) {
       size += com.google.protobuf.CodedOutputStream
         .computeInt64Size(4, occurTime_);
@@ -524,9 +523,9 @@ private static final long serialVersionUID = 0L;
               break;
             } // case 32
             default: {
-              if (!super.parseUnknownField(input, extensionRegistry, tag)) {
-                done = true; // was an endgroup tag
-              }
+//              if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+//                done = true; // was an endgroup tag
+//              }
               break;
             } // default:
           } // switch (tag)
