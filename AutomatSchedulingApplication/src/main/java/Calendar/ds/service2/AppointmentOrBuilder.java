@@ -38,8 +38,26 @@ public interface AppointmentOrBuilder extends
       getDetailBytes();
 
   /**
-   * <code>int64 occurTime = 4;</code>
+   * <code>string occurTime = 4;</code>
    * @return The occurTime.
    */
-  long getOccurTime();
+  String getOccurTime();
+  /**
+   * <code>string occurTime = 4;</code>
+   * @return The bytes for occurTime.
+   */
+  com.google.protobuf.ByteString
+      getOccurTimeBytes();
+
+  /**
+   * <code>string participants = 5;</code>
+   * @return The participants.
+   */
+  String getParticipants();
+  /**
+   * <code>string participants = 5;</code>
+   * @return The bytes for participants.
+   */
+  com.google.protobuf.ByteString
+      getParticipantsBytes();
 }

@@ -9,7 +9,7 @@ package Calendar.ds.service2;
 public final class AppointmentRequest extends
     com.google.protobuf.GeneratedMessageV3 implements
     // @@protoc_insertion_point(message_implements:service2.AppointmentRequest)
-        AppointmentRequestOrBuilder {
+    AppointmentRequestOrBuilder {
 private static final long serialVersionUID = 0L;
   // Use AppointmentRequest.newBuilder() to construct.
   private AppointmentRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
@@ -41,7 +41,7 @@ private static final long serialVersionUID = 0L;
       internalGetFieldAccessorTable() {
     return Service2Impl.internal_static_service2_AppointmentRequest_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            AppointmentRequest.class, AppointmentRequest.Builder.class);
+            AppointmentRequest.class, Builder.class);
   }
 
   public static final int APPOINTMENTS_FIELD_NUMBER = 1;
@@ -248,7 +248,7 @@ private static final long serialVersionUID = 0L;
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
       // @@protoc_insertion_point(builder_implements:service2.AppointmentRequest)
-          AppointmentRequestOrBuilder {
+      AppointmentRequestOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return Service2Impl.internal_static_service2_AppointmentRequest_descriptor;
@@ -259,7 +259,7 @@ private static final long serialVersionUID = 0L;
         internalGetFieldAccessorTable() {
       return Service2Impl.internal_static_service2_AppointmentRequest_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              AppointmentRequest.class, AppointmentRequest.Builder.class);
+              AppointmentRequest.class, Builder.class);
     }
 
     // Construct using Calendar.ds.service2.AppointmentRequest.newBuilder()
@@ -467,7 +467,7 @@ private static final long serialVersionUID = 0L;
     }
 
     private com.google.protobuf.RepeatedFieldBuilderV3<
-            Appointment, Appointment.Builder, AppointmentOrBuilder> appointmentsBuilder_;
+        Appointment, Appointment.Builder, AppointmentOrBuilder> appointmentsBuilder_;
 
     /**
      * <code>repeated .service2.Appointment appointments = 1;</code>
@@ -683,11 +683,11 @@ private static final long serialVersionUID = 0L;
       return getAppointmentsFieldBuilder().getBuilderList();
     }
     private com.google.protobuf.RepeatedFieldBuilderV3<
-            Appointment, Appointment.Builder, AppointmentOrBuilder>
+        Appointment, Appointment.Builder, AppointmentOrBuilder>
         getAppointmentsFieldBuilder() {
       if (appointmentsBuilder_ == null) {
         appointmentsBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
-                Appointment, Appointment.Builder, AppointmentOrBuilder>(
+            Appointment, Appointment.Builder, AppointmentOrBuilder>(
                 appointments_,
                 ((bitField0_ & 0x00000001) != 0),
                 getParentForChildren(),

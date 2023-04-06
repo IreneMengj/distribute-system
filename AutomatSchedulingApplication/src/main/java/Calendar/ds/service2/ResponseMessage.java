@@ -9,7 +9,7 @@ package Calendar.ds.service2;
 public final class ResponseMessage extends
     com.google.protobuf.GeneratedMessageV3 implements
     // @@protoc_insertion_point(message_implements:service2.ResponseMessage)
-        ResponseMessageOrBuilder {
+    ResponseMessageOrBuilder {
 private static final long serialVersionUID = 0L;
   // Use ResponseMessage.newBuilder() to construct.
   private ResponseMessage(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
@@ -40,7 +40,7 @@ private static final long serialVersionUID = 0L;
       internalGetFieldAccessorTable() {
     return Service2Impl.internal_static_service2_ResponseMessage_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            ResponseMessage.class, ResponseMessage.Builder.class);
+            ResponseMessage.class, Builder.class);
   }
 
   public static final int CODE_FIELD_NUMBER = 1;
@@ -215,7 +215,7 @@ private static final long serialVersionUID = 0L;
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
       // @@protoc_insertion_point(builder_implements:service2.ResponseMessage)
-          ResponseMessageOrBuilder {
+      ResponseMessageOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return Service2Impl.internal_static_service2_ResponseMessage_descriptor;
@@ -226,7 +226,7 @@ private static final long serialVersionUID = 0L;
         internalGetFieldAccessorTable() {
       return Service2Impl.internal_static_service2_ResponseMessage_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              ResponseMessage.class, ResponseMessage.Builder.class);
+              ResponseMessage.class, Builder.class);
     }
 
     // Construct using Calendar.ds.service2.ResponseMessage.newBuilder()

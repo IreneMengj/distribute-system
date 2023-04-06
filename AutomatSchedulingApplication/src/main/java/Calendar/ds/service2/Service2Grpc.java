@@ -18,29 +18,29 @@ public final class Service2Grpc {
   public static final String SERVICE_NAME = "service2.Service2";
 
   // Static method descriptors that strictly reflect the proto.
-  private static volatile io.grpc.MethodDescriptor<Calendar.ds.service2.AppointmentRequest,
-          Calendar.ds.service2.ResponseMessage> getAddEventMethod;
+  private static volatile io.grpc.MethodDescriptor<Appointment,
+      ResponseMessage> getAddEventMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
       fullMethodName = SERVICE_NAME + '/' + "addEvent",
-      requestType = Calendar.ds.service2.AppointmentRequest.class,
-      responseType = Calendar.ds.service2.ResponseMessage.class,
+      requestType = Appointment.class,
+      responseType = ResponseMessage.class,
       methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
-  public static io.grpc.MethodDescriptor<Calendar.ds.service2.AppointmentRequest,
-          Calendar.ds.service2.ResponseMessage> getAddEventMethod() {
-    io.grpc.MethodDescriptor<Calendar.ds.service2.AppointmentRequest, Calendar.ds.service2.ResponseMessage> getAddEventMethod;
+  public static io.grpc.MethodDescriptor<Appointment,
+      ResponseMessage> getAddEventMethod() {
+    io.grpc.MethodDescriptor<Appointment, ResponseMessage> getAddEventMethod;
     if ((getAddEventMethod = Service2Grpc.getAddEventMethod) == null) {
       synchronized (Service2Grpc.class) {
         if ((getAddEventMethod = Service2Grpc.getAddEventMethod) == null) {
           Service2Grpc.getAddEventMethod = getAddEventMethod =
-              io.grpc.MethodDescriptor.<Calendar.ds.service2.AppointmentRequest, Calendar.ds.service2.ResponseMessage>newBuilder()
+              io.grpc.MethodDescriptor.<Appointment, ResponseMessage>newBuilder()
               .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(SERVICE_NAME, "addEvent"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  Calendar.ds.service2.AppointmentRequest.getDefaultInstance()))
+                  Appointment.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  Calendar.ds.service2.ResponseMessage.getDefaultInstance()))
+                  ResponseMessage.getDefaultInstance()))
               .setSchemaDescriptor(new Service2MethodDescriptorSupplier("addEvent"))
               .build();
         }
@@ -49,29 +49,60 @@ public final class Service2Grpc {
     return getAddEventMethod;
   }
 
-  private static volatile io.grpc.MethodDescriptor<Calendar.ds.service2.eventId,
-          Calendar.ds.service2.ResponseMessage> getDeleteEventMethod;
+  private static volatile io.grpc.MethodDescriptor<eventIdList,
+      AppointmentRequest> getViewEventMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "viewEvent",
+      requestType = eventIdList.class,
+      responseType = AppointmentRequest.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<eventIdList,
+      AppointmentRequest> getViewEventMethod() {
+    io.grpc.MethodDescriptor<eventIdList, AppointmentRequest> getViewEventMethod;
+    if ((getViewEventMethod = Service2Grpc.getViewEventMethod) == null) {
+      synchronized (Service2Grpc.class) {
+        if ((getViewEventMethod = Service2Grpc.getViewEventMethod) == null) {
+          Service2Grpc.getViewEventMethod = getViewEventMethod =
+              io.grpc.MethodDescriptor.<eventIdList, AppointmentRequest>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "viewEvent"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  eventIdList.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  AppointmentRequest.getDefaultInstance()))
+              .setSchemaDescriptor(new Service2MethodDescriptorSupplier("viewEvent"))
+              .build();
+        }
+      }
+    }
+    return getViewEventMethod;
+  }
+
+  private static volatile io.grpc.MethodDescriptor<eventId,
+      ResponseMessage> getDeleteEventMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
       fullMethodName = SERVICE_NAME + '/' + "deleteEvent",
-      requestType = Calendar.ds.service2.eventId.class,
-      responseType = Calendar.ds.service2.ResponseMessage.class,
+      requestType = eventId.class,
+      responseType = ResponseMessage.class,
       methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
-  public static io.grpc.MethodDescriptor<Calendar.ds.service2.eventId,
-          Calendar.ds.service2.ResponseMessage> getDeleteEventMethod() {
-    io.grpc.MethodDescriptor<Calendar.ds.service2.eventId, Calendar.ds.service2.ResponseMessage> getDeleteEventMethod;
+  public static io.grpc.MethodDescriptor<eventId,
+      ResponseMessage> getDeleteEventMethod() {
+    io.grpc.MethodDescriptor<eventId, ResponseMessage> getDeleteEventMethod;
     if ((getDeleteEventMethod = Service2Grpc.getDeleteEventMethod) == null) {
       synchronized (Service2Grpc.class) {
         if ((getDeleteEventMethod = Service2Grpc.getDeleteEventMethod) == null) {
           Service2Grpc.getDeleteEventMethod = getDeleteEventMethod =
-              io.grpc.MethodDescriptor.<Calendar.ds.service2.eventId, Calendar.ds.service2.ResponseMessage>newBuilder()
+              io.grpc.MethodDescriptor.<eventId, ResponseMessage>newBuilder()
               .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(SERVICE_NAME, "deleteEvent"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  Calendar.ds.service2.eventId.getDefaultInstance()))
+                  eventId.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  Calendar.ds.service2.ResponseMessage.getDefaultInstance()))
+                  ResponseMessage.getDefaultInstance()))
               .setSchemaDescriptor(new Service2MethodDescriptorSupplier("deleteEvent"))
               .build();
         }
@@ -80,29 +111,29 @@ public final class Service2Grpc {
     return getDeleteEventMethod;
   }
 
-  private static volatile io.grpc.MethodDescriptor<Calendar.ds.service2.eventIdList,
-          Calendar.ds.service2.AppointmentRequest> getUpdateEventMethod;
+  private static volatile io.grpc.MethodDescriptor<Appointment,
+      ResponseMessage> getUpdateEventMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
       fullMethodName = SERVICE_NAME + '/' + "updateEvent",
-      requestType = Calendar.ds.service2.eventIdList.class,
-      responseType = Calendar.ds.service2.AppointmentRequest.class,
+      requestType = Appointment.class,
+      responseType = ResponseMessage.class,
       methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
-  public static io.grpc.MethodDescriptor<Calendar.ds.service2.eventIdList,
-          Calendar.ds.service2.AppointmentRequest> getUpdateEventMethod() {
-    io.grpc.MethodDescriptor<Calendar.ds.service2.eventIdList, Calendar.ds.service2.AppointmentRequest> getUpdateEventMethod;
+  public static io.grpc.MethodDescriptor<Appointment,
+      ResponseMessage> getUpdateEventMethod() {
+    io.grpc.MethodDescriptor<Appointment, ResponseMessage> getUpdateEventMethod;
     if ((getUpdateEventMethod = Service2Grpc.getUpdateEventMethod) == null) {
       synchronized (Service2Grpc.class) {
         if ((getUpdateEventMethod = Service2Grpc.getUpdateEventMethod) == null) {
           Service2Grpc.getUpdateEventMethod = getUpdateEventMethod =
-              io.grpc.MethodDescriptor.<Calendar.ds.service2.eventIdList, Calendar.ds.service2.AppointmentRequest>newBuilder()
+              io.grpc.MethodDescriptor.<Appointment, ResponseMessage>newBuilder()
               .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(SERVICE_NAME, "updateEvent"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  Calendar.ds.service2.eventIdList.getDefaultInstance()))
+                  Appointment.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  Calendar.ds.service2.AppointmentRequest.getDefaultInstance()))
+                  ResponseMessage.getDefaultInstance()))
               .setSchemaDescriptor(new Service2MethodDescriptorSupplier("updateEvent"))
               .build();
         }
@@ -164,22 +195,29 @@ public final class Service2Grpc {
 
     /**
      */
-    public void addEvent(Calendar.ds.service2.AppointmentRequest request,
-                         io.grpc.stub.StreamObserver<Calendar.ds.service2.ResponseMessage> responseObserver) {
+    public void addEvent(Appointment request,
+                         io.grpc.stub.StreamObserver<ResponseMessage> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getAddEventMethod(), responseObserver);
     }
 
     /**
      */
-    public void deleteEvent(Calendar.ds.service2.eventId request,
-                            io.grpc.stub.StreamObserver<Calendar.ds.service2.ResponseMessage> responseObserver) {
+    public void viewEvent(eventIdList request,
+                          io.grpc.stub.StreamObserver<AppointmentRequest> responseObserver) {
+      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getViewEventMethod(), responseObserver);
+    }
+
+    /**
+     */
+    public void deleteEvent(eventId request,
+                            io.grpc.stub.StreamObserver<ResponseMessage> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getDeleteEventMethod(), responseObserver);
     }
 
     /**
      */
-    public void updateEvent(Calendar.ds.service2.eventIdList request,
-                            io.grpc.stub.StreamObserver<Calendar.ds.service2.AppointmentRequest> responseObserver) {
+    public void updateEvent(Appointment request,
+                            io.grpc.stub.StreamObserver<ResponseMessage> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getUpdateEventMethod(), responseObserver);
     }
 
@@ -189,22 +227,29 @@ public final class Service2Grpc {
             getAddEventMethod(),
             io.grpc.stub.ServerCalls.asyncUnaryCall(
               new MethodHandlers<
-                      Calendar.ds.service2.AppointmentRequest,
-                      Calendar.ds.service2.ResponseMessage>(
+                Appointment,
+                ResponseMessage>(
                   this, METHODID_ADD_EVENT)))
+          .addMethod(
+            getViewEventMethod(),
+            io.grpc.stub.ServerCalls.asyncUnaryCall(
+              new MethodHandlers<
+                eventIdList,
+                AppointmentRequest>(
+                  this, METHODID_VIEW_EVENT)))
           .addMethod(
             getDeleteEventMethod(),
             io.grpc.stub.ServerCalls.asyncUnaryCall(
               new MethodHandlers<
-                      Calendar.ds.service2.eventId,
-                      Calendar.ds.service2.ResponseMessage>(
+                eventId,
+                ResponseMessage>(
                   this, METHODID_DELETE_EVENT)))
           .addMethod(
             getUpdateEventMethod(),
             io.grpc.stub.ServerCalls.asyncUnaryCall(
               new MethodHandlers<
-                      Calendar.ds.service2.eventIdList,
-                      Calendar.ds.service2.AppointmentRequest>(
+                Appointment,
+                ResponseMessage>(
                   this, METHODID_UPDATE_EVENT)))
           .build();
     }
@@ -229,24 +274,32 @@ public final class Service2Grpc {
 
     /**
      */
-    public void addEvent(Calendar.ds.service2.AppointmentRequest request,
-                         io.grpc.stub.StreamObserver<Calendar.ds.service2.ResponseMessage> responseObserver) {
+    public void addEvent(Appointment request,
+                         io.grpc.stub.StreamObserver<ResponseMessage> responseObserver) {
       io.grpc.stub.ClientCalls.asyncUnaryCall(
           getChannel().newCall(getAddEventMethod(), getCallOptions()), request, responseObserver);
     }
 
     /**
      */
-    public void deleteEvent(Calendar.ds.service2.eventId request,
-                            io.grpc.stub.StreamObserver<Calendar.ds.service2.ResponseMessage> responseObserver) {
+    public void viewEvent(eventIdList request,
+                          io.grpc.stub.StreamObserver<AppointmentRequest> responseObserver) {
+      io.grpc.stub.ClientCalls.asyncUnaryCall(
+          getChannel().newCall(getViewEventMethod(), getCallOptions()), request, responseObserver);
+    }
+
+    /**
+     */
+    public void deleteEvent(eventId request,
+                            io.grpc.stub.StreamObserver<ResponseMessage> responseObserver) {
       io.grpc.stub.ClientCalls.asyncUnaryCall(
           getChannel().newCall(getDeleteEventMethod(), getCallOptions()), request, responseObserver);
     }
 
     /**
      */
-    public void updateEvent(Calendar.ds.service2.eventIdList request,
-                            io.grpc.stub.StreamObserver<Calendar.ds.service2.AppointmentRequest> responseObserver) {
+    public void updateEvent(Appointment request,
+                            io.grpc.stub.StreamObserver<ResponseMessage> responseObserver) {
       io.grpc.stub.ClientCalls.asyncUnaryCall(
           getChannel().newCall(getUpdateEventMethod(), getCallOptions()), request, responseObserver);
     }
@@ -271,21 +324,28 @@ public final class Service2Grpc {
 
     /**
      */
-    public Calendar.ds.service2.ResponseMessage addEvent(Calendar.ds.service2.AppointmentRequest request) {
+    public ResponseMessage addEvent(Appointment request) {
       return io.grpc.stub.ClientCalls.blockingUnaryCall(
           getChannel(), getAddEventMethod(), getCallOptions(), request);
     }
 
     /**
      */
-    public Calendar.ds.service2.ResponseMessage deleteEvent(Calendar.ds.service2.eventId request) {
+    public AppointmentRequest viewEvent(eventIdList request) {
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getViewEventMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public ResponseMessage deleteEvent(eventId request) {
       return io.grpc.stub.ClientCalls.blockingUnaryCall(
           getChannel(), getDeleteEventMethod(), getCallOptions(), request);
     }
 
     /**
      */
-    public Calendar.ds.service2.AppointmentRequest updateEvent(Calendar.ds.service2.eventIdList request) {
+    public ResponseMessage updateEvent(Appointment request) {
       return io.grpc.stub.ClientCalls.blockingUnaryCall(
           getChannel(), getUpdateEventMethod(), getCallOptions(), request);
     }
@@ -310,32 +370,41 @@ public final class Service2Grpc {
 
     /**
      */
-    public com.google.common.util.concurrent.ListenableFuture<Calendar.ds.service2.ResponseMessage> addEvent(
-        Calendar.ds.service2.AppointmentRequest request) {
+    public com.google.common.util.concurrent.ListenableFuture<ResponseMessage> addEvent(
+        Appointment request) {
       return io.grpc.stub.ClientCalls.futureUnaryCall(
           getChannel().newCall(getAddEventMethod(), getCallOptions()), request);
     }
 
     /**
      */
-    public com.google.common.util.concurrent.ListenableFuture<Calendar.ds.service2.ResponseMessage> deleteEvent(
-        Calendar.ds.service2.eventId request) {
+    public com.google.common.util.concurrent.ListenableFuture<AppointmentRequest> viewEvent(
+        eventIdList request) {
+      return io.grpc.stub.ClientCalls.futureUnaryCall(
+          getChannel().newCall(getViewEventMethod(), getCallOptions()), request);
+    }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<ResponseMessage> deleteEvent(
+        eventId request) {
       return io.grpc.stub.ClientCalls.futureUnaryCall(
           getChannel().newCall(getDeleteEventMethod(), getCallOptions()), request);
     }
 
     /**
      */
-    public com.google.common.util.concurrent.ListenableFuture<Calendar.ds.service2.AppointmentRequest> updateEvent(
-        Calendar.ds.service2.eventIdList request) {
+    public com.google.common.util.concurrent.ListenableFuture<ResponseMessage> updateEvent(
+        Appointment request) {
       return io.grpc.stub.ClientCalls.futureUnaryCall(
           getChannel().newCall(getUpdateEventMethod(), getCallOptions()), request);
     }
   }
 
   private static final int METHODID_ADD_EVENT = 0;
-  private static final int METHODID_DELETE_EVENT = 1;
-  private static final int METHODID_UPDATE_EVENT = 2;
+  private static final int METHODID_VIEW_EVENT = 1;
+  private static final int METHODID_DELETE_EVENT = 2;
+  private static final int METHODID_UPDATE_EVENT = 3;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -355,16 +424,20 @@ public final class Service2Grpc {
     public void invoke(Req request, io.grpc.stub.StreamObserver<Resp> responseObserver) {
       switch (methodId) {
         case METHODID_ADD_EVENT:
-          serviceImpl.addEvent((Calendar.ds.service2.AppointmentRequest) request,
-              (io.grpc.stub.StreamObserver<Calendar.ds.service2.ResponseMessage>) responseObserver);
+          serviceImpl.addEvent((Appointment) request,
+              (io.grpc.stub.StreamObserver<ResponseMessage>) responseObserver);
+          break;
+        case METHODID_VIEW_EVENT:
+          serviceImpl.viewEvent((eventIdList) request,
+              (io.grpc.stub.StreamObserver<AppointmentRequest>) responseObserver);
           break;
         case METHODID_DELETE_EVENT:
           serviceImpl.deleteEvent((eventId) request,
               (io.grpc.stub.StreamObserver<ResponseMessage>) responseObserver);
           break;
         case METHODID_UPDATE_EVENT:
-          serviceImpl.updateEvent((eventIdList) request,
-              (io.grpc.stub.StreamObserver<AppointmentRequest>) responseObserver);
+          serviceImpl.updateEvent((Appointment) request,
+              (io.grpc.stub.StreamObserver<ResponseMessage>) responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -428,6 +501,7 @@ public final class Service2Grpc {
           serviceDescriptor = result = io.grpc.ServiceDescriptor.newBuilder(SERVICE_NAME)
               .setSchemaDescriptor(new Service2FileDescriptorSupplier())
               .addMethod(getAddEventMethod())
+              .addMethod(getViewEventMethod())
               .addMethod(getDeleteEventMethod())
               .addMethod(getUpdateEventMethod())
               .build();

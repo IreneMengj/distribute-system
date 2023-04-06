@@ -9,7 +9,7 @@ package Calendar.ds.service2;
 public final class eventId extends
     com.google.protobuf.GeneratedMessageV3 implements
     // @@protoc_insertion_point(message_implements:service2.eventId)
-        eventIdOrBuilder {
+    eventIdOrBuilder {
 private static final long serialVersionUID = 0L;
   // Use eventId.newBuilder() to construct.
   private eventId(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
@@ -40,7 +40,7 @@ private static final long serialVersionUID = 0L;
       internalGetFieldAccessorTable() {
     return Service2Impl.internal_static_service2_eventId_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            eventId.class, eventId.Builder.class);
+            eventId.class, Builder.class);
   }
 
   public static final int ID_FIELD_NUMBER = 1;
@@ -215,7 +215,7 @@ private static final long serialVersionUID = 0L;
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
       // @@protoc_insertion_point(builder_implements:service2.eventId)
-          eventIdOrBuilder {
+      eventIdOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return Service2Impl.internal_static_service2_eventId_descriptor;
@@ -226,7 +226,7 @@ private static final long serialVersionUID = 0L;
         internalGetFieldAccessorTable() {
       return Service2Impl.internal_static_service2_eventId_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              eventId.class, eventId.Builder.class);
+              eventId.class, Builder.class);
     }
 
     // Construct using Calendar.ds.service2.eventId.newBuilder()

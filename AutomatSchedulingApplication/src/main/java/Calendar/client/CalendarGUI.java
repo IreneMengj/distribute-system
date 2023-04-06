@@ -2,7 +2,7 @@ package Calendar.client;
 import javax.swing.*;
 import java.awt.event.*;
 
-public class CalendarGUI {
+public class CalendarGUI extends JFrame {
     public static void main(String[] args) {
         JFrame frame = new JFrame("Calendar");
         frame.setSize(300, 200);
@@ -11,8 +11,7 @@ public class CalendarGUI {
         JButton addButton = new JButton("Add Appointment");
         addButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                JFrame addFrame = new JFrame("Add Appointment");
-                addFrame.setSize(200, 150);
+                JFrame addFrame = new CalendarGUI();
                 addFrame.setVisible(true);
             }
         });
@@ -26,10 +25,10 @@ public class CalendarGUI {
             }
         });
 
-        JButton deleteButton = new JButton("Delete Appointment");
+        JButton deleteButton = new JButton("View Appointment");
         deleteButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                JFrame deleteFrame = new JFrame("Delete Appointment");
+                JFrame deleteFrame = new JFrame("View Appointment");
                 deleteFrame.setSize(200, 150);
                 deleteFrame.setVisible(true);
             }
