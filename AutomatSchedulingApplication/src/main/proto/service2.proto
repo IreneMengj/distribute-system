@@ -11,12 +11,15 @@ service Service2 {
   
   rpc addEvent(AppointmentRequest) returns (ResponseMessage) {}
   rpc deleteEvent(eventId) returns (ResponseMessage) {}
-  rpc updateEvent(AppointmentRequest) returns (ResponseMessage) {}
-  rpc viewEvent(AppointmentRequest)returns (ResponseMessage){}
+  rpc updateEvent(eventIdList)returns (AppointmentRequest){}
 
 }
 message eventId{
   int32 id=1;
+}
+
+message eventIdList {
+  repeated int32 eventIds = 1;
 }
 
 message AppointmentRequest{
