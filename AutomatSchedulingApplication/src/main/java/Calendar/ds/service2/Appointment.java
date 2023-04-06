@@ -15,7 +15,7 @@ private static final long serialVersionUID = 0L;
   private Appointment(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
-  private Appointment() {
+  public Appointment(int id, String title, String desc, String time, String paticipant) {
     title_ = "";
     detail_ = "";
     occurTime_ = "";
@@ -26,7 +26,7 @@ private static final long serialVersionUID = 0L;
   @SuppressWarnings({"unused"})
   protected Object newInstance(
       UnusedPrivateParameter unused) {
-    return new Appointment();
+    return new Appointment(id, title, desc, time, paticipant);
   }
 
   @Override
@@ -971,7 +971,7 @@ private static final long serialVersionUID = 0L;
   // @@protoc_insertion_point(class_scope:service2.Appointment)
   private static final Appointment DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new Appointment();
+    DEFAULT_INSTANCE = new Appointment(id, title, desc, time, paticipant);
   }
 
   public static Appointment getDefaultInstance() {
