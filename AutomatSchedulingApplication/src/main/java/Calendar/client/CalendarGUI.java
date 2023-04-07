@@ -2,7 +2,7 @@ package Calendar.client;
 import javax.swing.*;
 import java.awt.event.*;
 
-public class CalendarGUI extends JFrame {
+public class CalendarGUI extends JFrame{
     public static void main(String[] args) {
         JFrame frame = new JFrame("Calendar");
         frame.setSize(300, 200);

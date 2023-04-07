@@ -40,11 +40,11 @@ public class Service2 extends Service2Grpc.Service2ImplBase {
         Calendar.ds.service2.ResponseMessage reply;
         boolean add = list.add(appointment);
         if (add) {
-//            reply = ResponseMessage.newBuilder().setCode(1).build();
+            reply=Calendar.ds.service2.ResponseMessage.newBuilder().setCode(1).build();
         } else {
-//            reply = ResponseMessage.newBuilder().setCode(0).build();
+            reply=Calendar.ds.service2.ResponseMessage.newBuilder().setCode(0).build();
         }
-//        responseObserver.onNext(reply);
+        responseObserver.onNext(reply);
         responseObserver.onCompleted();
     }
 

@@ -4,21 +4,17 @@ import Calendar.ds.service2.Appointment;
 import Calendar.ds.service2.ResponseMessage;
 import Calendar.ds.service2.Service2Grpc;
 
-import GUI.MainGUI;
+
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.time.Duration;
 
 public class AddAppointmentGUI extends JFrame implements ActionListener{
 
-    public String title;
-    public String desc;
-    public String time;
-    public String participant;
-    public String reply;
 
     public void displayAppointmentGUI() {
         JFrame frame = new JFrame("Add Appointment");
@@ -43,19 +39,25 @@ public class AddAppointmentGUI extends JFrame implements ActionListener{
         JButton saveButton = new JButton("Save");
         saveButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                title = titleField.getText();
-                desc = descArea.getText();
-                time = timeEditor.getFormat().format(timeSpinner.getValue());
-                participant = participantField.getText();
-                // Save the appointment to a database or a file
-                // ...
+                ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 50052)
+                        .usePlaintext()
+                        .build();
+                Service2Grpc.Service2BlockingStub blockingStub = Service2Grpc.newBlockingStub(channel);
+                int id=1;
+                Appointment request = Appointment.newBuilder().setId(id).setTitle(titleField.getText()).setDetail(descArea.getText()).setOccurTime(timeEditor.getFormat().format(timeSpinner.getValue())).setParticipants(participantField.getText()).build();
+                System.out.println("RPC add appointment to be invoked ...");
+                ResponseMessage response = blockingStub.addEvent(request);
+                int code = response.getCode();
+                String reply;
+                if (code == 1) {
+                    reply="Appointment saved successfully";
+                } else {
+                    reply="Appointment saved unsuccessfully";
+                }
                 JOptionPane.showMessageDialog(frame, reply);
                 frame.dispose();
             }
         });
-
-
-
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         c.insets = new Insets(5, 5, 5, 5);
@@ -89,22 +91,11 @@ public class AddAppointmentGUI extends JFrame implements ActionListener{
 
         frame.add(panel);
         frame.setVisible(true);
+
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 50052).usePlaintext().build();
-        Service2Grpc.Service2BlockingStub blockingStub = Service2Grpc.newBlockingStub(channel);
-        int id=1;
-        Appointment request = Appointment.newBuilder().setId(id).setTitle(title).setDetail(desc).setOccurTime(time).setParticipants(participant).build();
-        System.out.println("RPC add appointment to be invoked ...");
-        ResponseMessage response = blockingStub.addEvent(request);
-        int code = response.getCode();
-        if (code == 1) {
-            reply="Appointment saved successfully";
-        } else {
-            reply="Appointment saved unsuccessfully";
-        }
 
     }
 
