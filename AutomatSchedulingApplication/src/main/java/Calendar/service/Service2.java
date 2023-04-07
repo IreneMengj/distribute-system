@@ -38,11 +38,11 @@ public class Service2 extends Service2Grpc.Service2ImplBase {
         String time=request.getOccurTime();
         Appointment appointment =new Appointment(id,title,paticipant,desc,time);
         Calendar.ds.service2.ResponseMessage reply;
-        boolean add = list.add(appointment);
-        if (add) {
-            reply=Calendar.ds.service2.ResponseMessage.newBuilder().setCode(1).build();
-        } else {
+        list.add(appointment);
+        if (title.equals("")) {
             reply=Calendar.ds.service2.ResponseMessage.newBuilder().setCode(0).build();
+        } else {
+            reply=Calendar.ds.service2.ResponseMessage.newBuilder().setCode(1).build();
         }
         responseObserver.onNext(reply);
         responseObserver.onCompleted();

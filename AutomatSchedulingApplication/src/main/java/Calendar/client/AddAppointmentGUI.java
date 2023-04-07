@@ -49,10 +49,10 @@ public class AddAppointmentGUI extends JFrame{
                 ResponseMessage response = blockingStub.addEvent(request);
                 int code = response.getCode();
                 String reply;
-                if (code == 1) {
+                if (code == 0) {
                     reply="Appointment saved successfully";
-                } else {
-                    reply="Appointment saved unsuccessfully";
+                } else  {
+                    reply="Title can't be null";
                 }
                 JOptionPane.showMessageDialog(frame, reply);
                 frame.dispose();
