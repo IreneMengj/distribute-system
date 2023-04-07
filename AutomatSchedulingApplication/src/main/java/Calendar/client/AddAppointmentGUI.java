@@ -13,7 +13,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.time.Duration;
 
-public class AddAppointmentGUI extends JFrame implements ActionListener{
+public class AddAppointmentGUI extends JFrame{
 
 
     public void displayAppointmentGUI() {
@@ -56,6 +56,7 @@ public class AddAppointmentGUI extends JFrame implements ActionListener{
                 }
                 JOptionPane.showMessageDialog(frame, reply);
                 frame.dispose();
+
             }
         });
         JPanel panel = new JPanel(new GridBagLayout());
@@ -93,12 +94,6 @@ public class AddAppointmentGUI extends JFrame implements ActionListener{
         frame.setVisible(true);
 
     }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-
-    }
-
 
 }
 
