@@ -11,7 +11,9 @@ public class CalendarGUI extends JFrame {
         JButton addButton = new JButton("Add Appointment");
         addButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                JFrame addFrame = new CalendarGUI();
+                JFrame addFrame = new AddAppointmentGUI();
+                AddAppointmentGUI gui = new AddAppointmentGUI();
+                gui.displayAppointmentGUI();
                 addFrame.setVisible(true);
             }
         });

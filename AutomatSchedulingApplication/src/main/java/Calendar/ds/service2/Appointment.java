@@ -12,21 +12,25 @@ public final class Appointment extends
     AppointmentOrBuilder {
 private static final long serialVersionUID = 0L;
   // Use Appointment.newBuilder() to construct.
-  private Appointment(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+  public Appointment(Builder builder) {
     super(builder);
   }
-  public Appointment(int id, String title, String desc, String time, String paticipant) {
+  public Appointment() {
     title_ = "";
     detail_ = "";
     occurTime_ = "";
     participants_ = "";
   }
 
+  public Appointment(int id, String title, String paticipant, String desc, String time) {
+  }
+
   @Override
   @SuppressWarnings({"unused"})
   protected Object newInstance(
       UnusedPrivateParameter unused) {
-    return new Appointment(id, title, desc, time, paticipant);
+    Appointment appointment = new Appointment();
+    return appointment;
   }
 
   @Override
@@ -971,7 +975,7 @@ private static final long serialVersionUID = 0L;
   // @@protoc_insertion_point(class_scope:service2.Appointment)
   private static final Appointment DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new Appointment(id, title, desc, time, paticipant);
+    DEFAULT_INSTANCE = new Appointment();
   }
 
   public static Appointment getDefaultInstance() {

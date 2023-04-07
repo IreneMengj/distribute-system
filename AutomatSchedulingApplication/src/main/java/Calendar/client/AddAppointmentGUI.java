@@ -1,11 +1,10 @@
 package Calendar.client;
 
 import Calendar.ds.service2.Appointment;
-import Calendar.ds.service2.AppointmentRequest;
 import Calendar.ds.service2.ResponseMessage;
 import Calendar.ds.service2.Service2Grpc;
-import Login.ds.service1.RequestMessage;
-import Login.ds.service1.Service1Grpc;
+
+import GUI.MainGUI;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 
@@ -21,7 +20,7 @@ public class AddAppointmentGUI extends JFrame implements ActionListener{
     public String participant;
     public String reply;
 
-    public void main(String[] args) {
+    public void displayAppointmentGUI() {
         JFrame frame = new JFrame("Add Appointment");
         frame.setSize(400, 300);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -108,5 +107,7 @@ public class AddAppointmentGUI extends JFrame implements ActionListener{
         }
 
     }
+
+
 }
 
