@@ -7,22 +7,28 @@ import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
 
+import javax.jmdns.JmDNS;
+import javax.jmdns.ServiceInfo;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Service2 extends Service2Grpc.Service2ImplBase {
     public static void main(String[] args) throws InterruptedException, IOException {
+        // Register service with JmDNS
+        JmDNS jmdns = JmDNS.create();
+        ServiceInfo serviceInfo = ServiceInfo.create("_grpc._tcp.local.", "Service2", 50052, "");
+        jmdns.registerService(serviceInfo);
+        // Start gRPC server
         Service2 service2 = new Service2();
 
-        int port = 50052;
-
-        Server server = ServerBuilder.forPort(port)
+        Server server = ServerBuilder.forPort(serviceInfo.getPort())
                 .addService(service2)
                 .build()
                 .start();
 
-        System.out.println("Service-2 started, listening on " + port);
+        System.out.println("Service-2 started, listening on " + serviceInfo.getPort());
         server.awaitTermination();
     }
 

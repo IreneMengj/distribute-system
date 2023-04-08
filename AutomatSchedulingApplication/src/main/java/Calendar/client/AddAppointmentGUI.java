@@ -8,12 +8,17 @@ import Calendar.ds.service2.Service2Grpc;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 
+import javax.jmdns.JmDNS;
+import javax.jmdns.ServiceInfo;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.time.Duration;
 
-public class AddAppointmentGUI extends JFrame{
+public class AddAppointmentGUI extends JFrame {
 
 
     public void displayAppointmentGUI() {
@@ -39,20 +44,45 @@ public class AddAppointmentGUI extends JFrame{
         JButton saveButton = new JButton("Save");
         saveButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 50052)
+                // Discover gRPC service with JmDNS
+                JmDNS jmdns = null;
+                InetAddress inetAddress = null;
+                ServiceInfo serviceInfo=null;
+                try {
+                    jmdns = JmDNS.create();
+                    inetAddress = InetAddress.getLocalHost();
+                } catch (UnknownHostException unknownHostException) {
+                    unknownHostException.printStackTrace();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+                String serviceType = "_grpc._tcp.local.";
+                ServiceInfo[] serviceInfos = jmdns.list(serviceType);
+                ServiceInfo discoveredService=null;
+                int discoveredPort=0;
+                if (serviceInfos.length == 0) {
+                    System.err.println("No services found.");
+                } else {
+                   discoveredService = serviceInfos[0];
+                   discoveredPort = discoveredService.getPort();}
+                // Build an Appointment request to add a new appointment to the service
+                ManagedChannel channel  = ManagedChannelBuilder.forAddress(inetAddress.getHostAddress(), discoveredPort)
                         .usePlaintext()
                         .build();
+
                 Service2Grpc.Service2BlockingStub blockingStub = Service2Grpc.newBlockingStub(channel);
-                int id=1;
+                // Build an Appointment request to add a new appointment to the service
+                int id = 1;
                 Appointment request = Appointment.newBuilder().setId(id).setTitle(titleField.getText()).setDetail(descArea.getText()).setOccurTime(timeEditor.getFormat().format(timeSpinner.getValue())).setParticipants(participantField.getText()).build();
                 System.out.println("RPC add appointment to be invoked ...");
+                // Get the response code from the gRPC service
                 ResponseMessage response = blockingStub.addEvent(request);
                 int code = response.getCode();
                 String reply;
-                if (code == 0) {
-                    reply="Appointment saved successfully";
-                } else  {
-                    reply="Title can't be null";
+                if (code == 1) {
+                    reply = "Appointment saved successfully";
+                } else {
+                    reply = "Title can't be null";
                 }
                 JOptionPane.showMessageDialog(frame, reply);
                 frame.dispose();
