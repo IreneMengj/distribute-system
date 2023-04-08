@@ -18,7 +18,7 @@ public class Service2 extends Service2Grpc.Service2ImplBase {
     public static void main(String[] args) throws InterruptedException, IOException {
         // Register service with JmDNS
         JmDNS jmdns = JmDNS.create();
-        ServiceInfo serviceInfo = ServiceInfo.create("_grpc._tcp.local.", "Service2", 50052, "");
+        ServiceInfo serviceInfo = ServiceInfo.create("_grpc._tcp.local.", "service2", 50052, "");
         jmdns.registerService(serviceInfo);
         // Start gRPC server
         Service2 service2 = new Service2();

@@ -16,7 +16,6 @@ import java.awt.event.*;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.time.Duration;
 
 public class AddAppointmentGUI extends JFrame {
 
@@ -47,7 +46,6 @@ public class AddAppointmentGUI extends JFrame {
                 // Discover gRPC service with JmDNS
                 JmDNS jmdns = null;
                 InetAddress inetAddress = null;
-                ServiceInfo serviceInfo=null;
                 try {
                     jmdns = JmDNS.create();
                     inetAddress = InetAddress.getLocalHost();
@@ -57,20 +55,24 @@ public class AddAppointmentGUI extends JFrame {
                     ioException.printStackTrace();
                 }
                 String serviceType = "_grpc._tcp.local.";
-                ServiceInfo[] serviceInfos = jmdns.list(serviceType);
-                ServiceInfo discoveredService=null;
-                int discoveredPort=0;
-                if (serviceInfos.length == 0) {
-                    System.err.println("No services found.");
-                } else {
-                   discoveredService = serviceInfos[0];
-                   discoveredPort = discoveredService.getPort();}
-                // Build an Appointment request to add a new appointment to the service
-                ManagedChannel channel  = ManagedChannelBuilder.forAddress(inetAddress.getHostAddress(), discoveredPort)
+                String serviceName="service2";
+                ServiceInfo serviceInfo = jmdns.getServiceInfo(serviceType, serviceName);
+                if (serviceInfo == null) {
+                    System.err.println("Could not find service with name " + serviceName);
+                    return;
+                }
+                // Use the address and port to create the ManagedChannel
+                ManagedChannel channel  = ManagedChannelBuilder.forAddress(inetAddress.getHostAddress(), serviceInfo.getPort())
                         .usePlaintext()
                         .build();
 
                 Service2Grpc.Service2BlockingStub blockingStub = Service2Grpc.newBlockingStub(channel);
+                String reply = addEvent(blockingStub);
+                JOptionPane.showMessageDialog(frame, reply);
+                frame.dispose();
+
+            }
+            public String addEvent(Service2Grpc.Service2BlockingStub blockingStub) {
                 // Build an Appointment request to add a new appointment to the service
                 int id = 1;
                 Appointment request = Appointment.newBuilder().setId(id).setTitle(titleField.getText()).setDetail(descArea.getText()).setOccurTime(timeEditor.getFormat().format(timeSpinner.getValue())).setParticipants(participantField.getText()).build();
@@ -84,11 +86,12 @@ public class AddAppointmentGUI extends JFrame {
                 } else {
                     reply = "Title can't be null";
                 }
-                JOptionPane.showMessageDialog(frame, reply);
-                frame.dispose();
-
+                return reply;
             }
+
         });
+
+
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         c.insets = new Insets(5, 5, 5, 5);
