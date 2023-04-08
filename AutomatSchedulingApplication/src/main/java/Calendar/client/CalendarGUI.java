@@ -13,7 +13,6 @@ public class CalendarGUI extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 AddAppointmentGUI gui = new AddAppointmentGUI();
                 gui.displayAppointmentGUI();
-
             }
         });
 
