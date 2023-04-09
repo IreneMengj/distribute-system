@@ -46,7 +46,6 @@ public class MainGUI extends JFrame {
         controllerGUI.dispose();
     }
 
-
     public static void main(String[] args) {
         new MainGUI();
     }

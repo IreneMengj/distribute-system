@@ -61,6 +61,21 @@ public class Service2 extends Service2Grpc.Service2ImplBase {
 
     @Override
     public void deleteEvent(eventId request, StreamObserver<Calendar.ds.service2.ResponseMessage> responseObserver) {
+        int id = request.getId();
+        boolean flag=false;
+        for(Appointment a:list){
+            if(a.getId()==id){
+                 flag= list.remove(a);
+            }
+        }
+        Calendar.ds.service2.ResponseMessage reply;
+        if(flag) {
+            reply = Calendar.ds.service2.ResponseMessage.newBuilder().setCode(1).build();
+        }else{
+            reply = Calendar.ds.service2.ResponseMessage.newBuilder().setCode(0).build();
+        }
+        responseObserver.onNext(reply);
+        responseObserver.onCompleted();
 
     }
 

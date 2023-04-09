@@ -23,9 +23,9 @@ public class AddAppointmentGUI extends JFrame {
     public void displayAppointmentGUI(String str) {
         JFrame frame;
         if (str == "Update Appointment") {
-            frame = new JFrame("Add Appointment");
-        } else {
             frame = new JFrame("Update Appointment");
+        } else {
+            frame = new JFrame("Add Appointment");
         }
         frame.setSize(400, 300);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -39,7 +39,7 @@ public class AddAppointmentGUI extends JFrame {
 
         JLabel timeLabel = new JLabel("Time:");
         JSpinner timeSpinner = new JSpinner(new SpinnerDateModel());
-        JSpinner.DateEditor timeEditor = new JSpinner.DateEditor(timeSpinner, "HH:mm:ss");
+        JSpinner.DateEditor timeEditor = new JSpinner.DateEditor(timeSpinner, "yyyy-MM-dd");
         timeSpinner.setEditor(timeEditor);
 
         JLabel participantLabel = new JLabel("Participants:");
