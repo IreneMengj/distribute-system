@@ -20,8 +20,13 @@ import java.net.UnknownHostException;
 public class AddAppointmentGUI extends JFrame {
 
 
-    public void displayAppointmentGUI() {
-        JFrame frame = new JFrame("Add Appointment");
+    public void displayAppointmentGUI(String str) {
+        JFrame frame;
+        if (str == "Update Appointment") {
+            frame = new JFrame("Add Appointment");
+        } else {
+            frame = new JFrame("Update Appointment");
+        }
         frame.setSize(400, 300);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
@@ -55,14 +60,14 @@ public class AddAppointmentGUI extends JFrame {
                     ioException.printStackTrace();
                 }
                 String serviceType = "_grpc._tcp.local.";
-                String serviceName="service2";
+                String serviceName = "service2";
                 ServiceInfo serviceInfo = jmdns.getServiceInfo(serviceType, serviceName);
                 if (serviceInfo == null) {
                     System.err.println("Could not find service with name " + serviceName);
                     return;
                 }
                 // Use the address and port to create the ManagedChannel
-                ManagedChannel channel  = ManagedChannelBuilder.forAddress(inetAddress.getHostAddress(), serviceInfo.getPort())
+                ManagedChannel channel = ManagedChannelBuilder.forAddress(inetAddress.getHostAddress(), serviceInfo.getPort())
                         .usePlaintext()
                         .build();
 
@@ -72,6 +77,7 @@ public class AddAppointmentGUI extends JFrame {
                 frame.dispose();
 
             }
+
             public String addEvent(Service2Grpc.Service2BlockingStub blockingStub) {
                 // Build an Appointment request to add a new appointment to the service
                 int id = 1;

@@ -12,16 +12,15 @@ public class CalendarGUI extends JFrame{
         addButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 AddAppointmentGUI gui = new AddAppointmentGUI();
-                gui.displayAppointmentGUI();
+                gui.displayAppointmentGUI("Add Appointment");
             }
         });
 
         JButton updateButton = new JButton("Update Appointment");
         updateButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                JFrame updateFrame = new JFrame("Update Appointment");
-                updateFrame.setSize(200, 150);
-                updateFrame.setVisible(true);
+                AddAppointmentGUI gui = new AddAppointmentGUI();
+                gui.displayAppointmentGUI("Update Appointment");
             }
         });
 
