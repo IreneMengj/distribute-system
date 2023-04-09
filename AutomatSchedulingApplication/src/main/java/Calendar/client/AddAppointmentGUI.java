@@ -18,15 +18,11 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 public class AddAppointmentGUI extends JFrame {
-
+    private static int nextId = 1;
 
     public void displayAppointmentGUI(String str) {
-        JFrame frame;
-        if (str == "Update Appointment") {
-            frame = new JFrame("Update Appointment");
-        } else {
-            frame = new JFrame("Add Appointment");
-        }
+        JFrame frame = new JFrame("Add Appointment");
+
         frame.setSize(400, 300);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
@@ -72,7 +68,9 @@ public class AddAppointmentGUI extends JFrame {
                         .build();
 
                 Service2Grpc.Service2BlockingStub blockingStub = Service2Grpc.newBlockingStub(channel);
+
                 String reply = addEvent(blockingStub);
+
                 JOptionPane.showMessageDialog(frame, reply);
                 frame.dispose();
 
@@ -80,7 +78,7 @@ public class AddAppointmentGUI extends JFrame {
 
             public String addEvent(Service2Grpc.Service2BlockingStub blockingStub) {
                 // Build an Appointment request to add a new appointment to the service
-                int id = 1;
+                int id = nextId++;
                 Appointment request = Appointment.newBuilder().setId(id).setTitle(titleField.getText()).setDetail(descArea.getText()).setOccurTime(timeEditor.getFormat().format(timeSpinner.getValue())).setParticipants(participantField.getText()).build();
                 System.out.println("RPC add appointment to be invoked ...");
                 // Get the response code from the gRPC service

@@ -57,7 +57,6 @@ public class ViewAppointment extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 AddAppointmentGUI gui = new AddAppointmentGUI();
                 gui.displayAppointmentGUI("Add Appointment");
-
             }
         });
 
@@ -112,7 +111,7 @@ public class ViewAppointment extends JFrame {
                 editPanel.add(participantField);
 
                 // 显示编辑面板
-                int result = JOptionPane.showConfirmDialog(null, editPanel, "编辑行", JOptionPane.OK_CANCEL_OPTION);
+                int result = JOptionPane.showConfirmDialog(null, editPanel, "Edit Row", JOptionPane.OK_CANCEL_OPTION);
                 if (result == JOptionPane.OK_OPTION) {
                     // 获取用户修改后的数据
                     Object[] updatedRowData = new Object[model.getColumnCount()];
@@ -139,7 +138,7 @@ public class ViewAppointment extends JFrame {
 
 
 
-                JButton deleteButton = new JButton("Delete");
+        JButton deleteButton = new JButton("Delete");
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -159,6 +158,7 @@ public class ViewAppointment extends JFrame {
                     int code = responseMessage.getCode();
                     if(code==1){
                         JOptionPane.showMessageDialog(null, "Delete successfully.");
+                        model.removeRow(selectedRows[i]); // remove the row from the model
                     }else{
                         JOptionPane.showMessageDialog(null, "Delete unsuccessfully.");
                     }
@@ -189,8 +189,6 @@ public class ViewAppointment extends JFrame {
 
     // 将数据添加到表格中
     public void setData(ArrayList<Object[]> data) {
-        // 清空原来的数据
-        model.setRowCount(0);
 
         // 将新数据添加到模型中
         for (Object[] row : data) {

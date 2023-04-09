@@ -1,8 +1,6 @@
 package Calendar.service;
 
 import Calendar.ds.service2.*;
-import Login.ds.service1.RequestMessage;
-import Login.ds.service1.ResponseMessage;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
@@ -10,7 +8,6 @@ import io.grpc.stub.StreamObserver;
 import javax.jmdns.JmDNS;
 import javax.jmdns.ServiceInfo;
 import java.io.IOException;
-import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,18 +30,21 @@ public class Service2 extends Service2Grpc.Service2ImplBase {
     }
 
     //create a map to save username and password
-    List<Appointment> list = new ArrayList<>();
+    List<Appointment.Builder> list = new ArrayList<>();
 
     @Override
     public void addEvent(Appointment request, StreamObserver<Calendar.ds.service2.ResponseMessage> responseObserver) {
+//        System.out.println(list.get(0).getId());
         int id=request.getId();
         String title = request.getTitle();
         String paticipant = request.getParticipants();
         String desc=request.getDetail();
         String time=request.getOccurTime();
-        Appointment appointment =new Appointment(id,title,paticipant,desc,time);
+        Appointment appointment =new Appointment();
+        Appointment.Builder builder = appointment.toBuilder().setId(id).setTitle(title).setDetail(desc).setOccurTime(time).setParticipants(paticipant
+        );
         Calendar.ds.service2.ResponseMessage reply;
-        list.add(appointment);
+        list.add(builder);
         if (title.equals("")) {
             reply=Calendar.ds.service2.ResponseMessage.newBuilder().setCode(0).build();
         } else {
@@ -61,11 +61,13 @@ public class Service2 extends Service2Grpc.Service2ImplBase {
 
     @Override
     public void deleteEvent(eventId request, StreamObserver<Calendar.ds.service2.ResponseMessage> responseObserver) {
+
         int id = request.getId();
         boolean flag=false;
-        for(Appointment a:list){
+        for(Appointment.Builder a:list){
             if(a.getId()==id){
                  flag= list.remove(a);
+                 break;
             }
         }
         Calendar.ds.service2.ResponseMessage reply;
