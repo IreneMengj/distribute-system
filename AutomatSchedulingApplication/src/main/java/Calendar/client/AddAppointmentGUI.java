@@ -16,11 +16,14 @@ import java.awt.event.*;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AddAppointmentGUI extends JFrame {
     private static int nextId = 1;
+    private ArrayList<Appointment> list;
 
-    public void displayAppointmentGUI(String str) {
+    public ArrayList<Appointment> displayAppointmentGUI(String str) {
         JFrame frame = new JFrame("Add Appointment");
 
         frame.setSize(400, 300);
@@ -68,15 +71,6 @@ public class AddAppointmentGUI extends JFrame {
                         .build();
 
                 Service2Grpc.Service2BlockingStub blockingStub = Service2Grpc.newBlockingStub(channel);
-
-                String reply = addEvent(blockingStub);
-
-                JOptionPane.showMessageDialog(frame, reply);
-                frame.dispose();
-
-            }
-
-            public String addEvent(Service2Grpc.Service2BlockingStub blockingStub) {
                 // Build an Appointment request to add a new appointment to the service
                 int id = nextId++;
                 Appointment request = Appointment.newBuilder().setId(id).setTitle(titleField.getText()).setDetail(descArea.getText()).setOccurTime(timeEditor.getFormat().format(timeSpinner.getValue())).setParticipants(participantField.getText()).build();
@@ -84,13 +78,16 @@ public class AddAppointmentGUI extends JFrame {
                 // Get the response code from the gRPC service
                 ResponseMessage response = blockingStub.addEvent(request);
                 int code = response.getCode();
+                ArrayList<Appointment> appointmentsList = (ArrayList<Appointment>) response.getAppointmentsList();
+                list=appointmentsList;
                 String reply;
                 if (code == 1) {
                     reply = "Appointment saved successfully";
                 } else {
                     reply = "Title can't be null";
                 }
-                return reply;
+                JOptionPane.showMessageDialog(frame, reply);
+                frame.dispose();
             }
 
         });
@@ -129,6 +126,7 @@ public class AddAppointmentGUI extends JFrame {
 
         frame.add(panel);
         frame.setVisible(true);
+        return list;
 
     }
 

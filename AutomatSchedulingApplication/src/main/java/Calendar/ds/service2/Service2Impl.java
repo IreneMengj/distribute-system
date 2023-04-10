@@ -54,16 +54,17 @@ public final class Service2Impl {
       "\030\001 \003(\0132\025.service2.Appointment\"a\n\013Appoint" +
       "ment\022\n\n\002id\030\001 \001(\005\022\r\n\005title\030\002 \001(\t\022\016\n\006detai" +
       "l\030\003 \001(\t\022\021\n\toccurTime\030\004 \001(\t\022\024\n\014participan" +
-      "ts\030\005 \001(\t\"\037\n\017ResponseMessage\022\014\n\004code\030\001 \001(" +
-      "\0052\220\002\n\010Service2\022>\n\010addEvent\022\025.service2.Ap" +
-      "pointment\032\031.service2.ResponseMessage\"\000\022B" +
-      "\n\tviewEvent\022\025.service2.eventIdList\032\034.ser" +
-      "vice2.AppointmentRequest\"\000\022=\n\013deleteEven" +
-      "t\022\021.service2.eventId\032\031.service2.Response" +
-      "Message\"\000\022A\n\013updateEvent\022\025.service2.Appo" +
-      "intment\032\031.service2.ResponseMessage\"\000B&\n\024" +
-      "Calendar.ds.service2B\014Service2ImplP\001b\006pr" +
-      "oto3"
+      "ts\030\005 \001(\t\"L\n\017ResponseMessage\022\014\n\004code\030\001 \001(" +
+      "\005\022+\n\014appointments\030\002 \003(\0132\025.service2.Appoi" +
+      "ntment2\220\002\n\010Service2\022>\n\010addEvent\022\025.servic" +
+      "e2.Appointment\032\031.service2.ResponseMessag" +
+      "e\"\000\022B\n\tviewEvent\022\025.service2.eventIdList\032" +
+      "\034.service2.AppointmentRequest\"\000\022=\n\013delet" +
+      "eEvent\022\021.service2.eventId\032\031.service2.Res" +
+      "ponseMessage\"\000\022A\n\013updateEvent\022\025.service2" +
+      ".Appointment\032\031.service2.ResponseMessage\"" +
+      "\000B&\n\024Calendar.ds.service2B\014Service2ImplP" +
+      "\001b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -98,7 +99,7 @@ public final class Service2Impl {
     internal_static_service2_ResponseMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_service2_ResponseMessage_descriptor,
-        new String[] { "Code", });
+        new String[] { "Code", "Appointments", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

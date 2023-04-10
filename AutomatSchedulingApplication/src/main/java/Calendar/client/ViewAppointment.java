@@ -1,5 +1,6 @@
 package Calendar.client;
 
+import Calendar.ds.service2.Appointment;
 import Calendar.ds.service2.ResponseMessage;
 import Calendar.ds.service2.Service2Grpc;
 import Calendar.ds.service2.eventId;
@@ -20,10 +21,12 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class ViewAppointment extends JFrame {
     private JTable table;
     private DefaultTableModel model;
+    private ArrayList<Object[]> data;
 
     public ViewAppointment() {
         super("Appointments");
@@ -56,7 +59,9 @@ public class ViewAppointment extends JFrame {
         addButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 AddAppointmentGUI gui = new AddAppointmentGUI();
-                gui.displayAppointmentGUI("Add Appointment");
+                ArrayList<Appointment> appointments = gui.displayAppointmentGUI("Add Appointment");
+
+                setData(appointments);
             }
         });
 
@@ -65,15 +70,16 @@ public class ViewAppointment extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // 获取选中行的索引
-                int rowIndex = table.getSelectedRow();
+                int[] selectedRows = table.getSelectedRows();
 
-                // 如果没有选中行，则弹出提示框并返回
-                if (rowIndex < 0) {
-                    JOptionPane.showMessageDialog(null, "Select the row you want to modify:");
+                // 如果没有选中行或选中多行，则弹出提示框并返回
+                if (selectedRows.length != 1) {
+                    JOptionPane.showMessageDialog(null, "Please select one row to modify.");
                     return;
                 }
 
                 // 获取选中行的数据
+                int rowIndex = selectedRows[0];
                 Object[] rowData = new Object[model.getColumnCount()];
                 for (int i = 0; i < rowData.length; i++) {
                     rowData[i] = model.getValueAt(rowIndex, i);
@@ -81,6 +87,7 @@ public class ViewAppointment extends JFrame {
 
                 // 创建编辑面板并将数据填充到编辑面板中
                 JPanel editPanel = new JPanel(new GridLayout(0, 2));
+
                 JLabel idLabel = new JLabel("ID:");
                 JTextField idField = new JTextField(rowData[0].toString());
                 idField.setEditable(false);
@@ -92,7 +99,7 @@ public class ViewAppointment extends JFrame {
                 editPanel.add(titleLabel);
                 editPanel.add(titleField);
 
-                JLabel descLabel = new JLabel("DESCRIPTION:");
+                JLabel descLabel = new JLabel("TITLE:");
                 JTextField descField = new JTextField(rowData[2].toString());
                 editPanel.add(descLabel);
                 editPanel.add(descField);
@@ -110,32 +117,42 @@ public class ViewAppointment extends JFrame {
                 editPanel.add(participantLabel);
                 editPanel.add(participantField);
 
-                // 显示编辑面板
-                int result = JOptionPane.showConfirmDialog(null, editPanel, "Edit Row", JOptionPane.OK_CANCEL_OPTION);
-                if (result == JOptionPane.OK_OPTION) {
-                    // 获取用户修改后的数据
-                    Object[] updatedRowData = new Object[model.getColumnCount()];
-                    updatedRowData[0] = rowData[0];
-                    updatedRowData[1] = titleField.getText();
-                    updatedRowData[2] = descField.getText();
-                    updatedRowData[3] = timeSpinner.getValue();
-                    updatedRowData[4] = participantField.getText();
+                JFrame frame = new JFrame("Edit Panel Example");
+                frame.add(editPanel);
+                frame.pack();
+                frame.setVisible(true);
 
-                    // 更新模型中的数据
-                    model.setValueAt(updatedRowData[1], rowIndex, 1);
-                    model.setValueAt(updatedRowData[2], rowIndex, 2);
-                    model.setValueAt(updatedRowData[3], rowIndex, 3);
-                    model.setValueAt(updatedRowData[4], rowIndex, 4);
-                } else {
-                    // 用户取消编辑，恢复原始数据
-                    for (int i = 0; i < rowData.length; i++) {
-                        model.setValueAt(rowData[i], rowIndex, i);
+                // 创建确认按钮
+                JButton confirmButton = new JButton("Confirm");
+
+                // 创建一个用于保存确认按钮状态的变量
+                final boolean[] isEditEnabled = {false};
+
+                // 点击确认按钮后更新模型中的数据
+                confirmButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        // 获取用户修改后的数据
+                        Object[] updatedRowData = new Object[model.getColumnCount()];
+                        updatedRowData[0] = rowData[0];
+                        updatedRowData[1] = titleField.getText();
+                        updatedRowData[2] = descField.getText();
+                        updatedRowData[3] = timeSpinner.getValue();
+                        updatedRowData[4] = participantField.getText();
+
+                        // 更新模型中的数据
+                        model.setValueAt(updatedRowData[1], rowIndex, 1);
+                        model.setValueAt(updatedRowData[2], rowIndex, 2);
+                        model.setValueAt(updatedRowData[3], rowIndex, 3);
+                        model.setValueAt(updatedRowData[4], rowIndex, 4);
+
+                        // 关闭编辑面板
+                        isEditEnabled[0] = false;
+                        frame.dispose();
                     }
-                }
+                });
             }
         });
-
-
 
 
         JButton deleteButton = new JButton("Delete");
@@ -150,20 +167,19 @@ public class ViewAppointment extends JFrame {
                     return;
                 }
                 // Get the ID of the selected row
-                for(int i=0;i<selectedRows.length;i++) {
+                for (int i = 0; i < selectedRows.length; i++) {
                     int id = Integer.parseInt(model.getValueAt(selectedRows[i], 0).toString());
                     Service2Grpc.Service2BlockingStub blockingStub = createChannel();
                     eventId request = eventId.newBuilder().setId(id).build();
                     ResponseMessage responseMessage = blockingStub.deleteEvent(request);
                     int code = responseMessage.getCode();
-                    if(code==1){
+                    if (code == 1) {
                         JOptionPane.showMessageDialog(null, "Delete successfully.");
                         model.removeRow(selectedRows[i]); // remove the row from the model
-                    }else{
+                    } else {
                         JOptionPane.showMessageDialog(null, "Delete unsuccessfully.");
                     }
                 }
-
 
 
             }
@@ -188,14 +204,15 @@ public class ViewAppointment extends JFrame {
     }
 
     // 将数据添加到表格中
-    public void setData(ArrayList<Object[]> data) {
+    public void setData(ArrayList<Appointment> data) {
 
         // 将新数据添加到模型中
-        for (Object[] row : data) {
-            model.addRow(row);
+        for (Appointment row : data) {
+            model.addRow(new Appointment[]{row});
         }
     }
-    public Service2Grpc.Service2BlockingStub createChannel(){
+
+    public Service2Grpc.Service2BlockingStub createChannel() {
         // Discover gRPC service with JmDNS
         JmDNS jmdns = null;
         InetAddress inetAddress = null;
@@ -225,17 +242,17 @@ public class ViewAppointment extends JFrame {
 
 
     public static void main(String[] args) {
-        // 创建一个新的ListGUI对象
+//        // 创建一个新的ListGUI对象
         ViewAppointment gui = new ViewAppointment();
         // 创建一些数据并将其添加到表格中
-        ArrayList<Object[]> data=new ArrayList<>();
+//        ArrayList<Object[]> data = new ArrayList<>();
+//
+//        data.add(new Object[]{"1", "talk about recruiment", "we need new graduate", "2022-01-01", "John, Jane"});
+//        data.add(new Object[]{"2", "department meeting", "not urgent", "2022-01-02", "Mary"});
+//        data.add(new Object[]{"3", "team building", "spring is coming", "2022-01-03", "Bob, Alice"});
+//        data.add(new Object[]{"4", "team building", "spring is coming", "2022-01-03", "Bob, Alice"});
 
-        data.add(new Object[]{"1", "talk about recruiment", "we need new graduate", "2022-01-01", "John, Jane"});
-        data.add(new Object[]{"2", "department meeting", "not urgent", "2022-01-02", "Mary"});
-        data.add(new Object[]{"3", "team building", "spring is coming", "2022-01-03", "Bob, Alice"});
-        data.add(new Object[]{"3", "team building", "spring is coming", "2022-01-03", "Bob, Alice"});
 
-        gui.setData(data);
 
 
     }

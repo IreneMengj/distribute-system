@@ -48,7 +48,7 @@ public class Service2 extends Service2Grpc.Service2ImplBase {
         if (title.equals("")) {
             reply=Calendar.ds.service2.ResponseMessage.newBuilder().setCode(0).build();
         } else {
-            reply=Calendar.ds.service2.ResponseMessage.newBuilder().setCode(1).build();
+            reply=Calendar.ds.service2.ResponseMessage.newBuilder().setCode(1).setAppointments(0,builder).build();
         }
         responseObserver.onNext(reply);
         responseObserver.onCompleted();

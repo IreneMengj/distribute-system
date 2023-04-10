@@ -12,4 +12,28 @@ public interface ResponseMessageOrBuilder extends
    * @return The code.
    */
   int getCode();
+
+  /**
+   * <code>repeated .service2.Appointment appointments = 2;</code>
+   */
+  java.util.List<Appointment>
+      getAppointmentsList();
+  /**
+   * <code>repeated .service2.Appointment appointments = 2;</code>
+   */
+  Appointment getAppointments(int index);
+  /**
+   * <code>repeated .service2.Appointment appointments = 2;</code>
+   */
+  int getAppointmentsCount();
+  /**
+   * <code>repeated .service2.Appointment appointments = 2;</code>
+   */
+  java.util.List<? extends AppointmentOrBuilder>
+      getAppointmentsOrBuilderList();
+  /**
+   * <code>repeated .service2.Appointment appointments = 2;</code>
+   */
+  AppointmentOrBuilder getAppointmentsOrBuilder(
+      int index);
 }

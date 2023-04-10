@@ -36,4 +36,5 @@ message Appointment {
 
 message ResponseMessage {
   int32 code = 1;
+  repeated Appointment appointments = 2;
 }
