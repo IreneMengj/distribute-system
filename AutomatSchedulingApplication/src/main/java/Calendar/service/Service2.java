@@ -30,7 +30,7 @@ public class Service2 extends Service2Grpc.Service2ImplBase {
     }
 
     //create a map to save username and password
-    List<Appointment.Builder> list = new ArrayList<>();
+    ArrayList<Appointment.Builder> list = new ArrayList<>();
 
     @Override
     public void addEvent(Appointment request, StreamObserver<Calendar.ds.service2.ResponseMessage> responseObserver) {
@@ -43,12 +43,12 @@ public class Service2 extends Service2Grpc.Service2ImplBase {
         Appointment appointment =new Appointment();
         Appointment.Builder builder = appointment.toBuilder().setId(id).setTitle(title).setDetail(desc).setOccurTime(time).setParticipants(paticipant
         );
-        Calendar.ds.service2.ResponseMessage reply;
         list.add(builder);
+        Calendar.ds.service2.ResponseMessage reply;
         if (title.equals("")) {
             reply=Calendar.ds.service2.ResponseMessage.newBuilder().setCode(0).build();
         } else {
-            reply=Calendar.ds.service2.ResponseMessage.newBuilder().setCode(1).setAppointments(0,builder).build();
+            reply=Calendar.ds.service2.ResponseMessage.newBuilder().setCode(1).build();
         }
         responseObserver.onNext(reply);
         responseObserver.onCompleted();
@@ -56,7 +56,22 @@ public class Service2 extends Service2Grpc.Service2ImplBase {
 
     @Override
     public void updateEvent(Appointment request, StreamObserver<Calendar.ds.service2.ResponseMessage> responseObserver) {
-
+        int id = request.getId();
+        String title = request.getTitle();
+        String occurTime = request.getOccurTime();
+        String detail = request.getDetail();
+        String participants = request.getParticipants();
+        for(Appointment.Builder b:list){
+            if(b.getId()==id){
+                b.setTitle(title);
+                b.setOccurTime(occurTime);
+                b.setDetail(detail);
+                b.setParticipants(participants);
+            }
+        }
+        Calendar.ds.service2.ResponseMessage reply=Calendar.ds.service2.ResponseMessage.newBuilder().setCode(1).build();
+        responseObserver.onNext(reply);
+        responseObserver.onCompleted();
     }
 
     @Override

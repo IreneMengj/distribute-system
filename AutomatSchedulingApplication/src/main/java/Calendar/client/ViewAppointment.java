@@ -26,10 +26,14 @@ import java.util.List;
 public class ViewAppointment extends JFrame {
     private JTable table;
     private DefaultTableModel model;
-    private ArrayList<Object[]> data;
+    private List<Object[]> appointments;
+    private AddAppointmentGUI addAppointmentGUI;
+
 
     public ViewAppointment() {
         super("Appointments");
+        // Initialize the appointments list
+        appointments = new ArrayList<>();
 
 
         // Create a table model
@@ -58,10 +62,9 @@ public class ViewAppointment extends JFrame {
         JButton addButton = new JButton("Add");
         addButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                AddAppointmentGUI gui = new AddAppointmentGUI();
-                ArrayList<Appointment> appointments = gui.displayAppointmentGUI("Add Appointment");
-
-                setData(appointments);
+//                AddAppointmentGUI gui = new AddAppointmentGUI();
+                addAppointmentGUI = new AddAppointmentGUI(ViewAppointment.this);
+                addAppointmentGUI.displayAppointmentGUI("add", null);
             }
         });
 
@@ -84,73 +87,8 @@ public class ViewAppointment extends JFrame {
                 for (int i = 0; i < rowData.length; i++) {
                     rowData[i] = model.getValueAt(rowIndex, i);
                 }
-
-                // 创建编辑面板并将数据填充到编辑面板中
-                JPanel editPanel = new JPanel(new GridLayout(0, 2));
-
-                JLabel idLabel = new JLabel("ID:");
-                JTextField idField = new JTextField(rowData[0].toString());
-                idField.setEditable(false);
-                editPanel.add(idLabel);
-                editPanel.add(idField);
-
-                JLabel titleLabel = new JLabel("TITLE:");
-                JTextField titleField = new JTextField(rowData[1].toString());
-                editPanel.add(titleLabel);
-                editPanel.add(titleField);
-
-                JLabel descLabel = new JLabel("TITLE:");
-                JTextField descField = new JTextField(rowData[2].toString());
-                editPanel.add(descLabel);
-                editPanel.add(descField);
-
-                JLabel timeLabel = new JLabel("TIME:");
-                JSpinner timeSpinner = new JSpinner(new SpinnerDateModel());
-                JSpinner.DateEditor timeEditor = new JSpinner.DateEditor(timeSpinner, "yyyy-MM-dd HH:mm:ss");
-                timeSpinner.setEditor(timeEditor);
-                timeSpinner.setValue((Date) rowData[3]);
-                editPanel.add(timeLabel);
-                editPanel.add(timeSpinner);
-
-                JLabel participantLabel = new JLabel("PARTICIPANTS:");
-                JTextField participantField = new JTextField(rowData[4].toString());
-                editPanel.add(participantLabel);
-                editPanel.add(participantField);
-
-                JFrame frame = new JFrame("Edit Panel Example");
-                frame.add(editPanel);
-                frame.pack();
-                frame.setVisible(true);
-
-                // 创建确认按钮
-                JButton confirmButton = new JButton("Confirm");
-
-                // 创建一个用于保存确认按钮状态的变量
-                final boolean[] isEditEnabled = {false};
-
-                // 点击确认按钮后更新模型中的数据
-                confirmButton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        // 获取用户修改后的数据
-                        Object[] updatedRowData = new Object[model.getColumnCount()];
-                        updatedRowData[0] = rowData[0];
-                        updatedRowData[1] = titleField.getText();
-                        updatedRowData[2] = descField.getText();
-                        updatedRowData[3] = timeSpinner.getValue();
-                        updatedRowData[4] = participantField.getText();
-
-                        // 更新模型中的数据
-                        model.setValueAt(updatedRowData[1], rowIndex, 1);
-                        model.setValueAt(updatedRowData[2], rowIndex, 2);
-                        model.setValueAt(updatedRowData[3], rowIndex, 3);
-                        model.setValueAt(updatedRowData[4], rowIndex, 4);
-
-                        // 关闭编辑面板
-                        isEditEnabled[0] = false;
-                        frame.dispose();
-                    }
-                });
+                addAppointmentGUI = new AddAppointmentGUI(ViewAppointment.this);
+                addAppointmentGUI.displayAppointmentGUI("edit", rowData);
             }
         });
 
@@ -171,6 +109,7 @@ public class ViewAppointment extends JFrame {
                     int id = Integer.parseInt(model.getValueAt(selectedRows[i], 0).toString());
                     Service2Grpc.Service2BlockingStub blockingStub = createChannel();
                     eventId request = eventId.newBuilder().setId(id).build();
+                    System.out.println("RPC delete appointment to be invoked ...");
                     ResponseMessage responseMessage = blockingStub.deleteEvent(request);
                     int code = responseMessage.getCode();
                     if (code == 1) {
@@ -185,32 +124,64 @@ public class ViewAppointment extends JFrame {
             }
         });
 
-        // 将按钮添加到按钮面板中
+        // Add the button to the button panel
         buttonPanel.add(addButton);
         buttonPanel.add(editButton);
         buttonPanel.add(deleteButton);
 
-        // 创建一个面板来放置表格和按钮
+        // Create a panel to hold tables and buttons
         JPanel panel = new JPanel(new BorderLayout());
         panel.add(scrollPane, BorderLayout.CENTER);
         panel.add(buttonPanel, BorderLayout.SOUTH);
 
-        // 将主面板添加到窗口中
+        // Add the main panel to the window
         add(panel);
 
-        // 设置窗口大小并可见
+        // Sets the window size and visibility
         setSize(800, 600);
         setVisible(true);
     }
 
-    // 将数据添加到表格中
-    public void setData(ArrayList<Appointment> data) {
+    // Set the data of the table
+    public void setData(int id, Object[] newData) {
+        // Find the row with the specified id and update its data
+        for (int i = 0; i < appointments.size(); i++) {
+            Object[] row = appointments.get(i);
+            int o = Integer.parseInt(row[0].toString());
+            if (o==id) {
+                // Update the row data
+                row[1] = newData[0];
+                row[2] = newData[1];
+                row[3] = newData[2];
+                row[4] = newData[3];
+                // Update the data in the appointments list
+//                appointments.set(i, row);
+                // Update the row in the table model
+//                 Update the row in the table model
+                for (int j = 1; j <= 4; j++) {
+                    model.setValueAt(row[j], i, j);
+                }
 
-        // 将新数据添加到模型中
-        for (Appointment row : data) {
-            model.addRow(new Appointment[]{row});
+                return;
+            }
         }
     }
+
+    // Edit an existing appointment in the appointments list
+    public void editingAppointment(int id, Object[] newAppointment) {
+        // Update the row in the table model
+        setData(id, newAppointment);
+
+    }
+
+
+    // Add an appointment to the appointments list
+    public void addAppointment(Object[] appointment) {
+        appointments.add(appointment);
+        // Add the appointment data to the table
+        model.addRow(appointment);
+    }
+
 
     public Service2Grpc.Service2BlockingStub createChannel() {
         // Discover gRPC service with JmDNS
@@ -242,18 +213,7 @@ public class ViewAppointment extends JFrame {
 
 
     public static void main(String[] args) {
-//        // 创建一个新的ListGUI对象
         ViewAppointment gui = new ViewAppointment();
-        // 创建一些数据并将其添加到表格中
-//        ArrayList<Object[]> data = new ArrayList<>();
-//
-//        data.add(new Object[]{"1", "talk about recruiment", "we need new graduate", "2022-01-01", "John, Jane"});
-//        data.add(new Object[]{"2", "department meeting", "not urgent", "2022-01-02", "Mary"});
-//        data.add(new Object[]{"3", "team building", "spring is coming", "2022-01-03", "Bob, Alice"});
-//        data.add(new Object[]{"4", "team building", "spring is coming", "2022-01-03", "Bob, Alice"});
-
-
-
 
     }
 }
