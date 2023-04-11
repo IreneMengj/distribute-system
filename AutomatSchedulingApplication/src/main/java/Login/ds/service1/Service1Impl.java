@@ -33,18 +33,21 @@ public final class Service1Impl {
       descriptor;
   static {
     String[] descriptorData = {
-      "\n\016service1.proto\022\010service1\"4\n\016RequestMes" +
-      "sage\022\020\n\010username\030\001 \001(\t\022\020\n\010password\030\002 \001(\t" +
-      "\"\037\n\017ResponseMessage\022\014\n\004code\030\001 \001(\0052\213\001\n\010Se" +
-      "rvice1\022>\n\005login\022\030.service1.RequestMessag" +
-      "e\032\031.service1.ResponseMessage\"\000\022?\n\006signup" +
-      "\022\030.service1.RequestMessage\032\031.service1.Re" +
-      "sponseMessage\"\000B#\n\021Login.ds.service1B\014Se" +
-      "rvice1ImplP\001b\006proto3"
+      "\n\016service1.proto\022\010service1\032\033google/proto" +
+      "buf/empty.proto\"4\n\016RequestMessage\022\020\n\010use" +
+      "rname\030\001 \001(\t\022\020\n\010password\030\002 \001(\t\"\037\n\017Respons" +
+      "eMessage\022\014\n\004code\030\001 \001(\0052\313\001\n\010Service1\022>\n\005l" +
+      "ogin\022\030.service1.RequestMessage\032\031.service" +
+      "1.ResponseMessage\"\000\022?\n\006signup\022\030.service1" +
+      ".RequestMessage\032\031.service1.ResponseMessa" +
+      "ge\"\000\022>\n\007isLogin\022\026.google.protobuf.Empty\032" +
+      "\031.service1.ResponseMessage\"\000B#\n\021Login.ds" +
+      ".service1B\014Service1ImplP\001b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
+          com.google.protobuf.EmptyProto.getDescriptor(),
         });
     internal_static_service1_RequestMessage_descriptor =
       getDescriptor().getMessageTypes().get(0);
@@ -58,6 +61,7 @@ public final class Service1Impl {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_service1_ResponseMessage_descriptor,
         new String[] { "Code", });
+    com.google.protobuf.EmptyProto.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

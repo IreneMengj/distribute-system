@@ -80,6 +80,37 @@ public final class Service1Grpc {
     return getSignupMethod;
   }
 
+  private static volatile io.grpc.MethodDescriptor<com.google.protobuf.Empty,
+      ResponseMessage> getIsLoginMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "isLogin",
+      requestType = com.google.protobuf.Empty.class,
+      responseType = ResponseMessage.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<com.google.protobuf.Empty,
+      ResponseMessage> getIsLoginMethod() {
+    io.grpc.MethodDescriptor<com.google.protobuf.Empty, ResponseMessage> getIsLoginMethod;
+    if ((getIsLoginMethod = Service1Grpc.getIsLoginMethod) == null) {
+      synchronized (Service1Grpc.class) {
+        if ((getIsLoginMethod = Service1Grpc.getIsLoginMethod) == null) {
+          Service1Grpc.getIsLoginMethod = getIsLoginMethod =
+              io.grpc.MethodDescriptor.<com.google.protobuf.Empty, ResponseMessage>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "isLogin"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.google.protobuf.Empty.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  ResponseMessage.getDefaultInstance()))
+              .setSchemaDescriptor(new Service1MethodDescriptorSupplier("isLogin"))
+              .build();
+        }
+      }
+    }
+    return getIsLoginMethod;
+  }
+
   /**
    * Creates a new async stub that supports all call types for the service
    */
@@ -145,6 +176,13 @@ public final class Service1Grpc {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getSignupMethod(), responseObserver);
     }
 
+    /**
+     */
+    public void isLogin(com.google.protobuf.Empty request,
+        io.grpc.stub.StreamObserver<ResponseMessage> responseObserver) {
+      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getIsLoginMethod(), responseObserver);
+    }
+
     @Override public final io.grpc.ServerServiceDefinition bindService() {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
           .addMethod(
@@ -161,6 +199,13 @@ public final class Service1Grpc {
                 RequestMessage,
                 ResponseMessage>(
                   this, METHODID_SIGNUP)))
+          .addMethod(
+            getIsLoginMethod(),
+            io.grpc.stub.ServerCalls.asyncUnaryCall(
+              new MethodHandlers<
+                com.google.protobuf.Empty,
+                ResponseMessage>(
+                  this, METHODID_IS_LOGIN)))
           .build();
     }
   }
@@ -197,6 +242,14 @@ public final class Service1Grpc {
       io.grpc.stub.ClientCalls.asyncUnaryCall(
           getChannel().newCall(getSignupMethod(), getCallOptions()), request, responseObserver);
     }
+
+    /**
+     */
+    public void isLogin(com.google.protobuf.Empty request,
+        io.grpc.stub.StreamObserver<ResponseMessage> responseObserver) {
+      io.grpc.stub.ClientCalls.asyncUnaryCall(
+          getChannel().newCall(getIsLoginMethod(), getCallOptions()), request, responseObserver);
+    }
   }
 
   /**
@@ -228,6 +281,13 @@ public final class Service1Grpc {
     public ResponseMessage signup(RequestMessage request) {
       return io.grpc.stub.ClientCalls.blockingUnaryCall(
           getChannel(), getSignupMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public ResponseMessage isLogin(com.google.protobuf.Empty request) {
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getIsLoginMethod(), getCallOptions(), request);
     }
   }
 
@@ -263,10 +323,19 @@ public final class Service1Grpc {
       return io.grpc.stub.ClientCalls.futureUnaryCall(
           getChannel().newCall(getSignupMethod(), getCallOptions()), request);
     }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<ResponseMessage> isLogin(
+        com.google.protobuf.Empty request) {
+      return io.grpc.stub.ClientCalls.futureUnaryCall(
+          getChannel().newCall(getIsLoginMethod(), getCallOptions()), request);
+    }
   }
 
   private static final int METHODID_LOGIN = 0;
   private static final int METHODID_SIGNUP = 1;
+  private static final int METHODID_IS_LOGIN = 2;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -291,6 +360,10 @@ public final class Service1Grpc {
           break;
         case METHODID_SIGNUP:
           serviceImpl.signup((RequestMessage) request,
+              (io.grpc.stub.StreamObserver<ResponseMessage>) responseObserver);
+          break;
+        case METHODID_IS_LOGIN:
+          serviceImpl.isLogin((com.google.protobuf.Empty) request,
               (io.grpc.stub.StreamObserver<ResponseMessage>) responseObserver);
           break;
         default:
@@ -356,6 +429,7 @@ public final class Service1Grpc {
               .setSchemaDescriptor(new Service1FileDescriptorSupplier())
               .addMethod(getLoginMethod())
               .addMethod(getSignupMethod())
+              .addMethod(getIsLoginMethod())
               .build();
         }
       }

@@ -1,6 +1,6 @@
 package GUI;
 
-import Calendar.client.ViewAppointment;
+import Calendar.client.ViewAppointmentGUI;
 import Login.client.LoginGUI;
 
 
@@ -13,7 +13,7 @@ public class MainGUI extends JFrame {
     private JButton openLoginGUIButton;
     private JButton openAppButton;
     private LoginGUI loginGUI;
-    private ViewAppointment viewAppGUI;
+    private ViewAppointmentGUI viewAppGUI;
 
     public MainGUI() {
         setTitle("Automated Scheduling applications");
@@ -37,7 +37,7 @@ public class MainGUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // create the Controller GUI
-                viewAppGUI = new ViewAppointment(MainGUI.this);
+                viewAppGUI = new ViewAppointmentGUI(MainGUI.this);
                 // show the Controller GUI
                 viewAppGUI.setVisible(true);
                 // hide the First GUI
@@ -67,6 +67,7 @@ public class MainGUI extends JFrame {
     public void showMainGUI() {
         setVisible(true);
         loginGUI.dispose();
+        viewAppGUI.dispose();
     }
 
     public static void main(String[] args) {

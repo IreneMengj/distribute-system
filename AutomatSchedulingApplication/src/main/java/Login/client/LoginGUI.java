@@ -106,8 +106,10 @@ public class LoginGUI extends JFrame implements ActionListener {
             int code = response.getCode();
             if (code == 1) {
                 reply.setText("Login successfully");
-            } else {
-                reply.setText("Login unsuccessfully.");
+            } else  if(code==0)  {
+                reply.setText("Sign up first.");
+            }else{
+                reply.setText("Wrong username or password");
             }
         } else if (selectedOption.equals("Sign up")) {
             System.out.println("RPC Signup to be invoked ...");
@@ -119,7 +121,7 @@ public class LoginGUI extends JFrame implements ActionListener {
             int code = response.getCode();
             if (code == 1) {
                 reply.setText("Sign up successfully");
-            } else {
+            } else{
                 reply.setText("Username taken. Try again.");
             }
         }

@@ -5,6 +5,8 @@ import Calendar.ds.service2.ResponseMessage;
 import Calendar.ds.service2.Service2Grpc;
 
 
+import Login.ds.service1.Service1Grpc;
+import com.google.protobuf.Empty;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 
@@ -16,12 +18,11 @@ import java.awt.event.*;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class AddAppointmentGUI extends JFrame {
     private static int nextId = 1;
-    private ViewAppointment viewAppointment;
+    private ViewAppointmentGUI viewAppointmentGUI;
     JFrame frame;
     JLabel titleLabel;
     JTextField titleField;
@@ -35,8 +36,8 @@ public class AddAppointmentGUI extends JFrame {
     JTextField participantField ;
     int id;
 
-    public AddAppointmentGUI(ViewAppointment viewAppointment) {
-        this.viewAppointment = viewAppointment;
+    public AddAppointmentGUI(ViewAppointmentGUI viewAppointmentGUI) {
+        this.viewAppointmentGUI = viewAppointmentGUI;
         // ...
     }
 
@@ -109,12 +110,13 @@ public class AddAppointmentGUI extends JFrame {
                     System.err.println("Could not find service with name " + serviceName);
                     return;
                 }
+
                 // Use the address and port to create the ManagedChannel
-                ManagedChannel channel = ManagedChannelBuilder.forAddress(inetAddress.getHostAddress(), serviceInfo.getPort())
+                ManagedChannel channel1 = ManagedChannelBuilder.forAddress(inetAddress.getHostAddress(), serviceInfo.getPort())
                         .usePlaintext()
                         .build();
 
-                Service2Grpc.Service2BlockingStub blockingStub = Service2Grpc.newBlockingStub(channel);
+                Service2Grpc.Service2BlockingStub blockingStub = Service2Grpc.newBlockingStub(channel1);
                 // Build an Appointment request to add a new appointment to the service
 
 
@@ -136,9 +138,9 @@ public class AddAppointmentGUI extends JFrame {
                     JOptionPane.showMessageDialog(frame, reply);
                     // Create a new appointment with the input details
                     Object[] appointment = new Object[]{id,titleField.getText(), descArea.getText(), timeEditor.getFormat().format(timeSpinner.getValue()), participantField.getText()};
-                    // Get the instance of ViewAppointment and add the new appointment
+                    // Get the instance of ViewAppointmentGUI and add the new appointment
 
-                    viewAppointment.addAppointment(appointment);
+                    viewAppointmentGUI.addAppointment(appointment);
                 }else{
                     id=Integer.parseInt(rowData[0].toString());
                     String title=titleField.getText();
@@ -161,9 +163,9 @@ public class AddAppointmentGUI extends JFrame {
                     JOptionPane.showMessageDialog(frame, reply);
                     // Create a new appointment with the input details
                     Object[] appointment = new Object[]{title, desc, time, participant};
-                    // Get the instance of ViewAppointment and add the new appointment
+                    // Get the instance of ViewAppointmentGUI and add the new appointment
 
-                    viewAppointment.editingAppointment(id,appointment);
+                    viewAppointmentGUI.editingAppointment(id,appointment);
 
                 }
                 frame.dispose();

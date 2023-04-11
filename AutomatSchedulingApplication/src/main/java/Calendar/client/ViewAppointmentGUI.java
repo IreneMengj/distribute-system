@@ -1,10 +1,10 @@
 package Calendar.client;
 
-import Calendar.ds.service2.Appointment;
 import Calendar.ds.service2.ResponseMessage;
 import Calendar.ds.service2.Service2Grpc;
 import Calendar.ds.service2.eventId;
 import GUI.MainGUI;
+import Login.ds.service1.Service1Grpc;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 
@@ -21,11 +21,10 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 
-public class ViewAppointment extends JFrame {
+public class ViewAppointmentGUI extends JFrame {
     private JTable table;
     private DefaultTableModel model;
     private List<Object[]> appointments;
@@ -33,7 +32,7 @@ public class ViewAppointment extends JFrame {
     private MainGUI mainGUI;
 
 
-    public ViewAppointment(MainGUI mainGUI) {
+    public ViewAppointmentGUI(MainGUI mainGUI) {
         super("Appointments");
         // Initialize the appointments list
         this.mainGUI = mainGUI;
@@ -67,7 +66,17 @@ public class ViewAppointment extends JFrame {
         addButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 //                AddAppointmentGUI gui = new AddAppointmentGUI();
-                addAppointmentGUI = new AddAppointmentGUI(ViewAppointment.this);
+                // Use the address and port to create the ManagedChannel
+                ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 50051)
+                        .usePlaintext()
+                        .build();
+                Service1Grpc.Service1BlockingStub service1BlockingStub = Service1Grpc.newBlockingStub(channel);
+                Login.ds.service1.ResponseMessage service1Response = service1BlockingStub.isLogin(null);
+                if(service1Response.getCode()==0){
+                    JOptionPane.showMessageDialog(null, "Please log in first");
+                    return;
+                }
+                addAppointmentGUI = new AddAppointmentGUI(ViewAppointmentGUI.this);
                 addAppointmentGUI.displayAppointmentGUI("add", null);
             }
         });
@@ -91,7 +100,7 @@ public class ViewAppointment extends JFrame {
                 for (int i = 0; i < rowData.length; i++) {
                     rowData[i] = model.getValueAt(rowIndex, i);
                 }
-                addAppointmentGUI = new AddAppointmentGUI(ViewAppointment.this);
+                addAppointmentGUI = new AddAppointmentGUI(ViewAppointmentGUI.this);
                 addAppointmentGUI.displayAppointmentGUI("edit", rowData);
             }
         });
@@ -128,10 +137,23 @@ public class ViewAppointment extends JFrame {
             }
         });
 
+        // create a button to go back to the main GUI
+        JButton backButton = new JButton("Back to Main Menu");
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // show the First GUI
+                mainGUI.showMainGUI();
+            }
+        });
+
+
+
         // Add the button to the button panel
         buttonPanel.add(addButton);
         buttonPanel.add(editButton);
         buttonPanel.add(deleteButton);
+        buttonPanel.add(backButton); // add the backButton to the panel
 
         // Create a panel to hold tables and buttons
         JPanel panel = new JPanel(new BorderLayout());
@@ -146,7 +168,7 @@ public class ViewAppointment extends JFrame {
         setVisible(true);
     }
 
-    public ViewAppointment() {
+    public ViewAppointmentGUI() {
 
     }
 
@@ -219,7 +241,7 @@ public class ViewAppointment extends JFrame {
 
 
     public static void main(String[] args) {
-        ViewAppointment gui = new ViewAppointment();
+        ViewAppointmentGUI gui = new ViewAppointmentGUI();
 
     }
 }
