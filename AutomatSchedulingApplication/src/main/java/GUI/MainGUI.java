@@ -1,18 +1,22 @@
 package GUI;
 
-import Login.client.ControllerGUI;
+import Calendar.client.ViewAppointment;
+import Login.client.LoginGUI;
 
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class MainGUI extends JFrame {
     private JButton openLoginGUIButton;
-    private ControllerGUI controllerGUI;
+    private JButton openAppButton;
+    private LoginGUI loginGUI;
+    private ViewAppointment viewAppGUI;
 
     public MainGUI() {
-        setTitle("Main Menu");
+        setTitle("Automated Scheduling applications");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // create a button to open the second GUI
@@ -21,9 +25,21 @@ public class MainGUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // create the Controller GUI
-                controllerGUI = new ControllerGUI(MainGUI.this);
+                loginGUI = new LoginGUI(MainGUI.this);
                 // show the Controller GUI
-                controllerGUI.setVisible(true);
+                loginGUI.setVisible(true);
+                // hide the First GUI
+                MainGUI.this.setVisible(false);
+            }
+        });
+        openAppButton = new JButton("View Appointment");
+        openAppButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // create the Controller GUI
+                viewAppGUI = new ViewAppointment(MainGUI.this);
+                // show the Controller GUI
+                viewAppGUI.setVisible(true);
                 // hide the First GUI
                 MainGUI.this.setVisible(false);
             }
@@ -32,18 +48,25 @@ public class MainGUI extends JFrame {
 
         // add the buttons to the frame
         JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.add(openLoginGUIButton);
+        panel.add(openAppButton );
         add(panel);
+
+        // add the panel to the main frame using GridBagLayout
+        setLayout(new GridBagLayout());
+        add(panel, new GridBagConstraints());
+
 
         setSize(300, 300);
         setLocationRelativeTo(null);
         setVisible(true);
     }
 
-    // method to show the First GUI and close the Controller GUI
-    public void showFirstGUI() {
+    // method to show the Main GUI and close the Controller GUI
+    public void showMainGUI() {
         setVisible(true);
-        controllerGUI.dispose();
+        loginGUI.dispose();
     }
 
     public static void main(String[] args) {

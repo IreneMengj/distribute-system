@@ -4,6 +4,7 @@ import Calendar.ds.service2.Appointment;
 import Calendar.ds.service2.ResponseMessage;
 import Calendar.ds.service2.Service2Grpc;
 import Calendar.ds.service2.eventId;
+import GUI.MainGUI;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 
@@ -23,16 +24,19 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+
 public class ViewAppointment extends JFrame {
     private JTable table;
     private DefaultTableModel model;
     private List<Object[]> appointments;
     private AddAppointmentGUI addAppointmentGUI;
+    private MainGUI mainGUI;
 
 
-    public ViewAppointment() {
+    public ViewAppointment(MainGUI mainGUI) {
         super("Appointments");
         // Initialize the appointments list
+        this.mainGUI = mainGUI;
         appointments = new ArrayList<>();
 
 
@@ -142,6 +146,10 @@ public class ViewAppointment extends JFrame {
         setVisible(true);
     }
 
+    public ViewAppointment() {
+
+    }
+
     // Set the data of the table
     public void setData(int id, Object[] newData) {
         // Find the row with the specified id and update its data
@@ -154,10 +162,8 @@ public class ViewAppointment extends JFrame {
                 row[2] = newData[1];
                 row[3] = newData[2];
                 row[4] = newData[3];
-                // Update the data in the appointments list
-//                appointments.set(i, row);
+
                 // Update the row in the table model
-//                 Update the row in the table model
                 for (int j = 1; j <= 4; j++) {
                     model.setValueAt(row[j], i, j);
                 }

@@ -15,7 +15,7 @@ import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 
 
-public class ControllerGUI extends JFrame implements ActionListener {
+public class LoginGUI extends JFrame implements ActionListener {
 
 
     private JTextField entry1, entry2, reply;
@@ -56,7 +56,7 @@ public class ControllerGUI extends JFrame implements ActionListener {
         return panel;
     }
 
-    public ControllerGUI(MainGUI mainGUI) {
+    public LoginGUI(MainGUI mainGUI) {
         this.mainGUI = mainGUI;
         setTitle("Login");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -72,7 +72,7 @@ public class ControllerGUI extends JFrame implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // show the First GUI
-                mainGUI.showFirstGUI();
+                mainGUI.showMainGUI();
             }
         });
 
