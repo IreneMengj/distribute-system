@@ -20,20 +20,15 @@ public final class Service2Impl {
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_service2_eventId_fieldAccessorTable;
   static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_service2_eventIdList_descriptor;
-  static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_service2_eventIdList_fieldAccessorTable;
-  static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_service2_AppointmentRequest_descriptor;
-  static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_service2_AppointmentRequest_fieldAccessorTable;
-  static final com.google.protobuf.Descriptors.Descriptor
     internal_static_service2_Appointment_descriptor;
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_service2_Appointment_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_service2_Response_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_service2_Response_fieldAccessorTable;
   static final com.google.protobuf.Descriptors.Descriptor
     internal_static_service2_ResponseMessage_descriptor;
   static final 
@@ -48,27 +43,26 @@ public final class Service2Impl {
       descriptor;
   static {
     String[] descriptorData = {
-      "\n\016service2.proto\022\010service2\"\025\n\007eventId\022\n\n" +
-      "\002id\030\001 \001(\005\"\037\n\013eventIdList\022\020\n\010eventIds\030\001 \003" +
-      "(\005\"A\n\022AppointmentRequest\022+\n\014appointments" +
-      "\030\001 \003(\0132\025.service2.Appointment\"a\n\013Appoint" +
-      "ment\022\n\n\002id\030\001 \001(\005\022\r\n\005title\030\002 \001(\t\022\016\n\006detai" +
-      "l\030\003 \001(\t\022\021\n\toccurTime\030\004 \001(\t\022\024\n\014participan" +
-      "ts\030\005 \001(\t\"L\n\017ResponseMessage\022\014\n\004code\030\001 \001(" +
-      "\005\022+\n\014appointments\030\002 \003(\0132\025.service2.Appoi" +
-      "ntment2\220\002\n\010Service2\022>\n\010addEvent\022\025.servic" +
-      "e2.Appointment\032\031.service2.ResponseMessag" +
-      "e\"\000\022B\n\tviewEvent\022\025.service2.eventIdList\032" +
-      "\034.service2.AppointmentRequest\"\000\022=\n\013delet" +
-      "eEvent\022\021.service2.eventId\032\031.service2.Res" +
-      "ponseMessage\"\000\022A\n\013updateEvent\022\025.service2" +
-      ".Appointment\032\031.service2.ResponseMessage\"" +
-      "\000B&\n\024Calendar.ds.service2B\014Service2ImplP" +
-      "\001b\006proto3"
+      "\n\016service2.proto\022\010service2\032\033google/proto" +
+      "buf/empty.proto\"\025\n\007eventId\022\n\n\002id\030\001 \001(\005\"]" +
+      "\n\013Appointment\022\n\n\002id\030\001 \001(\005\022\r\n\005title\030\002 \001(\t" +
+      "\022\016\n\006detail\030\003 \001(\t\022\021\n\toccurTime\030\004 \001(\t\022\020\n\010r" +
+      "eminder\030\005 \001(\t\"D\n\010Response\022\014\n\004code\030\001 \001(\005\022" +
+      "*\n\013appointment\030\002 \001(\0132\025.service2.Appointm" +
+      "ent\"\037\n\017ResponseMessage\022\014\n\004code\030\001 \001(\0052\207\002\n" +
+      "\010Service2\0229\n\010addEvent\022\025.service2.Appoint" +
+      "ment\032\022.service2.Response\"\0000\001\022=\n\013deleteEv" +
+      "ent\022\021.service2.eventId\032\031.service2.Respon" +
+      "seMessage\"\000\022A\n\013updateEvent\022\025.service2.Ap" +
+      "pointment\032\031.service2.ResponseMessage\"\000\022>" +
+      "\n\tgetEvents\022\026.google.protobuf.Empty\032\025.se" +
+      "rvice2.Appointment\"\0000\001B&\n\024Calendar.ds.se" +
+      "rvice2B\014Service2ImplP\001b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
+          com.google.protobuf.EmptyProto.getDescriptor(),
         });
     internal_static_service2_eventId_descriptor =
       getDescriptor().getMessageTypes().get(0);
@@ -76,30 +70,25 @@ public final class Service2Impl {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_service2_eventId_descriptor,
         new String[] { "Id", });
-    internal_static_service2_eventIdList_descriptor =
-      getDescriptor().getMessageTypes().get(1);
-    internal_static_service2_eventIdList_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_service2_eventIdList_descriptor,
-        new String[] { "EventIds", });
-    internal_static_service2_AppointmentRequest_descriptor =
-      getDescriptor().getMessageTypes().get(2);
-    internal_static_service2_AppointmentRequest_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_service2_AppointmentRequest_descriptor,
-        new String[] { "Appointments", });
     internal_static_service2_Appointment_descriptor =
-      getDescriptor().getMessageTypes().get(3);
+      getDescriptor().getMessageTypes().get(1);
     internal_static_service2_Appointment_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_service2_Appointment_descriptor,
-        new String[] { "Id", "Title", "Detail", "OccurTime", "Participants", });
+        new String[] { "Id", "Title", "Detail", "OccurTime", "Reminder", });
+    internal_static_service2_Response_descriptor =
+      getDescriptor().getMessageTypes().get(2);
+    internal_static_service2_Response_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_service2_Response_descriptor,
+        new String[] { "Code", "Appointment", });
     internal_static_service2_ResponseMessage_descriptor =
-      getDescriptor().getMessageTypes().get(4);
+      getDescriptor().getMessageTypes().get(3);
     internal_static_service2_ResponseMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_service2_ResponseMessage_descriptor,
-        new String[] { "Code", "Appointments", });
+        new String[] { "Code", });
+    com.google.protobuf.EmptyProto.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

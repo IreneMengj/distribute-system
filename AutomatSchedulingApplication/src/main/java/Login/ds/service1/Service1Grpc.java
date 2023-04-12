@@ -25,7 +25,7 @@ public final class Service1Grpc {
       fullMethodName = SERVICE_NAME + '/' + "login",
       requestType = RequestMessage.class,
       responseType = ResponseMessage.class,
-      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+      methodType = io.grpc.MethodDescriptor.MethodType.CLIENT_STREAMING)
   public static io.grpc.MethodDescriptor<RequestMessage,
       ResponseMessage> getLoginMethod() {
     io.grpc.MethodDescriptor<RequestMessage, ResponseMessage> getLoginMethod;
@@ -34,7 +34,7 @@ public final class Service1Grpc {
         if ((getLoginMethod = Service1Grpc.getLoginMethod) == null) {
           Service1Grpc.getLoginMethod = getLoginMethod =
               io.grpc.MethodDescriptor.<RequestMessage, ResponseMessage>newBuilder()
-              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setType(io.grpc.MethodDescriptor.MethodType.CLIENT_STREAMING)
               .setFullMethodName(generateFullMethodName(SERVICE_NAME, "login"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
@@ -56,7 +56,7 @@ public final class Service1Grpc {
       fullMethodName = SERVICE_NAME + '/' + "signup",
       requestType = RequestMessage.class,
       responseType = ResponseMessage.class,
-      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+      methodType = io.grpc.MethodDescriptor.MethodType.CLIENT_STREAMING)
   public static io.grpc.MethodDescriptor<RequestMessage,
       ResponseMessage> getSignupMethod() {
     io.grpc.MethodDescriptor<RequestMessage, ResponseMessage> getSignupMethod;
@@ -65,7 +65,7 @@ public final class Service1Grpc {
         if ((getSignupMethod = Service1Grpc.getSignupMethod) == null) {
           Service1Grpc.getSignupMethod = getSignupMethod =
               io.grpc.MethodDescriptor.<RequestMessage, ResponseMessage>newBuilder()
-              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setType(io.grpc.MethodDescriptor.MethodType.CLIENT_STREAMING)
               .setFullMethodName(generateFullMethodName(SERVICE_NAME, "signup"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
@@ -164,16 +164,16 @@ public final class Service1Grpc {
 
     /**
      */
-    public void login(RequestMessage request,
-                      io.grpc.stub.StreamObserver<ResponseMessage> responseObserver) {
-      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getLoginMethod(), responseObserver);
+    public io.grpc.stub.StreamObserver<RequestMessage> login(
+        io.grpc.stub.StreamObserver<ResponseMessage> responseObserver) {
+      return io.grpc.stub.ServerCalls.asyncUnimplementedStreamingCall(getLoginMethod(), responseObserver);
     }
 
     /**
      */
-    public void signup(RequestMessage request,
-                       io.grpc.stub.StreamObserver<ResponseMessage> responseObserver) {
-      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getSignupMethod(), responseObserver);
+    public io.grpc.stub.StreamObserver<RequestMessage> signup(
+        io.grpc.stub.StreamObserver<ResponseMessage> responseObserver) {
+      return io.grpc.stub.ServerCalls.asyncUnimplementedStreamingCall(getSignupMethod(), responseObserver);
     }
 
     /**
@@ -187,14 +187,14 @@ public final class Service1Grpc {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
           .addMethod(
             getLoginMethod(),
-            io.grpc.stub.ServerCalls.asyncUnaryCall(
+            io.grpc.stub.ServerCalls.asyncClientStreamingCall(
               new MethodHandlers<
                 RequestMessage,
                 ResponseMessage>(
                   this, METHODID_LOGIN)))
           .addMethod(
             getSignupMethod(),
-            io.grpc.stub.ServerCalls.asyncUnaryCall(
+            io.grpc.stub.ServerCalls.asyncClientStreamingCall(
               new MethodHandlers<
                 RequestMessage,
                 ResponseMessage>(
@@ -229,18 +229,18 @@ public final class Service1Grpc {
 
     /**
      */
-    public void login(RequestMessage request,
-                      io.grpc.stub.StreamObserver<ResponseMessage> responseObserver) {
-      io.grpc.stub.ClientCalls.asyncUnaryCall(
-          getChannel().newCall(getLoginMethod(), getCallOptions()), request, responseObserver);
+    public io.grpc.stub.StreamObserver<RequestMessage> login(
+        io.grpc.stub.StreamObserver<ResponseMessage> responseObserver) {
+      return io.grpc.stub.ClientCalls.asyncClientStreamingCall(
+          getChannel().newCall(getLoginMethod(), getCallOptions()), responseObserver);
     }
 
     /**
      */
-    public void signup(RequestMessage request,
-                       io.grpc.stub.StreamObserver<ResponseMessage> responseObserver) {
-      io.grpc.stub.ClientCalls.asyncUnaryCall(
-          getChannel().newCall(getSignupMethod(), getCallOptions()), request, responseObserver);
+    public io.grpc.stub.StreamObserver<RequestMessage> signup(
+        io.grpc.stub.StreamObserver<ResponseMessage> responseObserver) {
+      return io.grpc.stub.ClientCalls.asyncClientStreamingCall(
+          getChannel().newCall(getSignupMethod(), getCallOptions()), responseObserver);
     }
 
     /**
@@ -271,20 +271,6 @@ public final class Service1Grpc {
 
     /**
      */
-    public ResponseMessage login(RequestMessage request) {
-      return io.grpc.stub.ClientCalls.blockingUnaryCall(
-          getChannel(), getLoginMethod(), getCallOptions(), request);
-    }
-
-    /**
-     */
-    public ResponseMessage signup(RequestMessage request) {
-      return io.grpc.stub.ClientCalls.blockingUnaryCall(
-          getChannel(), getSignupMethod(), getCallOptions(), request);
-    }
-
-    /**
-     */
     public ResponseMessage isLogin(com.google.protobuf.Empty request) {
       return io.grpc.stub.ClientCalls.blockingUnaryCall(
           getChannel(), getIsLoginMethod(), getCallOptions(), request);
@@ -310,22 +296,6 @@ public final class Service1Grpc {
 
     /**
      */
-    public com.google.common.util.concurrent.ListenableFuture<ResponseMessage> login(
-        RequestMessage request) {
-      return io.grpc.stub.ClientCalls.futureUnaryCall(
-          getChannel().newCall(getLoginMethod(), getCallOptions()), request);
-    }
-
-    /**
-     */
-    public com.google.common.util.concurrent.ListenableFuture<ResponseMessage> signup(
-        RequestMessage request) {
-      return io.grpc.stub.ClientCalls.futureUnaryCall(
-          getChannel().newCall(getSignupMethod(), getCallOptions()), request);
-    }
-
-    /**
-     */
     public com.google.common.util.concurrent.ListenableFuture<ResponseMessage> isLogin(
         com.google.protobuf.Empty request) {
       return io.grpc.stub.ClientCalls.futureUnaryCall(
@@ -333,9 +303,9 @@ public final class Service1Grpc {
     }
   }
 
-  private static final int METHODID_LOGIN = 0;
-  private static final int METHODID_SIGNUP = 1;
-  private static final int METHODID_IS_LOGIN = 2;
+  private static final int METHODID_IS_LOGIN = 0;
+  private static final int METHODID_LOGIN = 1;
+  private static final int METHODID_SIGNUP = 2;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -354,14 +324,6 @@ public final class Service1Grpc {
     @SuppressWarnings("unchecked")
     public void invoke(Req request, io.grpc.stub.StreamObserver<Resp> responseObserver) {
       switch (methodId) {
-        case METHODID_LOGIN:
-          serviceImpl.login((RequestMessage) request,
-              (io.grpc.stub.StreamObserver<ResponseMessage>) responseObserver);
-          break;
-        case METHODID_SIGNUP:
-          serviceImpl.signup((RequestMessage) request,
-              (io.grpc.stub.StreamObserver<ResponseMessage>) responseObserver);
-          break;
         case METHODID_IS_LOGIN:
           serviceImpl.isLogin((com.google.protobuf.Empty) request,
               (io.grpc.stub.StreamObserver<ResponseMessage>) responseObserver);
@@ -376,6 +338,12 @@ public final class Service1Grpc {
     public io.grpc.stub.StreamObserver<Req> invoke(
         io.grpc.stub.StreamObserver<Resp> responseObserver) {
       switch (methodId) {
+        case METHODID_LOGIN:
+          return (io.grpc.stub.StreamObserver<Req>) serviceImpl.login(
+              (io.grpc.stub.StreamObserver<ResponseMessage>) responseObserver);
+        case METHODID_SIGNUP:
+          return (io.grpc.stub.StreamObserver<Req>) serviceImpl.signup(
+              (io.grpc.stub.StreamObserver<ResponseMessage>) responseObserver);
         default:
           throw new AssertionError();
       }

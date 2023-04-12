@@ -19,65 +19,34 @@ public final class Service2Grpc {
 
   // Static method descriptors that strictly reflect the proto.
   private static volatile io.grpc.MethodDescriptor<Appointment,
-      ResponseMessage> getAddEventMethod;
+      Response> getAddEventMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
       fullMethodName = SERVICE_NAME + '/' + "addEvent",
       requestType = Appointment.class,
-      responseType = ResponseMessage.class,
-      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+      responseType = Response.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.SERVER_STREAMING)
   public static io.grpc.MethodDescriptor<Appointment,
-      ResponseMessage> getAddEventMethod() {
-    io.grpc.MethodDescriptor<Appointment, ResponseMessage> getAddEventMethod;
+      Response> getAddEventMethod() {
+    io.grpc.MethodDescriptor<Appointment, Response> getAddEventMethod;
     if ((getAddEventMethod = Service2Grpc.getAddEventMethod) == null) {
       synchronized (Service2Grpc.class) {
         if ((getAddEventMethod = Service2Grpc.getAddEventMethod) == null) {
           Service2Grpc.getAddEventMethod = getAddEventMethod =
-              io.grpc.MethodDescriptor.<Appointment, ResponseMessage>newBuilder()
-              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              io.grpc.MethodDescriptor.<Appointment, Response>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.SERVER_STREAMING)
               .setFullMethodName(generateFullMethodName(SERVICE_NAME, "addEvent"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
                   Appointment.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  ResponseMessage.getDefaultInstance()))
+                  Response.getDefaultInstance()))
               .setSchemaDescriptor(new Service2MethodDescriptorSupplier("addEvent"))
               .build();
         }
       }
     }
     return getAddEventMethod;
-  }
-
-  private static volatile io.grpc.MethodDescriptor<eventIdList,
-      AppointmentRequest> getViewEventMethod;
-
-  @io.grpc.stub.annotations.RpcMethod(
-      fullMethodName = SERVICE_NAME + '/' + "viewEvent",
-      requestType = eventIdList.class,
-      responseType = AppointmentRequest.class,
-      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
-  public static io.grpc.MethodDescriptor<eventIdList,
-      AppointmentRequest> getViewEventMethod() {
-    io.grpc.MethodDescriptor<eventIdList, AppointmentRequest> getViewEventMethod;
-    if ((getViewEventMethod = Service2Grpc.getViewEventMethod) == null) {
-      synchronized (Service2Grpc.class) {
-        if ((getViewEventMethod = Service2Grpc.getViewEventMethod) == null) {
-          Service2Grpc.getViewEventMethod = getViewEventMethod =
-              io.grpc.MethodDescriptor.<eventIdList, AppointmentRequest>newBuilder()
-              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
-              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "viewEvent"))
-              .setSampledToLocalTracing(true)
-              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  eventIdList.getDefaultInstance()))
-              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  AppointmentRequest.getDefaultInstance()))
-              .setSchemaDescriptor(new Service2MethodDescriptorSupplier("viewEvent"))
-              .build();
-        }
-      }
-    }
-    return getViewEventMethod;
   }
 
   private static volatile io.grpc.MethodDescriptor<eventId,
@@ -142,6 +111,37 @@ public final class Service2Grpc {
     return getUpdateEventMethod;
   }
 
+  private static volatile io.grpc.MethodDescriptor<com.google.protobuf.Empty,
+      Appointment> getGetEventsMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "getEvents",
+      requestType = com.google.protobuf.Empty.class,
+      responseType = Appointment.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.SERVER_STREAMING)
+  public static io.grpc.MethodDescriptor<com.google.protobuf.Empty,
+      Appointment> getGetEventsMethod() {
+    io.grpc.MethodDescriptor<com.google.protobuf.Empty, Appointment> getGetEventsMethod;
+    if ((getGetEventsMethod = Service2Grpc.getGetEventsMethod) == null) {
+      synchronized (Service2Grpc.class) {
+        if ((getGetEventsMethod = Service2Grpc.getGetEventsMethod) == null) {
+          Service2Grpc.getGetEventsMethod = getGetEventsMethod =
+              io.grpc.MethodDescriptor.<com.google.protobuf.Empty, Appointment>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.SERVER_STREAMING)
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "getEvents"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.google.protobuf.Empty.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  Appointment.getDefaultInstance()))
+              .setSchemaDescriptor(new Service2MethodDescriptorSupplier("getEvents"))
+              .build();
+        }
+      }
+    }
+    return getGetEventsMethod;
+  }
+
   /**
    * Creates a new async stub that supports all call types for the service
    */
@@ -196,15 +196,8 @@ public final class Service2Grpc {
     /**
      */
     public void addEvent(Appointment request,
-                         io.grpc.stub.StreamObserver<ResponseMessage> responseObserver) {
+                         io.grpc.stub.StreamObserver<Response> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getAddEventMethod(), responseObserver);
-    }
-
-    /**
-     */
-    public void viewEvent(eventIdList request,
-                          io.grpc.stub.StreamObserver<AppointmentRequest> responseObserver) {
-      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getViewEventMethod(), responseObserver);
     }
 
     /**
@@ -221,22 +214,22 @@ public final class Service2Grpc {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getUpdateEventMethod(), responseObserver);
     }
 
+    /**
+     */
+    public void getEvents(com.google.protobuf.Empty request,
+        io.grpc.stub.StreamObserver<Appointment> responseObserver) {
+      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getGetEventsMethod(), responseObserver);
+    }
+
     @Override public final io.grpc.ServerServiceDefinition bindService() {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
           .addMethod(
             getAddEventMethod(),
-            io.grpc.stub.ServerCalls.asyncUnaryCall(
+            io.grpc.stub.ServerCalls.asyncServerStreamingCall(
               new MethodHandlers<
                 Appointment,
-                ResponseMessage>(
+                Response>(
                   this, METHODID_ADD_EVENT)))
-          .addMethod(
-            getViewEventMethod(),
-            io.grpc.stub.ServerCalls.asyncUnaryCall(
-              new MethodHandlers<
-                eventIdList,
-                AppointmentRequest>(
-                  this, METHODID_VIEW_EVENT)))
           .addMethod(
             getDeleteEventMethod(),
             io.grpc.stub.ServerCalls.asyncUnaryCall(
@@ -251,6 +244,13 @@ public final class Service2Grpc {
                 Appointment,
                 ResponseMessage>(
                   this, METHODID_UPDATE_EVENT)))
+          .addMethod(
+            getGetEventsMethod(),
+            io.grpc.stub.ServerCalls.asyncServerStreamingCall(
+              new MethodHandlers<
+                com.google.protobuf.Empty,
+                Appointment>(
+                  this, METHODID_GET_EVENTS)))
           .build();
     }
   }
@@ -275,17 +275,9 @@ public final class Service2Grpc {
     /**
      */
     public void addEvent(Appointment request,
-                         io.grpc.stub.StreamObserver<ResponseMessage> responseObserver) {
-      io.grpc.stub.ClientCalls.asyncUnaryCall(
+                         io.grpc.stub.StreamObserver<Response> responseObserver) {
+      io.grpc.stub.ClientCalls.asyncServerStreamingCall(
           getChannel().newCall(getAddEventMethod(), getCallOptions()), request, responseObserver);
-    }
-
-    /**
-     */
-    public void viewEvent(eventIdList request,
-                          io.grpc.stub.StreamObserver<AppointmentRequest> responseObserver) {
-      io.grpc.stub.ClientCalls.asyncUnaryCall(
-          getChannel().newCall(getViewEventMethod(), getCallOptions()), request, responseObserver);
     }
 
     /**
@@ -302,6 +294,14 @@ public final class Service2Grpc {
                             io.grpc.stub.StreamObserver<ResponseMessage> responseObserver) {
       io.grpc.stub.ClientCalls.asyncUnaryCall(
           getChannel().newCall(getUpdateEventMethod(), getCallOptions()), request, responseObserver);
+    }
+
+    /**
+     */
+    public void getEvents(com.google.protobuf.Empty request,
+        io.grpc.stub.StreamObserver<Appointment> responseObserver) {
+      io.grpc.stub.ClientCalls.asyncServerStreamingCall(
+          getChannel().newCall(getGetEventsMethod(), getCallOptions()), request, responseObserver);
     }
   }
 
@@ -324,16 +324,10 @@ public final class Service2Grpc {
 
     /**
      */
-    public ResponseMessage addEvent(Appointment request) {
-      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+    public java.util.Iterator<Response> addEvent(
+        Appointment request) {
+      return io.grpc.stub.ClientCalls.blockingServerStreamingCall(
           getChannel(), getAddEventMethod(), getCallOptions(), request);
-    }
-
-    /**
-     */
-    public AppointmentRequest viewEvent(eventIdList request) {
-      return io.grpc.stub.ClientCalls.blockingUnaryCall(
-          getChannel(), getViewEventMethod(), getCallOptions(), request);
     }
 
     /**
@@ -348,6 +342,14 @@ public final class Service2Grpc {
     public ResponseMessage updateEvent(Appointment request) {
       return io.grpc.stub.ClientCalls.blockingUnaryCall(
           getChannel(), getUpdateEventMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public java.util.Iterator<Appointment> getEvents(
+        com.google.protobuf.Empty request) {
+      return io.grpc.stub.ClientCalls.blockingServerStreamingCall(
+          getChannel(), getGetEventsMethod(), getCallOptions(), request);
     }
   }
 
@@ -370,22 +372,6 @@ public final class Service2Grpc {
 
     /**
      */
-    public com.google.common.util.concurrent.ListenableFuture<ResponseMessage> addEvent(
-        Appointment request) {
-      return io.grpc.stub.ClientCalls.futureUnaryCall(
-          getChannel().newCall(getAddEventMethod(), getCallOptions()), request);
-    }
-
-    /**
-     */
-    public com.google.common.util.concurrent.ListenableFuture<AppointmentRequest> viewEvent(
-        eventIdList request) {
-      return io.grpc.stub.ClientCalls.futureUnaryCall(
-          getChannel().newCall(getViewEventMethod(), getCallOptions()), request);
-    }
-
-    /**
-     */
     public com.google.common.util.concurrent.ListenableFuture<ResponseMessage> deleteEvent(
         eventId request) {
       return io.grpc.stub.ClientCalls.futureUnaryCall(
@@ -402,9 +388,9 @@ public final class Service2Grpc {
   }
 
   private static final int METHODID_ADD_EVENT = 0;
-  private static final int METHODID_VIEW_EVENT = 1;
-  private static final int METHODID_DELETE_EVENT = 2;
-  private static final int METHODID_UPDATE_EVENT = 3;
+  private static final int METHODID_DELETE_EVENT = 1;
+  private static final int METHODID_UPDATE_EVENT = 2;
+  private static final int METHODID_GET_EVENTS = 3;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -425,11 +411,7 @@ public final class Service2Grpc {
       switch (methodId) {
         case METHODID_ADD_EVENT:
           serviceImpl.addEvent((Appointment) request,
-              (io.grpc.stub.StreamObserver<ResponseMessage>) responseObserver);
-          break;
-        case METHODID_VIEW_EVENT:
-          serviceImpl.viewEvent((eventIdList) request,
-              (io.grpc.stub.StreamObserver<AppointmentRequest>) responseObserver);
+              (io.grpc.stub.StreamObserver<Response>) responseObserver);
           break;
         case METHODID_DELETE_EVENT:
           serviceImpl.deleteEvent((eventId) request,
@@ -438,6 +420,10 @@ public final class Service2Grpc {
         case METHODID_UPDATE_EVENT:
           serviceImpl.updateEvent((Appointment) request,
               (io.grpc.stub.StreamObserver<ResponseMessage>) responseObserver);
+          break;
+        case METHODID_GET_EVENTS:
+          serviceImpl.getEvents((com.google.protobuf.Empty) request,
+              (io.grpc.stub.StreamObserver<Appointment>) responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -501,9 +487,9 @@ public final class Service2Grpc {
           serviceDescriptor = result = io.grpc.ServiceDescriptor.newBuilder(SERVICE_NAME)
               .setSchemaDescriptor(new Service2FileDescriptorSupplier())
               .addMethod(getAddEventMethod())
-              .addMethod(getViewEventMethod())
               .addMethod(getDeleteEventMethod())
               .addMethod(getUpdateEventMethod())
+              .addMethod(getGetEventsMethod())
               .build();
         }
       }

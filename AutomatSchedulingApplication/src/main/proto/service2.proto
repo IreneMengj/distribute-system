@@ -6,13 +6,16 @@ option java_outer_classname = "Service2Impl";
 
 package service2;
 
+import "google/protobuf/empty.proto";
+
 // Interface exported by the server.
 service Service2 {
-  
   rpc addEvent(Appointment) returns (stream Response) {}
   rpc deleteEvent(eventId) returns (ResponseMessage) {}
   rpc updateEvent(Appointment)returns (ResponseMessage){}
+  rpc getEvents(google.protobuf.Empty) returns (stream Appointment){}
 }
+
 message eventId{
   int32 id=1;
 }
@@ -22,12 +25,12 @@ message Appointment {
   string title=2;
   string detail=3;
   string occurTime=4;
-  string participants =5;
+  string reminder =5;
 }
 
 message Response{
   int32 code = 1;
-  repeated Appointment appointments = 2;
+  Appointment appointment = 2;
 }
 
 message ResponseMessage{

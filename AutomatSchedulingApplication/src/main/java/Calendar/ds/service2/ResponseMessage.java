@@ -16,7 +16,6 @@ private static final long serialVersionUID = 0L;
     super(builder);
   }
   private ResponseMessage() {
-    appointments_ = java.util.Collections.emptyList();
   }
 
   @Override
@@ -55,47 +54,6 @@ private static final long serialVersionUID = 0L;
     return code_;
   }
 
-  public static final int APPOINTMENTS_FIELD_NUMBER = 2;
-  @SuppressWarnings("serial")
-  private java.util.List<Appointment> appointments_;
-  /**
-   * <code>repeated .service2.Appointment appointments = 2;</code>
-   */
-  @Override
-  public java.util.List<Appointment> getAppointmentsList() {
-    return appointments_;
-  }
-  /**
-   * <code>repeated .service2.Appointment appointments = 2;</code>
-   */
-  @Override
-  public java.util.List<? extends AppointmentOrBuilder>
-      getAppointmentsOrBuilderList() {
-    return appointments_;
-  }
-  /**
-   * <code>repeated .service2.Appointment appointments = 2;</code>
-   */
-  @Override
-  public int getAppointmentsCount() {
-    return appointments_.size();
-  }
-  /**
-   * <code>repeated .service2.Appointment appointments = 2;</code>
-   */
-  @Override
-  public Appointment getAppointments(int index) {
-    return appointments_.get(index);
-  }
-  /**
-   * <code>repeated .service2.Appointment appointments = 2;</code>
-   */
-  @Override
-  public AppointmentOrBuilder getAppointmentsOrBuilder(
-      int index) {
-    return appointments_.get(index);
-  }
-
   private byte memoizedIsInitialized = -1;
   @Override
   public final boolean isInitialized() {
@@ -113,9 +71,6 @@ private static final long serialVersionUID = 0L;
     if (code_ != 0) {
       output.writeInt32(1, code_);
     }
-    for (int i = 0; i < appointments_.size(); i++) {
-      output.writeMessage(2, appointments_.get(i));
-    }
     getUnknownFields().writeTo(output);
   }
 
@@ -128,10 +83,6 @@ private static final long serialVersionUID = 0L;
     if (code_ != 0) {
       size += com.google.protobuf.CodedOutputStream
         .computeInt32Size(1, code_);
-    }
-    for (int i = 0; i < appointments_.size(); i++) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(2, appointments_.get(i));
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -150,8 +101,6 @@ private static final long serialVersionUID = 0L;
 
     if (getCode()
         != other.getCode()) return false;
-    if (!getAppointmentsList()
-        .equals(other.getAppointmentsList())) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -165,10 +114,6 @@ private static final long serialVersionUID = 0L;
     hash = (19 * hash) + getDescriptor().hashCode();
     hash = (37 * hash) + CODE_FIELD_NUMBER;
     hash = (53 * hash) + getCode();
-    if (getAppointmentsCount() > 0) {
-      hash = (37 * hash) + APPOINTMENTS_FIELD_NUMBER;
-      hash = (53 * hash) + getAppointmentsList().hashCode();
-    }
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -299,13 +244,6 @@ private static final long serialVersionUID = 0L;
       super.clear();
       bitField0_ = 0;
       code_ = 0;
-      if (appointmentsBuilder_ == null) {
-        appointments_ = java.util.Collections.emptyList();
-      } else {
-        appointments_ = null;
-        appointmentsBuilder_.clear();
-      }
-      bitField0_ = (bitField0_ & ~0x00000002);
       return this;
     }
 
@@ -332,22 +270,9 @@ private static final long serialVersionUID = 0L;
     @Override
     public ResponseMessage buildPartial() {
       ResponseMessage result = new ResponseMessage(this);
-      buildPartialRepeatedFields(result);
       if (bitField0_ != 0) { buildPartial0(result); }
       onBuilt();
       return result;
-    }
-
-    private void buildPartialRepeatedFields(ResponseMessage result) {
-      if (appointmentsBuilder_ == null) {
-        if (((bitField0_ & 0x00000002) != 0)) {
-          appointments_ = java.util.Collections.unmodifiableList(appointments_);
-          bitField0_ = (bitField0_ & ~0x00000002);
-        }
-        result.appointments_ = appointments_;
-      } else {
-        result.appointments_ = appointmentsBuilder_.build();
-      }
     }
 
     private void buildPartial0(ResponseMessage result) {
@@ -404,32 +329,6 @@ private static final long serialVersionUID = 0L;
       if (other.getCode() != 0) {
         setCode(other.getCode());
       }
-      if (appointmentsBuilder_ == null) {
-        if (!other.appointments_.isEmpty()) {
-          if (appointments_.isEmpty()) {
-            appointments_ = other.appointments_;
-            bitField0_ = (bitField0_ & ~0x00000002);
-          } else {
-            ensureAppointmentsIsMutable();
-            appointments_.addAll(other.appointments_);
-          }
-          onChanged();
-        }
-      } else {
-        if (!other.appointments_.isEmpty()) {
-          if (appointmentsBuilder_.isEmpty()) {
-            appointmentsBuilder_.dispose();
-            appointmentsBuilder_ = null;
-            appointments_ = other.appointments_;
-            bitField0_ = (bitField0_ & ~0x00000002);
-            appointmentsBuilder_ = 
-              com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
-                 getAppointmentsFieldBuilder() : null;
-          } else {
-            appointmentsBuilder_.addAllMessages(other.appointments_);
-          }
-        }
-      }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
       return this;
@@ -461,23 +360,10 @@ private static final long serialVersionUID = 0L;
               bitField0_ |= 0x00000001;
               break;
             } // case 8
-            case 18: {
-              Appointment m =
-                  input.readMessage(
-                      Appointment.parser(),
-                      extensionRegistry);
-              if (appointmentsBuilder_ == null) {
-                ensureAppointmentsIsMutable();
-                appointments_.add(m);
-              } else {
-                appointmentsBuilder_.addMessage(m);
-              }
-              break;
-            } // case 18
             default: {
-//              if (!super.parseUnknownField(input, extensionRegistry, tag)) {
-//                done = true; // was an endgroup tag
-//              }
+              if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                done = true; // was an endgroup tag
+              }
               break;
             } // default:
           } // switch (tag)
@@ -521,246 +407,6 @@ private static final long serialVersionUID = 0L;
       code_ = 0;
       onChanged();
       return this;
-    }
-
-    private java.util.List<Appointment> appointments_ =
-      java.util.Collections.emptyList();
-    private void ensureAppointmentsIsMutable() {
-      if (!((bitField0_ & 0x00000002) != 0)) {
-        appointments_ = new java.util.ArrayList<Appointment>(appointments_);
-        bitField0_ |= 0x00000002;
-       }
-    }
-
-    private com.google.protobuf.RepeatedFieldBuilderV3<
-        Appointment, Appointment.Builder, AppointmentOrBuilder> appointmentsBuilder_;
-
-    /**
-     * <code>repeated .service2.Appointment appointments = 2;</code>
-     */
-    public java.util.List<Appointment> getAppointmentsList() {
-      if (appointmentsBuilder_ == null) {
-        return java.util.Collections.unmodifiableList(appointments_);
-      } else {
-        return appointmentsBuilder_.getMessageList();
-      }
-    }
-    /**
-     * <code>repeated .service2.Appointment appointments = 2;</code>
-     */
-    public int getAppointmentsCount() {
-      if (appointmentsBuilder_ == null) {
-        return appointments_.size();
-      } else {
-        return appointmentsBuilder_.getCount();
-      }
-    }
-    /**
-     * <code>repeated .service2.Appointment appointments = 2;</code>
-     */
-    public Appointment getAppointments(int index) {
-      if (appointmentsBuilder_ == null) {
-        return appointments_.get(index);
-      } else {
-        return appointmentsBuilder_.getMessage(index);
-      }
-    }
-    /**
-     * <code>repeated .service2.Appointment appointments = 2;</code>
-     */
-    public Builder setAppointments(
-        int index, Appointment value) {
-      if (appointmentsBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        ensureAppointmentsIsMutable();
-        appointments_.set(index, value);
-        onChanged();
-      } else {
-        appointmentsBuilder_.setMessage(index, value);
-      }
-      return this;
-    }
-    /**
-     * <code>repeated .service2.Appointment appointments = 2;</code>
-     */
-    public Builder setAppointments(
-        int index, Appointment.Builder builderForValue) {
-      if (appointmentsBuilder_ == null) {
-        ensureAppointmentsIsMutable();
-        appointments_.set(index, builderForValue.build());
-        onChanged();
-      } else {
-        appointmentsBuilder_.setMessage(index, builderForValue.build());
-      }
-      return this;
-    }
-    /**
-     * <code>repeated .service2.Appointment appointments = 2;</code>
-     */
-    public Builder addAppointments(Appointment value) {
-      if (appointmentsBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        ensureAppointmentsIsMutable();
-        appointments_.add(value);
-        onChanged();
-      } else {
-        appointmentsBuilder_.addMessage(value);
-      }
-      return this;
-    }
-    /**
-     * <code>repeated .service2.Appointment appointments = 2;</code>
-     */
-    public Builder addAppointments(
-        int index, Appointment value) {
-      if (appointmentsBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        ensureAppointmentsIsMutable();
-        appointments_.add(index, value);
-        onChanged();
-      } else {
-        appointmentsBuilder_.addMessage(index, value);
-      }
-      return this;
-    }
-    /**
-     * <code>repeated .service2.Appointment appointments = 2;</code>
-     */
-    public Builder addAppointments(
-        Appointment.Builder builderForValue) {
-      if (appointmentsBuilder_ == null) {
-        ensureAppointmentsIsMutable();
-        appointments_.add(builderForValue.build());
-        onChanged();
-      } else {
-        appointmentsBuilder_.addMessage(builderForValue.build());
-      }
-      return this;
-    }
-    /**
-     * <code>repeated .service2.Appointment appointments = 2;</code>
-     */
-    public Builder addAppointments(
-        int index, Appointment.Builder builderForValue) {
-      if (appointmentsBuilder_ == null) {
-        ensureAppointmentsIsMutable();
-        appointments_.add(index, builderForValue.build());
-        onChanged();
-      } else {
-        appointmentsBuilder_.addMessage(index, builderForValue.build());
-      }
-      return this;
-    }
-    /**
-     * <code>repeated .service2.Appointment appointments = 2;</code>
-     */
-    public Builder addAllAppointments(
-        Iterable<? extends Appointment> values) {
-      if (appointmentsBuilder_ == null) {
-        ensureAppointmentsIsMutable();
-        com.google.protobuf.AbstractMessageLite.Builder.addAll(
-            values, appointments_);
-        onChanged();
-      } else {
-        appointmentsBuilder_.addAllMessages(values);
-      }
-      return this;
-    }
-    /**
-     * <code>repeated .service2.Appointment appointments = 2;</code>
-     */
-    public Builder clearAppointments() {
-      if (appointmentsBuilder_ == null) {
-        appointments_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000002);
-        onChanged();
-      } else {
-        appointmentsBuilder_.clear();
-      }
-      return this;
-    }
-    /**
-     * <code>repeated .service2.Appointment appointments = 2;</code>
-     */
-    public Builder removeAppointments(int index) {
-      if (appointmentsBuilder_ == null) {
-        ensureAppointmentsIsMutable();
-        appointments_.remove(index);
-        onChanged();
-      } else {
-        appointmentsBuilder_.remove(index);
-      }
-      return this;
-    }
-    /**
-     * <code>repeated .service2.Appointment appointments = 2;</code>
-     */
-    public Appointment.Builder getAppointmentsBuilder(
-        int index) {
-      return getAppointmentsFieldBuilder().getBuilder(index);
-    }
-    /**
-     * <code>repeated .service2.Appointment appointments = 2;</code>
-     */
-    public AppointmentOrBuilder getAppointmentsOrBuilder(
-        int index) {
-      if (appointmentsBuilder_ == null) {
-        return appointments_.get(index);  } else {
-        return appointmentsBuilder_.getMessageOrBuilder(index);
-      }
-    }
-    /**
-     * <code>repeated .service2.Appointment appointments = 2;</code>
-     */
-    public java.util.List<? extends AppointmentOrBuilder>
-         getAppointmentsOrBuilderList() {
-      if (appointmentsBuilder_ != null) {
-        return appointmentsBuilder_.getMessageOrBuilderList();
-      } else {
-        return java.util.Collections.unmodifiableList(appointments_);
-      }
-    }
-    /**
-     * <code>repeated .service2.Appointment appointments = 2;</code>
-     */
-    public Appointment.Builder addAppointmentsBuilder() {
-      return getAppointmentsFieldBuilder().addBuilder(
-          Appointment.getDefaultInstance());
-    }
-    /**
-     * <code>repeated .service2.Appointment appointments = 2;</code>
-     */
-    public Appointment.Builder addAppointmentsBuilder(
-        int index) {
-      return getAppointmentsFieldBuilder().addBuilder(
-          index, Appointment.getDefaultInstance());
-    }
-    /**
-     * <code>repeated .service2.Appointment appointments = 2;</code>
-     */
-    public java.util.List<Appointment.Builder>
-         getAppointmentsBuilderList() {
-      return getAppointmentsFieldBuilder().getBuilderList();
-    }
-    private com.google.protobuf.RepeatedFieldBuilderV3<
-        Appointment, Appointment.Builder, AppointmentOrBuilder>
-        getAppointmentsFieldBuilder() {
-      if (appointmentsBuilder_ == null) {
-        appointmentsBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
-            Appointment, Appointment.Builder, AppointmentOrBuilder>(
-                appointments_,
-                ((bitField0_ & 0x00000002) != 0),
-                getParentForChildren(),
-                isClean());
-        appointments_ = null;
-      }
-      return appointmentsBuilder_;
     }
     @Override
     public final Builder setUnknownFields(

@@ -15,11 +15,11 @@ private static final long serialVersionUID = 0L;
   private Appointment(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
-  public Appointment() {
+  private Appointment() {
     title_ = "";
     detail_ = "";
     occurTime_ = "";
-    participants_ = "";
+    reminder_ = "";
   }
 
   @Override
@@ -175,39 +175,39 @@ private static final long serialVersionUID = 0L;
     }
   }
 
-  public static final int PARTICIPANTS_FIELD_NUMBER = 5;
+  public static final int REMINDER_FIELD_NUMBER = 5;
   @SuppressWarnings("serial")
-  private volatile Object participants_ = "";
+  private volatile Object reminder_ = "";
   /**
-   * <code>string participants = 5;</code>
-   * @return The participants.
+   * <code>string reminder = 5;</code>
+   * @return The reminder.
    */
   @Override
-  public String getParticipants() {
-    Object ref = participants_;
+  public String getReminder() {
+    Object ref = reminder_;
     if (ref instanceof String) {
       return (String) ref;
     } else {
       com.google.protobuf.ByteString bs = 
           (com.google.protobuf.ByteString) ref;
       String s = bs.toStringUtf8();
-      participants_ = s;
+      reminder_ = s;
       return s;
     }
   }
   /**
-   * <code>string participants = 5;</code>
-   * @return The bytes for participants.
+   * <code>string reminder = 5;</code>
+   * @return The bytes for reminder.
    */
   @Override
   public com.google.protobuf.ByteString
-      getParticipantsBytes() {
-    Object ref = participants_;
+      getReminderBytes() {
+    Object ref = reminder_;
     if (ref instanceof String) {
       com.google.protobuf.ByteString b = 
           com.google.protobuf.ByteString.copyFromUtf8(
               (String) ref);
-      participants_ = b;
+      reminder_ = b;
       return b;
     } else {
       return (com.google.protobuf.ByteString) ref;
@@ -231,18 +231,18 @@ private static final long serialVersionUID = 0L;
     if (id_ != 0) {
       output.writeInt32(1, id_);
     }
-
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(title_)) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 2, title_);
-
-
+    }
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(detail_)) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 3, detail_);
-
-
+    }
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(occurTime_)) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 4, occurTime_);
-
-
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 5, participants_);
-
+    }
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(reminder_)) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 5, reminder_);
+    }
     getUnknownFields().writeTo(output);
   }
 
@@ -256,17 +256,18 @@ private static final long serialVersionUID = 0L;
       size += com.google.protobuf.CodedOutputStream
         .computeInt32Size(1, id_);
     }
-
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(title_)) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, title_);
-
-
+    }
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(detail_)) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, detail_);
-
-
+    }
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(occurTime_)) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, occurTime_);
-
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, participants_);
-
+    }
+    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(reminder_)) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, reminder_);
+    }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
     return size;
@@ -290,8 +291,8 @@ private static final long serialVersionUID = 0L;
         .equals(other.getDetail())) return false;
     if (!getOccurTime()
         .equals(other.getOccurTime())) return false;
-    if (!getParticipants()
-        .equals(other.getParticipants())) return false;
+    if (!getReminder()
+        .equals(other.getReminder())) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -311,8 +312,8 @@ private static final long serialVersionUID = 0L;
     hash = (53 * hash) + getDetail().hashCode();
     hash = (37 * hash) + OCCURTIME_FIELD_NUMBER;
     hash = (53 * hash) + getOccurTime().hashCode();
-    hash = (37 * hash) + PARTICIPANTS_FIELD_NUMBER;
-    hash = (53 * hash) + getParticipants().hashCode();
+    hash = (37 * hash) + REMINDER_FIELD_NUMBER;
+    hash = (53 * hash) + getReminder().hashCode();
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -446,7 +447,7 @@ private static final long serialVersionUID = 0L;
       title_ = "";
       detail_ = "";
       occurTime_ = "";
-      participants_ = "";
+      reminder_ = "";
       return this;
     }
 
@@ -493,7 +494,7 @@ private static final long serialVersionUID = 0L;
         result.occurTime_ = occurTime_;
       }
       if (((from_bitField0_ & 0x00000010) != 0)) {
-        result.participants_ = participants_;
+        result.reminder_ = reminder_;
       }
     }
 
@@ -559,8 +560,8 @@ private static final long serialVersionUID = 0L;
         bitField0_ |= 0x00000008;
         onChanged();
       }
-      if (!other.getParticipants().isEmpty()) {
-        participants_ = other.participants_;
+      if (!other.getReminder().isEmpty()) {
+        reminder_ = other.reminder_;
         bitField0_ |= 0x00000010;
         onChanged();
       }
@@ -611,14 +612,14 @@ private static final long serialVersionUID = 0L;
               break;
             } // case 34
             case 42: {
-              participants_ = input.readStringRequireUtf8();
+              reminder_ = input.readStringRequireUtf8();
               bitField0_ |= 0x00000010;
               break;
             } // case 42
             default: {
-//              if (!super.parseUnknownField(input, extensionRegistry, tag)) {
-//                done = true; // was an endgroup tag
-//              }
+              if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                done = true; // was an endgroup tag
+              }
               break;
             } // default:
           } // switch (tag)
@@ -880,73 +881,73 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    private Object participants_ = "";
+    private Object reminder_ = "";
     /**
-     * <code>string participants = 5;</code>
-     * @return The participants.
+     * <code>string reminder = 5;</code>
+     * @return The reminder.
      */
-    public String getParticipants() {
-      Object ref = participants_;
+    public String getReminder() {
+      Object ref = reminder_;
       if (!(ref instanceof String)) {
         com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         String s = bs.toStringUtf8();
-        participants_ = s;
+        reminder_ = s;
         return s;
       } else {
         return (String) ref;
       }
     }
     /**
-     * <code>string participants = 5;</code>
-     * @return The bytes for participants.
+     * <code>string reminder = 5;</code>
+     * @return The bytes for reminder.
      */
     public com.google.protobuf.ByteString
-        getParticipantsBytes() {
-      Object ref = participants_;
+        getReminderBytes() {
+      Object ref = reminder_;
       if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (String) ref);
-        participants_ = b;
+        reminder_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
     /**
-     * <code>string participants = 5;</code>
-     * @param value The participants to set.
+     * <code>string reminder = 5;</code>
+     * @param value The reminder to set.
      * @return This builder for chaining.
      */
-    public Builder setParticipants(
+    public Builder setReminder(
         String value) {
       if (value == null) { throw new NullPointerException(); }
-      participants_ = value;
+      reminder_ = value;
       bitField0_ |= 0x00000010;
       onChanged();
       return this;
     }
     /**
-     * <code>string participants = 5;</code>
+     * <code>string reminder = 5;</code>
      * @return This builder for chaining.
      */
-    public Builder clearParticipants() {
-      participants_ = getDefaultInstance().getParticipants();
+    public Builder clearReminder() {
+      reminder_ = getDefaultInstance().getReminder();
       bitField0_ = (bitField0_ & ~0x00000010);
       onChanged();
       return this;
     }
     /**
-     * <code>string participants = 5;</code>
-     * @param value The bytes for participants to set.
+     * <code>string reminder = 5;</code>
+     * @param value The bytes for reminder to set.
      * @return This builder for chaining.
      */
-    public Builder setParticipantsBytes(
+    public Builder setReminderBytes(
         com.google.protobuf.ByteString value) {
       if (value == null) { throw new NullPointerException(); }
       checkByteStringIsUtf8(value);
-      participants_ = value;
+      reminder_ = value;
       bitField0_ |= 0x00000010;
       onChanged();
       return this;

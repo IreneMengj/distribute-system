@@ -36,13 +36,13 @@ public final class Service1Impl {
       "\n\016service1.proto\022\010service1\032\033google/proto" +
       "buf/empty.proto\"4\n\016RequestMessage\022\020\n\010use" +
       "rname\030\001 \001(\t\022\020\n\010password\030\002 \001(\t\"\037\n\017Respons" +
-      "eMessage\022\014\n\004code\030\001 \001(\0052\313\001\n\010Service1\022>\n\005l" +
+      "eMessage\022\014\n\004code\030\001 \001(\0052\317\001\n\010Service1\022@\n\005l" +
       "ogin\022\030.service1.RequestMessage\032\031.service" +
-      "1.ResponseMessage\"\000\022?\n\006signup\022\030.service1" +
-      ".RequestMessage\032\031.service1.ResponseMessa" +
-      "ge\"\000\022>\n\007isLogin\022\026.google.protobuf.Empty\032" +
-      "\031.service1.ResponseMessage\"\000B#\n\021Login.ds" +
-      ".service1B\014Service1ImplP\001b\006proto3"
+      "1.ResponseMessage\"\000(\001\022A\n\006signup\022\030.servic" +
+      "e1.RequestMessage\032\031.service1.ResponseMes" +
+      "sage\"\000(\001\022>\n\007isLogin\022\026.google.protobuf.Em" +
+      "pty\032\031.service1.ResponseMessage\"\000B#\n\021Logi" +
+      "n.ds.service1B\014Service1ImplP\001b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,

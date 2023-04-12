@@ -1,4 +1,5 @@
 package Login.client;
+
 import GUI.MainGUI;
 
 import java.awt.*;
@@ -9,10 +10,13 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import GUI.MainGUI;
+import Login.ds.service1.RequestMessage;
+import Login.ds.service1.ResponseMessage;
 import Login.ds.service1.Service1Grpc;
 
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+import io.grpc.stub.StreamObserver;
 
 
 public class LoginGUI extends JFrame implements ActionListener {
@@ -90,42 +94,74 @@ public class LoginGUI extends JFrame implements ActionListener {
         JComboBox<String> dropdown = (JComboBox<String>) e.getSource();
         String selectedOption = (String) dropdown.getSelectedItem();
         ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 50051).usePlaintext().build();
-        Service1Grpc.Service1BlockingStub blockingStub = Service1Grpc.newBlockingStub(channel);
+        Service1Grpc.Service1Stub service1Stub = Service1Grpc.newStub(channel);
         //preparing message to send
         String username = entry1.getText();
         String password = entry2.getText();
         Login.ds.service1.RequestMessage request = Login.ds.service1.RequestMessage.newBuilder().setUsername(username).setPassword(password).build();
-
         if (selectedOption.equals("Log in")) {
             System.out.println("RPC LOGIN to be invoked ...");
-            /*
-             *
-             */
-            Login.ds.service1.ResponseMessage response = blockingStub.login(request);
-            //retreving reply from Login.service
-            int code = response.getCode();
-            if (code == 1) {
-                reply.setText("Login successfully");
-            } else  if(code==0)  {
-                reply.setText("Sign up first.");
-            }else{
-                reply.setText("Wrong username or password");
-            }
+            StreamObserver<ResponseMessage> responseObserver = new StreamObserver<ResponseMessage>() {
+                @Override
+                public void onNext(ResponseMessage response) {
+                    // Handle response
+                    int code = response.getCode();
+                    if (code == 1) {
+                        reply.setText("Login successfully");
+                    } else if (code == 0) {
+                        reply.setText("Sign up first.");
+                    } else {
+                        reply.setText("Wrong username or password");
+                    }
+                }
+
+                @Override
+                public void onError(Throwable t) {
+                    // Handle error
+                    reply.setText("An error occurred: " + t.getMessage());
+                }
+
+                @Override
+                public void onCompleted() {
+                    // Handle completion
+                }
+            };
+            StreamObserver<RequestMessage> requestObserver = service1Stub.login(responseObserver);
+            requestObserver.onNext(request);
+// Call onNext() multiple times to send multiple requests
+            requestObserver.onCompleted();
+
         } else if (selectedOption.equals("Sign up")) {
             System.out.println("RPC Signup to be invoked ...");
-            /*
-             *
-             */
-            //retreving reply from Login.service
-            Login.ds.service1.ResponseMessage response = blockingStub.signup(request);
-            int code = response.getCode();
-            if (code == 1) {
-                reply.setText("Sign up successfully");
-            } else{
-                reply.setText("Username taken. Try again.");
-            }
-        }
 
+            // Handle response
+            StreamObserver<ResponseMessage> responseObserver = new StreamObserver<ResponseMessage>() {
+                @Override
+                public void onNext(ResponseMessage response) {
+                    int code = response.getCode();
+                    if (code == 1) {
+                        reply.setText("Sign up successfully");
+                    } else{
+                        reply.setText("Username taken. Try again.");
+                    }
+                }
+
+                @Override
+                public void onError(Throwable t) {
+                    // Handle error
+                    reply.setText("An error occurred: " + t.getMessage());
+                }
+
+                @Override
+                public void onCompleted() {
+                    // Handle completion
+                }
+            };
+            StreamObserver<RequestMessage> requestObserver = service1Stub.signup(responseObserver);
+            requestObserver.onNext(request);
+// Call onNext() multiple times to send multiple requests
+            requestObserver.onCompleted();
+        }
     }
 }
 

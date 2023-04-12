@@ -3,7 +3,7 @@ package Login.service;
 import Login.ds.service1.RequestMessage;
 import Login.ds.service1.ResponseMessage;
 import Login.ds.service1.Service1Grpc;
-import com.google.common.base.Strings;
+
 import com.google.protobuf.Empty;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
@@ -36,50 +36,84 @@ public class Service1 extends Service1Grpc.Service1ImplBase {
     private static Boolean flag = false;
 
     @Override
-    public void login(RequestMessage request, StreamObserver<ResponseMessage> responseObserver) {
-        String username = request.getUsername();
-        String password = request.getPassword();
-        ResponseMessage reply = null;
+    public StreamObserver<RequestMessage> login(StreamObserver<ResponseMessage> responseObserver) {
+        StreamObserver<RequestMessage> requestObserver = new StreamObserver<RequestMessage>() {
+            @Override
+            public void onNext(RequestMessage request) {
+                String username = request.getUsername();
+                String password = request.getPassword();
+                ResponseMessage reply = null;
 
+                //preparing the response message
+                if (map.size() > 0) {
+                    Set<String> strings = map.keySet();
+                    for (String s : strings) {
+                        if (s.equals(username) && map.get(s).equals(password)) {
 
-        //preparing the response message
-        if (map.size() > 0) {
-            Set<String> strings = map.keySet();
-            for (String s : strings) {
-                if (s.equals(username) && map.get(s).equals(password)) {
+                            reply = ResponseMessage.newBuilder().setCode(1).build();
+                            flag = true;
 
-                    reply = ResponseMessage.newBuilder().setCode(1).build();
-                    flag = true;
+                        } else {
+                            reply = ResponseMessage.newBuilder().setCode(2).build();
+                        }
+                    }
 
                 } else {
-                    reply = ResponseMessage.newBuilder().setCode(2).build();
+                    reply = ResponseMessage.newBuilder().setCode(0).build();
                 }
+                responseObserver.onNext(reply);
             }
 
-        } else {
-            reply = ResponseMessage.newBuilder().setCode(0).build();
-        }
-        responseObserver.onNext(reply);
-        responseObserver.onCompleted();
+            @Override
+            public void onError(Throwable t) {
+                responseObserver.onError(t);
+            }
+
+            @Override
+            public void onCompleted() {
+                responseObserver.onCompleted();
+            }
+
+
+        };
+        return requestObserver;
     }
+
 
     @Override
-    public void signup(RequestMessage request, StreamObserver<ResponseMessage> responseObserver) {
-//        map.put("irene", "123456");
-        String username = request.getUsername();
-        String password = request.getPassword();
-        ResponseMessage reply;
-        //preparing the response message
+    public StreamObserver<RequestMessage> signup(StreamObserver<ResponseMessage> responseObserver) {
+        StreamObserver<RequestMessage> requestObserver = new StreamObserver<RequestMessage>() {
+            @Override
+            public void onNext(RequestMessage request) {
 
-        if (!map.containsKey(username)) {
-            map.put(username, password);
-            reply = ResponseMessage.newBuilder().setCode(1).build();
-        } else {
-            reply = ResponseMessage.newBuilder().setCode(0).build();
-        }
-        responseObserver.onNext(reply);
-        responseObserver.onCompleted();
+                String username = request.getUsername();
+                String password = request.getPassword();
+                ResponseMessage reply;
+                //preparing the response message
+                if (!map.containsKey(username)) {
+                    map.put(username, password);
+                    reply = ResponseMessage.newBuilder().setCode(1).build();
+                } else {
+                    reply = ResponseMessage.newBuilder().setCode(0).build();
+                }
+                responseObserver.onNext(reply);
+
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                responseObserver.onError(t);
+            }
+
+            @Override
+            public void onCompleted() {
+                responseObserver.onCompleted();
+            }
+        };
+        return requestObserver;
     }
+
+
 
     @Override
     public void isLogin(Empty request, StreamObserver<ResponseMessage> responseObserver) {

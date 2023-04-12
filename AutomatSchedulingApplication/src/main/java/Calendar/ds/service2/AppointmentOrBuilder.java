@@ -50,14 +50,14 @@ public interface AppointmentOrBuilder extends
       getOccurTimeBytes();
 
   /**
-   * <code>string participants = 5;</code>
-   * @return The participants.
+   * <code>string reminder = 5;</code>
+   * @return The reminder.
    */
-  String getParticipants();
+  String getReminder();
   /**
-   * <code>string participants = 5;</code>
-   * @return The bytes for participants.
+   * <code>string reminder = 5;</code>
+   * @return The bytes for reminder.
    */
   com.google.protobuf.ByteString
-      getParticipantsBytes();
+      getReminderBytes();
 }
