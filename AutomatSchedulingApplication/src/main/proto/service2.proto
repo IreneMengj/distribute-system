@@ -9,21 +9,12 @@ package service2;
 // Interface exported by the server.
 service Service2 {
   
-  rpc addEvent(Appointment) returns (ResponseMessage) {}
-  rpc viewEvent(eventIdList)returns (AppointmentRequest){}
+  rpc addEvent(Appointment) returns (stream Response) {}
   rpc deleteEvent(eventId) returns (ResponseMessage) {}
   rpc updateEvent(Appointment)returns (ResponseMessage){}
 }
 message eventId{
   int32 id=1;
-}
-
-message eventIdList {
-  repeated int32 eventIds = 1;
-}
-
-message AppointmentRequest{
-  repeated Appointment appointments = 1;
 }
 
 message Appointment {
@@ -34,7 +25,11 @@ message Appointment {
   string participants =5;
 }
 
-message ResponseMessage {
+message Response{
   int32 code = 1;
   repeated Appointment appointments = 2;
+}
+
+message ResponseMessage{
+  int32 code = 1;
 }

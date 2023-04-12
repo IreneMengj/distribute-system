@@ -95,9 +95,4 @@ public class Service2 extends Service2Grpc.Service2ImplBase {
         responseObserver.onCompleted();
 
     }
-
-    @Override
-    public void viewEvent(eventIdList request, StreamObserver<AppointmentRequest> responseObserver) {
-
-    }
 }

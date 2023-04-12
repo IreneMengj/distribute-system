@@ -11,8 +11,8 @@ import "google/protobuf/empty.proto";
 // Interface exported by the server.
 service Service1 {
   
-  rpc login(RequestMessage) returns (ResponseMessage) {}
-  rpc signup(RequestMessage) returns (ResponseMessage){}
+  rpc login(stream RequestMessage) returns (ResponseMessage) {}
+  rpc signup(stream RequestMessage) returns (ResponseMessage){}
   rpc isLogin(google.protobuf.Empty)  returns(ResponseMessage){}
 }
 
