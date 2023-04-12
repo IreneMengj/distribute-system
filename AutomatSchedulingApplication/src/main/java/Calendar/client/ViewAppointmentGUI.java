@@ -73,7 +73,7 @@ public class ViewAppointmentGUI extends JFrame {
                         .build();
                 Service1Grpc.Service1BlockingStub service1BlockingStub = Service1Grpc.newBlockingStub(channel);
                 Login.ds.service1.ResponseMessage service1Response = service1BlockingStub.isLogin(null);
-                if(service1Response.getCode()==0){
+                if (service1Response.getCode() == 0) {
                     JOptionPane.showMessageDialog(null, "Please log in first");
                     return;
                 }
@@ -121,133 +121,142 @@ public class ViewAppointmentGUI extends JFrame {
                 // Get the ID of the selected row
                 for (int i = 0; i < selectedRows.length; i++) {
                     int id = Integer.parseInt(model.getValueAt(selectedRows[i], 0).toString());
-                    Service2Grpc.Service2BlockingStub blockingStub = createChannel();
-                    eventId request = eventId.newBuilder().setId(id).build();
-                    System.out.println("RPC delete appointment to be invoked ...");
-                    ResponseMessage responseMessage = blockingStub.deleteEvent(request);
-                    int code = responseMessage.getCode();
-                    if (code == 1) {
-                        JOptionPane.showMessageDialog(null, "Delete successfully.");
-                        model.removeRow(selectedRows[i]); // remove the row from the model
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Delete unsuccessfully.");
+
+                    ManagedChannel channel = createChannel();
+                    try {
+                        Service2Grpc.Service2BlockingStub blockingStub = Service2Grpc.newBlockingStub(channel);
+                        eventId request = eventId.newBuilder().setId(id).build();
+                        System.out.println("RPC delete appointment to be invoked ...");
+                        ResponseMessage responseMessage = blockingStub.deleteEvent(request);
+                        int code = responseMessage.getCode();
+                        if (code == 1) {
+                            JOptionPane.showMessageDialog(null, "Delete successfully.");
+                            model.removeRow(selectedRows[i]); // remove the row from the model
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Delete unsuccessfully.");
+                        }
+                    } finally {
+                        channel.shutdown();
+                        try {
+                            channel.awaitTermination(5, TimeUnit.SECONDS);
+                        } catch (InterruptedException error) {
+                            error.printStackTrace();
+                        }
                     }
+
+
                 }
-
-
             }
-        });
+            });
 
-        // create a button to go back to the main GUI
-        JButton backButton = new JButton("Back to Main Menu");
-        backButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // show the First GUI
-                mainGUI.showMainGUI();
-            }
-        });
+            // create a button to go back to the main GUI
+            JButton backButton = new JButton("Back to Main Menu");
+        backButton.addActionListener(new
+
+            ActionListener() {
+                @Override
+                public void actionPerformed (ActionEvent e){
+                    // show the First GUI
+                    mainGUI.showMainGUI();
+                }
+            });
 
 
-
-        // Add the button to the button panel
+            // Add the button to the button panel
         buttonPanel.add(addButton);
         buttonPanel.add(editButton);
         buttonPanel.add(deleteButton);
         buttonPanel.add(backButton); // add the backButton to the panel
 
-        // Create a panel to hold tables and buttons
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.add(scrollPane, BorderLayout.CENTER);
-        panel.add(buttonPanel, BorderLayout.SOUTH);
+            // Create a panel to hold tables and buttons
+            JPanel panel = new JPanel(new BorderLayout());
+        panel.add(scrollPane,BorderLayout.CENTER);
+        panel.add(buttonPanel,BorderLayout.SOUTH);
 
-        // Add the main panel to the window
-        add(panel);
+            // Add the main panel to the window
+            add(panel);
 
-        // Sets the window size and visibility
-        setSize(800, 600);
-        setVisible(true);
-    }
+            // Sets the window size and visibility
+            setSize(800,600);
+
+            setVisible(true);
+        }
 
     public ViewAppointmentGUI() {
 
-    }
+        }
 
-    // Set the data of the table
-    public void setData(int id, Object[] newData) {
-        // Find the row with the specified id and update its data
-        for (int i = 0; i < appointments.size(); i++) {
-            Object[] row = appointments.get(i);
-            int o = Integer.parseInt(row[0].toString());
-            if (o==id) {
-                // Update the row data
-                row[1] = newData[0];
-                row[2] = newData[1];
-                row[3] = newData[2];
-                row[4] = newData[3];
+        // Set the data of the table
+        public void setData ( int id, Object[] newData){
+            // Find the row with the specified id and update its data
+            for (int i = 0; i < appointments.size(); i++) {
+                Object[] row = appointments.get(i);
+                int o = Integer.parseInt(row[0].toString());
+                if (o == id) {
+                    // Update the row data
+                    row[1] = newData[0];
+                    row[2] = newData[1];
+                    row[3] = newData[2];
+                    row[4] = newData[3];
 
-                // Update the row in the table model
-                for (int j = 1; j <= 4; j++) {
-                    model.setValueAt(row[j], i, j);
+                    // Update the row in the table model
+                    for (int j = 1; j <= 4; j++) {
+                        model.setValueAt(row[j], i, j);
+                    }
+
+                    return;
                 }
-
-                return;
             }
         }
-    }
 
-    // Edit an existing appointment in the appointments list
-    public void editingAppointment(int id, Object[] newAppointment) {
-        // Update the row in the table model
-        setData(id, newAppointment);
+        // Edit an existing appointment in the appointments list
+        public void editingAppointment ( int id, Object[] newAppointment){
+            // Update the row in the table model
+            setData(id, newAppointment);
 
-    }
-
-
-    // Add an appointment to the appointments list
-    public void addAppointment(Object[] appointment) {
-        appointments.add(appointment);
-        // Add the appointment data to the table
-        model.addRow(appointment);
-    }
-
-
-    public Service2Grpc.Service2BlockingStub createChannel() {
-        // Discover gRPC service with JmDNS
-
-        JmDNS jmdns = null;
-        InetAddress inetAddress = null;
-        try {
-            jmdns = JmDNS.create();
-            inetAddress = InetAddress.getLocalHost();
-        } catch (UnknownHostException unknownHostException) {
-            unknownHostException.printStackTrace();
-        } catch (IOException ioException) {
-            ioException.printStackTrace();
         }
-        String serviceType = "_grpc._tcp.local.";
-        String serviceName = "service2";
-        ServiceInfo serviceInfo = jmdns.getServiceInfo(serviceType, serviceName);
-        if (serviceInfo == null) {
-            System.err.println("Could not find service with name " + serviceName);
-            return null;
+
+
+        // Add an appointment to the appointments list
+        public void addAppointment (Object[]appointment){
+            appointments.add(appointment);
+            // Add the appointment data to the table
+            model.addRow(appointment);
         }
-        // Use the address and port to create the ManagedChannel
-        ManagedChannel channel = ManagedChannelBuilder.forAddress(inetAddress.getHostAddress(), serviceInfo.getPort())
-                .usePlaintext()
-                .build();
-
-            Service2Grpc.Service2BlockingStub blockingStub = Service2Grpc.newBlockingStub(channel);
-            return blockingStub;
 
 
+        public ManagedChannel createChannel () {
+            // Discover gRPC service with JmDNS
+
+            JmDNS jmdns = null;
+            InetAddress inetAddress = null;
+            try {
+                jmdns = JmDNS.create();
+                inetAddress = InetAddress.getLocalHost();
+            } catch (UnknownHostException unknownHostException) {
+                unknownHostException.printStackTrace();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+            String serviceType = "_grpc._tcp.local.";
+            String serviceName = "service2";
+            ServiceInfo serviceInfo = jmdns.getServiceInfo(serviceType, serviceName);
+            if (serviceInfo == null) {
+                System.err.println("Could not find service with name " + serviceName);
+                return null;
+            }
+            // Use the address and port to create the ManagedChannel
+            ManagedChannel channel = ManagedChannelBuilder.forAddress(inetAddress.getHostAddress(), serviceInfo.getPort())
+                    .usePlaintext()
+                    .build();
+            return channel;
+        }
+
+
+        public static void main (String[]args){
+            ViewAppointmentGUI gui = new ViewAppointmentGUI();
+
+        }
     }
-
-
-    public static void main(String[] args) {
-        ViewAppointmentGUI gui = new ViewAppointmentGUI();
-
-    }
-}
 
 
