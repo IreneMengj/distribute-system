@@ -361,9 +361,9 @@ private static final long serialVersionUID = 0L;
               break;
             } // case 8
             default: {
-              if (!super.parseUnknownField(input, extensionRegistry, tag)) {
-                done = true; // was an endgroup tag
-              }
+//              if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+//                done = true; // was an endgroup tag
+//              }
               break;
             } // default:
           } // switch (tag)

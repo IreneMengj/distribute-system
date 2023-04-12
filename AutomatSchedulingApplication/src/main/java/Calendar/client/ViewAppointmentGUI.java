@@ -22,6 +22,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 
 public class ViewAppointmentGUI extends JFrame {
@@ -45,7 +46,7 @@ public class ViewAppointmentGUI extends JFrame {
         model.addColumn("TITLE");
         model.addColumn("DESCRIPTION");
         model.addColumn("TIME");
-        model.addColumn("PARTICIPANTS");
+        model.addColumn("Reminder");
         model.addColumn("SELECT");
 
         // Create the table and set the model as its data source
@@ -213,6 +214,7 @@ public class ViewAppointmentGUI extends JFrame {
 
     public Service2Grpc.Service2BlockingStub createChannel() {
         // Discover gRPC service with JmDNS
+
         JmDNS jmdns = null;
         InetAddress inetAddress = null;
         try {
@@ -235,8 +237,10 @@ public class ViewAppointmentGUI extends JFrame {
                 .usePlaintext()
                 .build();
 
-        Service2Grpc.Service2BlockingStub blockingStub = Service2Grpc.newBlockingStub(channel);
-        return blockingStub;
+            Service2Grpc.Service2BlockingStub blockingStub = Service2Grpc.newBlockingStub(channel);
+            return blockingStub;
+
+
     }
 
 

@@ -9,12 +9,19 @@ import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
 
+import javax.jmdns.JmDNS;
+import javax.jmdns.ServiceInfo;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Set;
 
 public class Service1 extends Service1Grpc.Service1ImplBase {
     public static void main(String[] args) throws InterruptedException, IOException {
+        // Register service with JmDNS
+        JmDNS jmdns = JmDNS.create();
+        ServiceInfo serviceInfo = ServiceInfo.create("_grpc._tcp.local.", "service1", 50051, "");
+        jmdns.registerService(serviceInfo);
+        // Start gRPC server
         Service1 service1 = new Service1();
 
         int port = 50051;

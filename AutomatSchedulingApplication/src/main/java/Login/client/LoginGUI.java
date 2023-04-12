@@ -5,7 +5,13 @@ import GUI.MainGUI;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.concurrent.TimeUnit;
 
+import javax.jmdns.JmDNS;
+import javax.jmdns.ServiceInfo;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
@@ -93,74 +99,103 @@ public class LoginGUI extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         JComboBox<String> dropdown = (JComboBox<String>) e.getSource();
         String selectedOption = (String) dropdown.getSelectedItem();
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 50051).usePlaintext().build();
-        Service1Grpc.Service1Stub service1Stub = Service1Grpc.newStub(channel);
-        //preparing message to send
-        String username = entry1.getText();
-        String password = entry2.getText();
-        Login.ds.service1.RequestMessage request = Login.ds.service1.RequestMessage.newBuilder().setUsername(username).setPassword(password).build();
-        if (selectedOption.equals("Log in")) {
-            System.out.println("RPC LOGIN to be invoked ...");
-            StreamObserver<ResponseMessage> responseObserver = new StreamObserver<ResponseMessage>() {
-                @Override
-                public void onNext(ResponseMessage response) {
-                    // Handle response
-                    int code = response.getCode();
-                    if (code == 1) {
-                        reply.setText("Login successfully");
-                    } else if (code == 0) {
-                        reply.setText("Sign up first.");
-                    } else {
-                        reply.setText("Wrong username or password");
+        // Discover gRPC service with JmDNS
+        JmDNS jmdns = null;
+        InetAddress inetAddress = null;
+        try {
+            jmdns = JmDNS.create();
+            inetAddress = InetAddress.getLocalHost();
+        } catch (UnknownHostException unknownHostException) {
+            unknownHostException.printStackTrace();
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        }
+        String serviceType = "_grpc._tcp.local.";
+        String serviceName = "service1";
+        ServiceInfo serviceInfo = jmdns.getServiceInfo(serviceType, serviceName);
+        if (serviceInfo == null) {
+            System.err.println("Could not find service with name " + serviceName);
+            return;
+        }
+        ManagedChannel channel = ManagedChannelBuilder.forAddress(inetAddress.getHostAddress(), serviceInfo.getPort()).usePlaintext().build();
+        try {
+            // Call gRPC service methods here
+            Service1Grpc.Service1Stub service1Stub = Service1Grpc.newStub(channel);
+            //preparing message to send
+            String username = entry1.getText();
+            String password = entry2.getText();
+            Login.ds.service1.RequestMessage request = Login.ds.service1.RequestMessage.newBuilder().setUsername(username).setPassword(password).build();
+            if (selectedOption.equals("Log in")) {
+                System.out.println("RPC LOGIN to be invoked ...");
+                StreamObserver<ResponseMessage> responseObserver = new StreamObserver<ResponseMessage>() {
+                    @Override
+                    public void onNext(ResponseMessage response) {
+                        // Handle response
+                        int code = response.getCode();
+                        if (code == 1) {
+                            reply.setText("Login successfully");
+                        } else if (code == 0) {
+                            reply.setText("Sign up first.");
+                        } else {
+                            reply.setText("Wrong username or password");
+                        }
                     }
-                }
 
-                @Override
-                public void onError(Throwable t) {
-                    // Handle error
-                    reply.setText("An error occurred: " + t.getMessage());
-                }
-
-                @Override
-                public void onCompleted() {
-                    // Handle completion
-                }
-            };
-            StreamObserver<RequestMessage> requestObserver = service1Stub.login(responseObserver);
-            requestObserver.onNext(request);
-// Call onNext() multiple times to send multiple requests
-            requestObserver.onCompleted();
-
-        } else if (selectedOption.equals("Sign up")) {
-            System.out.println("RPC Signup to be invoked ...");
-
-            // Handle response
-            StreamObserver<ResponseMessage> responseObserver = new StreamObserver<ResponseMessage>() {
-                @Override
-                public void onNext(ResponseMessage response) {
-                    int code = response.getCode();
-                    if (code == 1) {
-                        reply.setText("Sign up successfully");
-                    } else{
-                        reply.setText("Username taken. Try again.");
+                    @Override
+                    public void onError(Throwable t) {
+                        // Handle error
+                        reply.setText("An error occurred: " + t.getMessage());
                     }
-                }
 
-                @Override
-                public void onError(Throwable t) {
-                    // Handle error
-                    reply.setText("An error occurred: " + t.getMessage());
-                }
-
-                @Override
-                public void onCompleted() {
-                    // Handle completion
-                }
-            };
-            StreamObserver<RequestMessage> requestObserver = service1Stub.signup(responseObserver);
-            requestObserver.onNext(request);
+                    @Override
+                    public void onCompleted() {
+                        // Handle completion
+                    }
+                };
+                StreamObserver<RequestMessage> requestObserver = service1Stub.login(responseObserver);
+                requestObserver.onNext(request);
 // Call onNext() multiple times to send multiple requests
-            requestObserver.onCompleted();
+                requestObserver.onCompleted();
+
+            } else if (selectedOption.equals("Sign up")) {
+                System.out.println("RPC Signup to be invoked ...");
+
+                // Handle response
+                StreamObserver<ResponseMessage> responseObserver = new StreamObserver<ResponseMessage>() {
+                    @Override
+                    public void onNext(ResponseMessage response) {
+                        int code = response.getCode();
+                        if (code == 1) {
+                            reply.setText("Sign up successfully");
+                        } else {
+                            reply.setText("Username taken. Try again.");
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        // Handle error
+                        reply.setText("An error occurred: " + t.getMessage());
+                    }
+
+                    @Override
+                    public void onCompleted() {
+                        // Handle completion
+                    }
+                };
+                StreamObserver<RequestMessage> requestObserver = service1Stub.signup(responseObserver);
+                requestObserver.onNext(request);
+// Call onNext() multiple times to send multiple requests
+                requestObserver.onCompleted();
+            }
+
+        } finally {
+            channel.shutdown();
+            try {
+                channel.awaitTermination(5, TimeUnit.SECONDS);
+            } catch (InterruptedException error) {
+                error.printStackTrace();
+            }
         }
     }
 }

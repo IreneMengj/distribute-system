@@ -33,66 +33,80 @@ public class Service2 extends Service2Grpc.Service2ImplBase {
     ArrayList<Appointment.Builder> list = new ArrayList<>();
 
     @Override
-    public void addEvent(Appointment request, StreamObserver<Calendar.ds.service2.ResponseMessage> responseObserver) {
-//        System.out.println(list.get(0).getId());
-        int id=request.getId();
-        String title = request.getTitle();
-        String paticipant = request.getParticipants();
-        String desc=request.getDetail();
-        String time=request.getOccurTime();
-        Appointment appointment =new Appointment();
-        Appointment.Builder builder = appointment.toBuilder().setId(id).setTitle(title).setDetail(desc).setOccurTime(time).setParticipants(paticipant
-        );
-        list.add(builder);
-        Calendar.ds.service2.ResponseMessage reply;
-        if (title.equals("")) {
-            reply=Calendar.ds.service2.ResponseMessage.newBuilder().setCode(0).build();
-        } else {
-            reply=Calendar.ds.service2.ResponseMessage.newBuilder().setCode(1).build();
+    public void addEvent(Appointment request, StreamObserver<Response> responseObserver) {
+        try {
+            int id = request.getId();
+            String title = request.getTitle();
+            String reminder = request.getReminder();
+            String desc = request.getDetail();
+            String time = request.getOccurTime();
+            Appointment appointment = new Appointment();
+            Appointment.Builder builder = appointment.toBuilder().setId(id).setTitle(title).setDetail(desc).setOccurTime(time).setReminder(reminder
+            );
+            list.add(builder);
+            Calendar.ds.service2.Response reply;
+            if (title.equals("")) {
+                reply = Calendar.ds.service2.Response.newBuilder().setCode(0).build();
+            } else {
+                reply = Calendar.ds.service2.Response.newBuilder().setCode(1).build();
+            }
+            responseObserver.onNext(reply);
+            responseObserver.onCompleted();
+        } catch (Exception e) {
+            // Handle exceptions and send error responses
+            responseObserver.onError(e);
         }
-        responseObserver.onNext(reply);
-        responseObserver.onCompleted();
     }
+
 
     @Override
     public void updateEvent(Appointment request, StreamObserver<Calendar.ds.service2.ResponseMessage> responseObserver) {
-        int id = request.getId();
-        String title = request.getTitle();
-        String occurTime = request.getOccurTime();
-        String detail = request.getDetail();
-        String participants = request.getParticipants();
-        for(Appointment.Builder b:list){
-            if(b.getId()==id){
-                b.setTitle(title);
-                b.setOccurTime(occurTime);
-                b.setDetail(detail);
-                b.setParticipants(participants);
+        try {
+            int id = request.getId();
+            String title = request.getTitle();
+            String occurTime = request.getOccurTime();
+            String detail = request.getDetail();
+            String reminder = request.getReminder();
+            for (Appointment.Builder b : list) {
+                if (b.getId() == id) {
+                    b.setTitle(title);
+                    b.setOccurTime(occurTime);
+                    b.setDetail(detail);
+                    b.setReminder(reminder);
+                }
             }
+            Calendar.ds.service2.ResponseMessage reply = Calendar.ds.service2.ResponseMessage.newBuilder().setCode(1).build();
+            responseObserver.onNext(reply);
+            responseObserver.onCompleted();
+        } catch (Exception e) {
+            // Handle exceptions and send error responses
+            responseObserver.onError(e);
         }
-        Calendar.ds.service2.ResponseMessage reply=Calendar.ds.service2.ResponseMessage.newBuilder().setCode(1).build();
-        responseObserver.onNext(reply);
-        responseObserver.onCompleted();
     }
 
     @Override
     public void deleteEvent(eventId request, StreamObserver<Calendar.ds.service2.ResponseMessage> responseObserver) {
-
-        int id = request.getId();
-        boolean flag=false;
-        for(Appointment.Builder a:list){
-            if(a.getId()==id){
-                 flag= list.remove(a);
-                 break;
+        try {
+            int id = request.getId();
+            boolean flag = false;
+            for (Appointment.Builder a : list) {
+                if (a.getId() == id) {
+                    flag = list.remove(a);
+                    break;
+                }
             }
+            Calendar.ds.service2.ResponseMessage reply;
+            if (flag) {
+                reply = Calendar.ds.service2.ResponseMessage.newBuilder().setCode(1).build();
+            } else {
+                reply = Calendar.ds.service2.ResponseMessage.newBuilder().setCode(0).build();
+            }
+            responseObserver.onNext(reply);
+            responseObserver.onCompleted();
+        } catch (Exception e) {
+            // Handle exceptions and send error responses
+            responseObserver.onError(e);
         }
-        Calendar.ds.service2.ResponseMessage reply;
-        if(flag) {
-            reply = Calendar.ds.service2.ResponseMessage.newBuilder().setCode(1).build();
-        }else{
-            reply = Calendar.ds.service2.ResponseMessage.newBuilder().setCode(0).build();
-        }
-        responseObserver.onNext(reply);
-        responseObserver.onCompleted();
 
     }
 }

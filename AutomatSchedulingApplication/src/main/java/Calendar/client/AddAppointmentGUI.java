@@ -1,6 +1,7 @@
 package Calendar.client;
 
 import Calendar.ds.service2.Appointment;
+import Calendar.ds.service2.Response;
 import Calendar.ds.service2.ResponseMessage;
 import Calendar.ds.service2.Service2Grpc;
 
@@ -18,7 +19,9 @@ import java.awt.event.*;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class AddAppointmentGUI extends JFrame {
     private static int nextId = 1;
@@ -32,8 +35,8 @@ public class AddAppointmentGUI extends JFrame {
     JLabel timeLabel;
     JSpinner timeSpinner;
     JSpinner.DateEditor timeEditor;
-    JLabel participantLabel ;
-    JTextField participantField ;
+    JLabel reminderLabel ;
+    JComboBox<String> reminderField;
     int id;
 
     public AddAppointmentGUI(ViewAppointmentGUI viewAppointmentGUI) {
@@ -61,8 +64,9 @@ public class AddAppointmentGUI extends JFrame {
             timeEditor = new JSpinner.DateEditor(timeSpinner, "yyyy-MM-dd");
             timeSpinner.setEditor(timeEditor);
 
-            participantLabel = new JLabel("Participants:");
-            participantField= new JTextField(20);
+            reminderLabel = new JLabel("Reminder:");
+            String[] options = {"Yes", "No"};
+            reminderField = new JComboBox<>(options);
 
         } else {
             frame = new JFrame("Update Appointment");
@@ -82,10 +86,9 @@ public class AddAppointmentGUI extends JFrame {
             timeEditor = new JSpinner.DateEditor(timeSpinner, "yyyy-MM-dd");
             timeSpinner.setEditor(timeEditor);
 
-            participantLabel = new JLabel("Participants:");
-            participantField= new JTextField(20);
-            participantField.setText(rowData[4].toString());
-
+            reminderLabel = new JLabel("Reminder:");
+            String[] options = {"Yes", "No"};
+            reminderField = new JComboBox<>(options);
         }
 
         JButton saveButton = new JButton("Save");
@@ -115,20 +118,19 @@ public class AddAppointmentGUI extends JFrame {
                 ManagedChannel channel1 = ManagedChannelBuilder.forAddress(inetAddress.getHostAddress(), serviceInfo.getPort())
                         .usePlaintext()
                         .build();
-
+                try{
                 Service2Grpc.Service2BlockingStub blockingStub = Service2Grpc.newBlockingStub(channel1);
                 // Build an Appointment request to add a new appointment to the service
 
 
                 if(str=="add") {
                     id = nextId++;
-                    Appointment request = Appointment.newBuilder().setId(id).setTitle(titleField.getText()).setDetail(descArea.getText()).setOccurTime(timeEditor.getFormat().format(timeSpinner.getValue())).setParticipants(participantField.getText()).build();
+                    Appointment request = Appointment.newBuilder().setId(id).setTitle(titleField.getText()).setDetail(descArea.getText()).setOccurTime(timeEditor.getFormat().format(timeSpinner.getValue())).setReminder((String)reminderField.getSelectedItem()).build();
                     System.out.println("RPC add appointment to be invoked ...");
 
                     // Get the response code from the gRPC service
-                    ResponseMessage response = blockingStub.addEvent(request);
-                    int code = response.getCode();
-                    updatedList = response.getAppointmentsList();
+                    Iterator<Response> response = blockingStub.addEvent(request);
+                    int code = response.next().getCode();
                     String reply;
                     if (code == 1) {
                         reply = "Appointment saved successfully";
@@ -137,7 +139,7 @@ public class AddAppointmentGUI extends JFrame {
                     }
                     JOptionPane.showMessageDialog(frame, reply);
                     // Create a new appointment with the input details
-                    Object[] appointment = new Object[]{id,titleField.getText(), descArea.getText(), timeEditor.getFormat().format(timeSpinner.getValue()), participantField.getText()};
+                    Object[] appointment = new Object[]{id,titleField.getText(), descArea.getText(), timeEditor.getFormat().format(timeSpinner.getValue()), (String)reminderField.getSelectedItem()};
                     // Get the instance of ViewAppointmentGUI and add the new appointment
 
                     viewAppointmentGUI.addAppointment(appointment);
@@ -146,8 +148,8 @@ public class AddAppointmentGUI extends JFrame {
                     String title=titleField.getText();
                     String desc=descArea.getText();
                     String time = timeEditor.getFormat().format(timeSpinner.getValue());
-                    String participant=participantField.getText();
-                    Appointment request = Appointment.newBuilder().setId(id).setTitle(title).setDetail(desc).setOccurTime(time).setParticipants(participant).build();
+                    String reminder=(String)reminderField.getSelectedItem();
+                    Appointment request = Appointment.newBuilder().setId(id).setTitle(title).setDetail(desc).setOccurTime(time).setReminder(reminder).build();
                     System.out.println("RPC edit appointment to be invoked ...");
 
                     // Get the response code from the gRPC service
@@ -162,11 +164,18 @@ public class AddAppointmentGUI extends JFrame {
                     }
                     JOptionPane.showMessageDialog(frame, reply);
                     // Create a new appointment with the input details
-                    Object[] appointment = new Object[]{title, desc, time, participant};
+                    Object[] appointment = new Object[]{title, desc, time, reminder};
                     // Get the instance of ViewAppointmentGUI and add the new appointment
 
                     viewAppointmentGUI.editingAppointment(id,appointment);
 
+                }}finally {
+                    channel1.shutdown();
+                    try {
+                        channel1.awaitTermination(5, TimeUnit.SECONDS);
+                    } catch (InterruptedException error) {
+                        error.printStackTrace();
+                    }
                 }
                 frame.dispose();
                 dispose();
@@ -199,10 +208,10 @@ public class AddAppointmentGUI extends JFrame {
         panel.add(timeSpinner, c);
         c.gridx = 0;
         c.gridy = 3;
-        panel.add(participantLabel, c);
+        panel.add(reminderLabel, c);
         c.gridx = 1;
         c.gridy = 3;
-        panel.add(participantField, c);
+        panel.add(reminderField, c);
         c.gridx = 1;
         c.gridy = 4;
         panel.add(saveButton, c);
