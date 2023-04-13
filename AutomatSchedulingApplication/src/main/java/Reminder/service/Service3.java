@@ -1,9 +1,8 @@
 package Reminder.service;
 
-import Calendar.ds.service2.*;
-import Calendar.service.Service2;
 import Reminder.ds.service3.Reminder;
 import Reminder.ds.service3.ReminderId;
+import Reminder.ds.service3.ResponseMessage;
 import Reminder.ds.service3.Service3Grpc;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
@@ -57,10 +56,14 @@ public class Service3 extends Service3Grpc.Service3ImplBase {
     public void getReminder(ReminderId request, StreamObserver<Reminder.ds.service3.ResponseMessage> responseObserver) {
         try {
             List<Integer> idList = request.getIDList();
-            int id;
             for(Integer i:idList){
-
+                for(Reminder r:list){
+                    if(r.getID()==i){
+                        list.remove(r);
+                    }
+                }
             }
+            ResponseMessage reply = ResponseMessage.newBuilder().setMessage("Delete successfully").build();
             responseObserver.onNext(reply);
             responseObserver.onCompleted();
         } catch (Exception e) {
