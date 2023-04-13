@@ -1,11 +1,25 @@
 package Reminder.client;
 
 
+import Login.ds.service1.RequestMessage;
+import Login.ds.service1.ResponseMessage;
+import Login.ds.service1.Service1Grpc;
+import Reminder.ds.service3.Reminder;
+import Reminder.ds.service3.Service3Grpc;
+import io.grpc.ManagedChannel;
+import io.grpc.ManagedChannelBuilder;
+import io.grpc.stub.StreamObserver;
+
+import javax.jmdns.JmDNS;
+import javax.jmdns.ServiceInfo;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -21,9 +35,9 @@ public class AddReminderGUI extends JFrame {
 
     private DefaultTableModel tableModel;
 
-    public AddReminderGUI(ReminderGUI reminderGUI,DefaultTableModel tableModel) {
+    public AddReminderGUI(ReminderGUI reminderGUI, DefaultTableModel tableModel) {
         this.reminderGUI = reminderGUI;
-        this.tableModel= tableModel;
+        this.tableModel = tableModel;
         // 设置窗口标题
         setTitle("Add Reminder");
 
@@ -44,9 +58,6 @@ public class AddReminderGUI extends JFrame {
         JSpinner.DateEditor timeEditor = new JSpinner.DateEditor(timeSpinner, "yyyy-MM-dd HH:mm:ss");
         timeSpinner.setEditor(timeEditor);
 
-
-
-
         // 添加确认按钮事件
         okButton.addActionListener(new ActionListener() {
             @Override
@@ -55,6 +66,47 @@ public class AddReminderGUI extends JFrame {
                 String title = titleField.getText();
                 String desc = descField.getText();
                 LocalDateTime time = LocalDateTime.parse(timeEditor.getFormat().format(timeSpinner.getValue()), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+
+                // Discover gRPC service with JmDNS
+                JmDNS jmdns = null;
+                InetAddress inetAddress = null;
+                try {
+                    jmdns = JmDNS.create();
+                    inetAddress = InetAddress.getLocalHost();
+                } catch (UnknownHostException unknownHostException) {
+                    unknownHostException.printStackTrace();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+                String serviceType = "_grpc._tcp.local.";
+                String serviceName = "service3";
+                ServiceInfo serviceInfo = jmdns.getServiceInfo(serviceType, serviceName);
+                if (serviceInfo == null) {
+                    System.err.println("Could not find service with name " + serviceName);
+                    return;
+                }
+                ManagedChannel channel = ManagedChannelBuilder.forAddress(inetAddress.getHostAddress(), serviceInfo.getPort()).usePlaintext().build();
+                try {
+                    // Call gRPC service methods here
+                    Service3Grpc.Service3Stub service3Stub = Service3Grpc.newStub(channel);
+                    //preparing message to send
+                    Reminder.newBuilder().setID().build();
+
+                    @Override
+                    public void onError (Throwable t){
+                        // Handle error
+                        reply.setText("An error occurred: " + t.getMessage());
+                    }
+
+                    @Override
+                    public void onCompleted () {
+                        // Handle completion
+                    }
+                } ;
+                StreamObserver<RequestMessage> requestObserver = service1Stub.login(responseObserver);
+                requestObserver.onNext(request);
+// Call onNext() multiple times to send multiple requests
+                requestObserver.onCompleted();
 
                 // 发送添加提醒请求
                 Object[] rowData = {desc, title, time};

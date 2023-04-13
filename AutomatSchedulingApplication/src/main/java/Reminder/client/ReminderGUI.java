@@ -68,8 +68,6 @@ public class ReminderGUI extends JFrame {
         add(scrollPane, BorderLayout.CENTER);
 
 
-
-
         // 设置窗口大小、位置和关闭方式
         setSize(400, 200);
         setLocationRelativeTo(null);
