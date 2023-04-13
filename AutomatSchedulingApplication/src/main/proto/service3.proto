@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 option java_multiple_files = true;
-option java_package = "Notification.ds.service3";
+option java_package = "Reminder.ds.service3";
 option java_outer_classname = "Service3Impl";
 
 package service3;
@@ -11,14 +11,27 @@ import "google/protobuf/empty.proto";
 // Interface exported by the server.
 service Service3 {
   
-  rpc setReminder(stream Reminder) returns (stream ResponseMessage) {}
-  rpc getReminder(google.protobuf.Empty) returns (stream ResponseMessage) {}
+  rpc setReminder(Reminder) returns (stream Response) {}
+  rpc getReminder(ReminderId) returns (ResponseMessage) {}
+  rpc deleteReminder(stream ReminderId) returns(stream ResponseMessage){}
     
 }
 
-message ResponseMessage {
+message Response {
   int32 code = 1;
   string message=2;
+}
+
+message ResponseMessage {
+  string message=1;
+}
+
+message ReminderId{
+  repeated int32  ID = 1;
+}
+
+message ID{
+  int32 ID=1;
 }
 
 message Reminder {
@@ -28,4 +41,5 @@ message Reminder {
   string hour=4;
   string min=5;
   string sec=6;
+  int32 ID=7;
 }

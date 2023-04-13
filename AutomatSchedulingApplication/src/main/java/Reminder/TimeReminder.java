@@ -1,4 +1,4 @@
-package Notification;
+package Reminder;
 
 import java.time.LocalDateTime;
 

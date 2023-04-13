@@ -10,29 +10,29 @@ import "google/protobuf/empty.proto";
 
 // Interface exported by the server.
 service Service2 {
-  rpc addEvent(Appointment) returns (stream Response) {}
-  rpc deleteEvent(eventId) returns (ResponseMessage) {}
-  rpc updateEvent(Appointment)returns (ResponseMessage){}
-  rpc getEvents(google.protobuf.Empty) returns (stream Appointment){}
+    rpc addEvent(Appointment) returns (stream Response) {}
+    rpc deleteEvent(eventId) returns (ResponseMessage) {}
+    rpc updateEvent(Appointment) returns (ResponseMessage) {}
+    rpc getEvents(google.protobuf.Empty) returns (stream Appointment) {}
 }
 
-message eventId{
-  int32 id=1;
+message eventId {
+    int32 id = 1;
 }
 
 message Appointment {
-  int32 id=1;
-  string title=2;
-  string detail=3;
-  string occurTime=4;
-  string reminder =5;
+    int32 id = 1;
+    string title = 2;
+    string detail = 3;
+    string occurTime = 4;
+    string reminder = 5;
 }
 
-message Response{
-  int32 code = 1;
-  Appointment appointment = 2;
+message Response {
+    int32 code = 1;
+    Appointment appointment = 2;
 }
 
-message ResponseMessage{
-  int32 code = 1;
+message ResponseMessage {
+    int32 code = 1;
 }
