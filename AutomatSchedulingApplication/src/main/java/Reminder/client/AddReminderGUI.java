@@ -1,7 +1,8 @@
 package Reminder.client;
-import Calendar.client.ViewAppointmentGUI;
+
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,8 +19,11 @@ public class AddReminderGUI extends JFrame {
     private JButton okButton;
     private ReminderGUI reminderGUI;
 
-    public AddReminderGUI(ReminderGUI reminderGUI) {
+    private DefaultTableModel tableModel;
+
+    public AddReminderGUI(ReminderGUI reminderGUI,DefaultTableModel tableModel) {
         this.reminderGUI = reminderGUI;
+        this.tableModel= tableModel;
         // 设置窗口标题
         setTitle("Add Reminder");
 
@@ -40,6 +44,9 @@ public class AddReminderGUI extends JFrame {
         JSpinner.DateEditor timeEditor = new JSpinner.DateEditor(timeSpinner, "yyyy-MM-dd HH:mm:ss");
         timeSpinner.setEditor(timeEditor);
 
+
+
+
         // 添加确认按钮事件
         okButton.addActionListener(new ActionListener() {
             @Override
@@ -50,7 +57,9 @@ public class AddReminderGUI extends JFrame {
                 LocalDateTime time = LocalDateTime.parse(timeEditor.getFormat().format(timeSpinner.getValue()), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
                 // 发送添加提醒请求
-//                ReminderGUI.
+                Object[] rowData = {desc, title, time};
+                tableModel.addRow(rowData);
+
 
                 // 关闭窗口
                 dispose();

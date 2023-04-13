@@ -15,7 +15,7 @@ private static final long serialVersionUID = 0L;
   private Reminder(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
-  private Reminder() {
+  public Reminder() {
     year_ = "";
     month_ = "";
     day_ = "";
