@@ -9,7 +9,7 @@ package Reminder.ds.service3;
 public final class ReminderId extends
     com.google.protobuf.GeneratedMessageV3 implements
     // @@protoc_insertion_point(message_implements:service3.ReminderId)
-        ReminderIdOrBuilder {
+    ReminderIdOrBuilder {
 private static final long serialVersionUID = 0L;
   // Use ReminderId.newBuilder() to construct.
   private ReminderId(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
@@ -41,7 +41,7 @@ private static final long serialVersionUID = 0L;
       internalGetFieldAccessorTable() {
     return Service3Impl.internal_static_service3_ReminderId_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            ReminderId.class, ReminderId.Builder.class);
+            ReminderId.class, Builder.class);
   }
 
   public static final int ID_FIELD_NUMBER = 1;
@@ -251,7 +251,7 @@ private static final long serialVersionUID = 0L;
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
       // @@protoc_insertion_point(builder_implements:service3.ReminderId)
-          ReminderIdOrBuilder {
+      ReminderIdOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return Service3Impl.internal_static_service3_ReminderId_descriptor;
@@ -262,10 +262,10 @@ private static final long serialVersionUID = 0L;
         internalGetFieldAccessorTable() {
       return Service3Impl.internal_static_service3_ReminderId_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              ReminderId.class, ReminderId.Builder.class);
+              ReminderId.class, Builder.class);
     }
 
-    // Construct using Notification.ds.service3.ReminderId.newBuilder()
+    // Construct using Reminder.ds.service3.ReminderId.newBuilder()
     private Builder() {
 
     }

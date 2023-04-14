@@ -2,6 +2,7 @@ package GUI;
 
 import Calendar.client.ViewAppointmentGUI;
 import Login.client.LoginGUI;
+import Reminder.client.ReminderGUI;
 
 
 import javax.swing.*;
@@ -12,8 +13,10 @@ import java.awt.event.ActionListener;
 public class MainGUI extends JFrame {
     private JButton openLoginGUIButton;
     private JButton openAppButton;
+    private JButton openReminder;
     private LoginGUI loginGUI;
     private ViewAppointmentGUI viewAppGUI;
+    private ReminderGUI reminderGUI;
 
     public MainGUI() {
         setTitle("Automated Scheduling applications");
@@ -44,6 +47,18 @@ public class MainGUI extends JFrame {
                 MainGUI.this.setVisible(false);
             }
         });
+        openReminder = new JButton("Reminder");
+        openReminder.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // create the Controller GUI
+                reminderGUI = new ReminderGUI(MainGUI.this);
+                // show the Controller GUI
+                reminderGUI.setVisible(true);
+                // hide the First GUI
+                MainGUI.this.setVisible(false);
+            }
+        });
 
 
         // add the buttons to the frame
@@ -51,6 +66,7 @@ public class MainGUI extends JFrame {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.add(openLoginGUIButton);
         panel.add(openAppButton );
+        panel.add(openReminder);
         add(panel);
 
         // add the panel to the main frame using GridBagLayout

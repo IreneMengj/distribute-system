@@ -9,11 +9,15 @@ import io.grpc.stub.StreamObserver;
 import javax.jmdns.JmDNS;
 import javax.jmdns.ServiceInfo;
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.time.LocalDateTime;
 
 public class Service3 extends Service3Grpc.Service3ImplBase {
+    //create a map to save username and password
+    public static ArrayList<Reminder.Builder> list = new ArrayList<>();
+
     public static void main(String[] args) throws InterruptedException, IOException {
         // Register service with JmDNS
         JmDNS jmdns = JmDNS.create();
@@ -31,15 +35,14 @@ public class Service3 extends Service3Grpc.Service3ImplBase {
         server.awaitTermination();
     }
 
-    //create a map to save username and password
-    ArrayList<Reminder> list = new ArrayList<Reminder>();
+
 
     @Override
     public void setReminder(Reminder request, StreamObserver<Response> responseObserver) {
         try {
             Reminder r = new Reminder();
-            r.toBuilder().setID(request.getID()).setYear(request.getYear()).setMonth(request.getMonth()).setDay(request.getDay()).setHour(request.getHour()).setMin(request.getMin()).setSec(request.getSec());
-            boolean add = list.add(r);
+            Reminder.Builder builder = r.toBuilder().setID(request.getID()).setYear(request.getYear()).setMonth(request.getMonth()).setDay(request.getDay()).setHour(request.getHour()).setMin(request.getMin()).setSec(request.getSec());
+            boolean add = Service3.list.add(builder);
             Response reply;
             if (add) {
                 reply = Response.newBuilder().setCode(1).setMessage("Add successfully").build();
@@ -61,9 +64,9 @@ public class Service3 extends Service3Grpc.Service3ImplBase {
             public void onNext(ReminderId request) {
                 List<Integer> idList = request.getIDList();
                 for (Integer i : idList) {
-                    for (Reminder r : list) {
-                        if (r.getID() == i) {
-                            list.remove(r);
+                    for (Reminder.Builder b : Service3.list) {
+                        if (b.getID() == i) {
+                            Service3.list.remove(b);
                         }
                     }
                 }
@@ -92,21 +95,39 @@ public class Service3 extends Service3Grpc.Service3ImplBase {
     public void getReminder(ReminderId request, StreamObserver<ResponseMessage> responseObserver) {
        try{
            int id = request.getID(0);
-           LocalDateTime reminderTime = null;
-           for (Reminder r : list) {
-               if (r.getID() == id) {
-                   reminderTime = LocalDateTime.of(Integer.parseInt(r.getYear()), Integer.parseInt(r.getMonth()), Integer.parseInt(r.getDay()), Integer.parseInt(r.getHour()), Integer.parseInt(r.getMin()), Integer.parseInt(r.getSec())); // Set the time when the prompt is triggered
+
+           for (Reminder.Builder b  : Service3.list) {
+               int id1 = b.getID();
+               if (id1 == id) {
+                   String year = b.getYear();
+                   String month = b.getMonth();
+                   if(month.length()==1){
+                       month="0"+month;
+                   }
+                   String day = b.getDay();
+                   String hour = b.getHour();
+                   String min = b.getMin();
+                   String sec = b.getSec();
+                   if(sec.length()==1){
+                       sec="0"+sec;
+                   }
+                   String reminderTime = year + "-" + month + "-" + "03" + " " + hour + ":" + min + ":" + sec; // Set the time when the prompt is triggered
+                   LocalDateTime now = LocalDateTime.now();
+                   String format = "yyyy-MM-dd HH:mm:ss"; // 指定日期时间格式
+                   LocalDateTime parse = LocalDateTime.parse(reminderTime, DateTimeFormatter.ofPattern(format));
+                   ResponseMessage reply;
+                   if (now.isAfter(parse)) {
+                       reply = ResponseMessage.newBuilder().setMessage("This task is not now!").build();
+                   } else {
+                       reply = ResponseMessage.newBuilder().setMessage("It's time to do this task!").build();
+                   }
+                   responseObserver.onNext(reply);
+                   responseObserver.onCompleted();
+
                }
            }
-           LocalDateTime now = LocalDateTime.now();
-           ResponseMessage reply;
-           if (now.isAfter(reminderTime)) {
-               reply = ResponseMessage.newBuilder().setMessage("It's time to do something!").build();
-           } else {
-               reply = ResponseMessage.newBuilder().setMessage("Not yet.").build();
-           }
-           responseObserver.onNext(reply);
-           responseObserver.onCompleted();
+
+
 
         } catch (Exception e) {
             // Handle exceptions and send error responses

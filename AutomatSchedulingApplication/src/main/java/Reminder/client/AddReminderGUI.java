@@ -5,6 +5,7 @@ import Login.ds.service1.RequestMessage;
 import Login.ds.service1.ResponseMessage;
 import Login.ds.service1.Service1Grpc;
 import Reminder.ds.service3.Reminder;
+import Reminder.ds.service3.Response;
 import Reminder.ds.service3.Service3Grpc;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
@@ -64,7 +65,8 @@ public class AddReminderGUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 // 获取输入的信息
                 String title = titleField.getText();
-                String desc = descField.getText();
+                String ID =descField.getText();
+
                 LocalDateTime time = LocalDateTime.parse(timeEditor.getFormat().format(timeSpinner.getValue()), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
                 // Discover gRPC service with JmDNS
@@ -86,30 +88,49 @@ public class AddReminderGUI extends JFrame {
                     return;
                 }
                 ManagedChannel channel = ManagedChannelBuilder.forAddress(inetAddress.getHostAddress(), serviceInfo.getPort()).usePlaintext().build();
-                try {
-                    // Call gRPC service methods here
-                    Service3Grpc.Service3Stub service3Stub = Service3Grpc.newStub(channel);
-                    //preparing message to send
-                    Reminder.newBuilder().setID().build();
+                //preparing message to send
+                Reminder request = Reminder.newBuilder()
+                        .setID(Integer.parseInt(ID))
+                        .setYear(String.valueOf(time.getYear()))
+                        .setMonth(String.valueOf(time.getMonthValue()))
+                        .setHour(String.valueOf(time.getHour()))
+                        .setMin(String.valueOf(time.getMinute()))
+                        .setSec(String.valueOf(time.getSecond()))
+                        .build();
 
+                 // Call gRPC service methods here
+                Service3Grpc.Service3Stub service3Stub = Service3Grpc.newStub(channel);
+                System.out.println("RPC set reminder to be invoked ...");
+                service3Stub.setReminder(request, new StreamObserver<Response>() {
                     @Override
-                    public void onError (Throwable t){
-                        // Handle error
-                        reply.setText("An error occurred: " + t.getMessage());
+                    public void onNext(Response response) {
+                        // Handle response from gRPC service
+                        int code = response.getCode();
+                        if(code==1){
+                            JOptionPane.showMessageDialog(null,response.getMessage());
+                        }else{
+                            JOptionPane.showMessageDialog(null,response.getMessage());
+                        }
+
                     }
 
                     @Override
-                    public void onCompleted () {
-                        // Handle completion
+                    public void onError(Throwable throwable) {
+                        // Handle error from gRPC service
+                        // Handle error from gRPC service
+                        System.out.println("An error occurred: " + throwable.getMessage());
+                        JOptionPane.showMessageDialog(null, "An error occurred: " + throwable.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+
                     }
-                } ;
-                StreamObserver<RequestMessage> requestObserver = service1Stub.login(responseObserver);
-                requestObserver.onNext(request);
-// Call onNext() multiple times to send multiple requests
-                requestObserver.onCompleted();
+
+                    @Override
+                    public void onCompleted() {
+
+                    }
+                });
 
                 // 发送添加提醒请求
-                Object[] rowData = {desc, title, time};
+                Object[] rowData = {ID, title, time};
                 tableModel.addRow(rowData);
 
 

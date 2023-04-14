@@ -1,29 +1,59 @@
 package Reminder.client;
+
+import Calendar.ds.service2.Service2Grpc;
+import Calendar.ds.service2.eventId;
+import GUI.MainGUI;
+import Reminder.ds.service3.ReminderId;
+import Reminder.ds.service3.ResponseMessage;
+import Reminder.ds.service3.Service3Grpc;
+import io.grpc.ManagedChannel;
+import io.grpc.ManagedChannelBuilder;
+
+import javax.jmdns.JmDNS;
+import javax.jmdns.ServiceInfo;
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.IOException;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 public class ReminderGUI extends JFrame {
-    private  JSpinner timeSpinner;
-    private  JTextField titleField;
+    private JSpinner timeSpinner;
+    private JTextField titleField;
     private JTextField idField;
-    private  JTable table;
-    private  DefaultTableModel tableModel;
+    private DefaultTableModel tableModel;
     private JButton addButton;
     private JButton getButton;
     private JButton deleteButton;
     private JButton backButton;
     private AddReminderGUI addReminderGUI;
     private JTable reminderTable;
+    private JTable table;
+    private MainGUI mainGUI;
 
     public ReminderGUI() {
+
+    }
+
+    public ReminderGUI(MainGUI mainGUI) {
         // 设置窗口标题
         setTitle("Reminder");
+        this.mainGUI = mainGUI;
         reminderTable = new JTable();
+
 
         String[] columnNames = {"ID", "Title", "Time"};
         Object[][] rowData = {};
@@ -57,11 +87,48 @@ public class ReminderGUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // 显示添加提醒界面
-                addReminderGUI = new AddReminderGUI(ReminderGUI.this,tableModel);
+                addReminderGUI = new AddReminderGUI(ReminderGUI.this, tableModel);
                 addReminderGUI.setVisible(true);
             }
         });
 
+        getButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                int[] selectedRows = table.getSelectedRows();
+                for (int i = 0; i < selectedRows.length; i++) {
+                    int selectedRow = selectedRows[i];
+                    Object id = table.getValueAt(selectedRow, 0);
+                    ManagedChannel channel = createChannel();
+                    try {
+                        System.out.println("RPC get reminder to be invoked ...");
+                        Service3Grpc.Service3BlockingStub service3BlockingStub = Service3Grpc.newBlockingStub(channel);
+                        ReminderId build = ReminderId.newBuilder().addID(1).build();
+                        ResponseMessage response = service3BlockingStub.getReminder(build);
+                        String message = response.getMessage();
+                        JOptionPane.showMessageDialog(null, message);
+                    } finally {
+                        channel.shutdown();
+                        try {
+                            channel.awaitTermination(5, TimeUnit.SECONDS);
+                        } catch (InterruptedException error) {
+                            error.printStackTrace();
+                        }
+                    }
+                }
+            }
+        });
+
+        deleteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int[] selectedRows = table.getSelectedRows();
+                for (int i = selectedRows.length - 1; i >= 0; i--) {
+                    tableModel.removeRow(selectedRows[i]);
+                }
+            }
+        });
         // 添加按钮布局
         getContentPane().setLayout(new BorderLayout());
         getContentPane().add(buttonPanel, BorderLayout.SOUTH);
@@ -74,10 +141,37 @@ public class ReminderGUI extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
+    public ManagedChannel createChannel () {
+        // Discover gRPC service with JmDNS
+
+        JmDNS jmdns = null;
+        InetAddress inetAddress = null;
+        try {
+            jmdns = JmDNS.create();
+            inetAddress = InetAddress.getLocalHost();
+        } catch (UnknownHostException unknownHostException) {
+            unknownHostException.printStackTrace();
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        }
+        String serviceType = "_grpc._tcp.local.";
+        String serviceName = "service3";
+        ServiceInfo serviceInfo = jmdns.getServiceInfo(serviceType, serviceName);
+        if (serviceInfo == null) {
+            System.err.println("Could not find service with name " + serviceName);
+            return null;
+        }
+        // Use the address and port to create the ManagedChannel
+        ManagedChannel channel = ManagedChannelBuilder.forAddress(inetAddress.getHostAddress(), serviceInfo.getPort())
+                .usePlaintext()
+                .build();
+        return channel;
+    }
 
     public static void main(String[] args) {
-        ReminderGUI gui=new ReminderGUI();
+        ReminderGUI gui = new ReminderGUI();
         gui.setVisible(true);
     }
 }
+
 

@@ -60,8 +60,8 @@ public final class Service3Impl {
       "getReminder\022\024.service3.ReminderId\032\031.serv" +
       "ice3.ResponseMessage\"\000\022G\n\016deleteReminder" +
       "\022\024.service3.ReminderId\032\031.service3.Respon" +
-      "seMessage\"\000(\0010\001B*\n\030Notification.ds.servi" +
-      "ce3B\014Service3ImplP\001b\006proto3"
+      "seMessage\"\000(\0010\001B&\n\024Reminder.ds.service3B" +
+      "\014Service3ImplP\001b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,

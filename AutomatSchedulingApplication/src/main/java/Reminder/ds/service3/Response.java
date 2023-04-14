@@ -9,7 +9,7 @@ package Reminder.ds.service3;
 public final class Response extends
     com.google.protobuf.GeneratedMessageV3 implements
     // @@protoc_insertion_point(message_implements:service3.Response)
-        ResponseOrBuilder {
+    ResponseOrBuilder {
 private static final long serialVersionUID = 0L;
   // Use Response.newBuilder() to construct.
   private Response(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
@@ -41,7 +41,7 @@ private static final long serialVersionUID = 0L;
       internalGetFieldAccessorTable() {
     return Service3Impl.internal_static_service3_Response_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            Response.class, Response.Builder.class);
+            Response.class, Builder.class);
   }
 
   public static final int CODE_FIELD_NUMBER = 1;
@@ -111,9 +111,9 @@ private static final long serialVersionUID = 0L;
     if (code_ != 0) {
       output.writeInt32(1, code_);
     }
-
+//    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(message_)) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 2, message_);
-
+//    }
     getUnknownFields().writeTo(output);
   }
 
@@ -127,9 +127,9 @@ private static final long serialVersionUID = 0L;
       size += com.google.protobuf.CodedOutputStream
         .computeInt32Size(1, code_);
     }
-
+//    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(message_)) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, message_);
-
+//    }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
     return size;
@@ -265,7 +265,7 @@ private static final long serialVersionUID = 0L;
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
       // @@protoc_insertion_point(builder_implements:service3.Response)
-          ResponseOrBuilder {
+      ResponseOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return Service3Impl.internal_static_service3_Response_descriptor;
@@ -276,10 +276,10 @@ private static final long serialVersionUID = 0L;
         internalGetFieldAccessorTable() {
       return Service3Impl.internal_static_service3_Response_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              Response.class, Response.Builder.class);
+              Response.class, Builder.class);
     }
 
-    // Construct using Notification.ds.service3.Response.newBuilder()
+    // Construct using Reminder.ds.service3.Response.newBuilder()
     private Builder() {
 
     }

@@ -9,7 +9,7 @@ package Reminder.ds.service3;
 public final class Reminder extends
     com.google.protobuf.GeneratedMessageV3 implements
     // @@protoc_insertion_point(message_implements:service3.Reminder)
-        ReminderOrBuilder {
+    ReminderOrBuilder {
 private static final long serialVersionUID = 0L;
   // Use Reminder.newBuilder() to construct.
   private Reminder(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
@@ -46,7 +46,7 @@ private static final long serialVersionUID = 0L;
       internalGetFieldAccessorTable() {
     return Service3Impl.internal_static_service3_Reminder_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            Reminder.class, Reminder.Builder.class);
+            Reminder.class, Builder.class);
   }
 
   public static final int YEAR_FIELD_NUMBER = 1;
@@ -308,24 +308,24 @@ private static final long serialVersionUID = 0L;
   @Override
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
-
+//    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(year_)) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 1, year_);
-
-
+//    }
+//    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(month_)) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 2, month_);
-
-
+//    }
+//    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(day_)) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 3, day_);
-
-
+//    }
+//    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(hour_)) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 4, hour_);
-
-
+//    }
+//    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(min_)) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 5, min_);
-
-
+//    }
+//    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(sec_)) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 6, sec_);
-
+//    }
     if (iD_ != 0) {
       output.writeInt32(7, iD_);
     }
@@ -338,24 +338,24 @@ private static final long serialVersionUID = 0L;
     if (size != -1) return size;
 
     size = 0;
-
+//    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(year_)) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, year_);
-
-
+//    }
+//    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(month_)) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, month_);
-
-
+//    }
+//    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(day_)) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, day_);
-
-
+//    }
+//    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(hour_)) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, hour_);
-
-
+//    }
+//    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(min_)) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, min_);
-
-
+//    }
+//    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(sec_)) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(6, sec_);
-
+//    }
     if (iD_ != 0) {
       size += com.google.protobuf.CodedOutputStream
         .computeInt32Size(7, iD_);
@@ -515,7 +515,7 @@ private static final long serialVersionUID = 0L;
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
       // @@protoc_insertion_point(builder_implements:service3.Reminder)
-          ReminderOrBuilder {
+      ReminderOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return Service3Impl.internal_static_service3_Reminder_descriptor;
@@ -526,10 +526,10 @@ private static final long serialVersionUID = 0L;
         internalGetFieldAccessorTable() {
       return Service3Impl.internal_static_service3_Reminder_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              Reminder.class, Reminder.Builder.class);
+              Reminder.class, Builder.class);
     }
 
-    // Construct using Notification.ds.service3.Reminder.newBuilder()
+    // Construct using Reminder.ds.service3.Reminder.newBuilder()
     private Builder() {
 
     }
