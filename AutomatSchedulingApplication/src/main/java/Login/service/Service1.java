@@ -5,36 +5,54 @@ import Login.ds.service1.ResponseMessage;
 import Login.ds.service1.Service1Grpc;
 
 import com.google.protobuf.Empty;
+import com.sun.tools.javadoc.Start;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
+import io.grpc.Status;
+import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 
 import javax.jmdns.JmDNS;
 import javax.jmdns.ServiceInfo;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.Set;
 
 public class Service1 extends Service1Grpc.Service1ImplBase {
     public static void main(String[] args) throws InterruptedException, IOException {
-        // Register service with JmDNS
-        JmDNS jmdns = JmDNS.create();
-        ServiceInfo serviceInfo = ServiceInfo.create("_grpc._tcp.local.", "service1", 50051, "");
-        jmdns.registerService(serviceInfo);
-        // Start gRPC server
-        Service1 service1 = new Service1();
+//        // Register service with JmDNS
+//        JmDNS jmdns = JmDNS.create();
+//        ServiceInfo serviceInfo = ServiceInfo.create("_grpc._tcp.local.", "service1", 50051, "");
+//        jmdns.registerService(serviceInfo);
+////       Start gRPC server
+//        Service1 service1 = new Service1();
+//
+//        int port = 50051;
+//
+//        Server server = ServerBuilder.forPort(port)
+//                .addService(service1)
+//                .build()
+//                .start();
+//
+//        System.out.println("Service-1 started, listening on " + 50051);
+//
+//
+//        server.awaitTermination();
+        try {
+            // 创建jmDNS实例
+            JmDNS jmdns = JmDNS.create(InetAddress.getLocalHost());
 
-        int port = 50051;
+            // 创建ServiceInfo对象
+            ServiceInfo serviceInfo = ServiceInfo.create("_grpc._tcp.local.", "service1", 50051, "");
 
-        Server server = ServerBuilder.forPort(port)
-                .addService(service1)
-                .build()
-                .start();
+            // 注册服务
+            jmdns.registerService(serviceInfo);
+            System.out.println("Service-1 started, listening on " + 50051);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        System.out.println("Service-1 started, listening on " + port);
-
-
-        server.awaitTermination();
     }
 
 
@@ -73,7 +91,21 @@ public class Service1 extends Service1Grpc.Service1ImplBase {
 
             @Override
             public void onError(Throwable t) {
-                responseObserver.onError(t);
+
+                if (t instanceof StatusRuntimeException) {
+                    StatusRuntimeException e = (StatusRuntimeException) t;
+                    Status status = e.getStatus();
+                    if (status.getCode() == Status.Code.DEADLINE_EXCEEDED) {
+                        responseObserver.onError(Status.DEADLINE_EXCEEDED.withDescription("Request deadline exceeded").asRuntimeException());
+                    } else if (status.getCode() == Status.Code.UNAUTHENTICATED) {
+                        responseObserver.onError(Status.UNAUTHENTICATED.withDescription("Unauthenticated request").asRuntimeException());
+                    } else {
+                        responseObserver.onError(e);
+                    }
+                } else {
+                    // Handle other exceptions
+                    responseObserver.onError(t);
+                }
             }
 
             @Override
@@ -109,7 +141,20 @@ public class Service1 extends Service1Grpc.Service1ImplBase {
 
             @Override
             public void onError(Throwable t) {
-                responseObserver.onError(t);
+                if (t instanceof StatusRuntimeException) {
+                    StatusRuntimeException e = (StatusRuntimeException) t;
+                    Status status = e.getStatus();
+                    if (status.getCode() == Status.Code.DEADLINE_EXCEEDED) {
+                        responseObserver.onError(Status.DEADLINE_EXCEEDED.withDescription("Request deadline exceeded").asRuntimeException());
+                    } else if (status.getCode() == Status.Code.UNAUTHENTICATED) {
+                        responseObserver.onError(Status.UNAUTHENTICATED.withDescription("Unauthenticated request").asRuntimeException());
+                    } else {
+                        responseObserver.onError(e);
+                    }
+                } else {
+                    // Handle other exceptions
+                    responseObserver.onError(t);
+                }
             }
 
             @Override
@@ -119,7 +164,6 @@ public class Service1 extends Service1Grpc.Service1ImplBase {
         };
         return requestObserver;
     }
-
 
 
     @Override

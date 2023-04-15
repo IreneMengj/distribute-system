@@ -3,6 +3,8 @@ package Calendar.service;
 import Calendar.ds.service2.*;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
+import io.grpc.Status;
+import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 
 import javax.jmdns.JmDNS;
@@ -52,9 +54,16 @@ public class Service2 extends Service2Grpc.Service2ImplBase {
             }
             responseObserver.onNext(reply);
             responseObserver.onCompleted();
-        } catch (Exception e) {
-            // Handle exceptions and send error responses
-            responseObserver.onError(e);
+        } catch (StatusRuntimeException e) {
+            // Handle exception related to deadlines, metadata, or authentication
+            Status status = e.getStatus();
+            if (status.getCode() == Status.Code.DEADLINE_EXCEEDED) {
+                responseObserver.onError(Status.DEADLINE_EXCEEDED.withDescription("Request deadline exceeded").asRuntimeException());
+            } else if (status.getCode() == Status.Code.UNAUTHENTICATED) {
+                responseObserver.onError(Status.UNAUTHENTICATED.withDescription("Unauthenticated request").asRuntimeException());
+            } else {
+                responseObserver.onError(e);
+            }
         }
     }
 
@@ -78,9 +87,16 @@ public class Service2 extends Service2Grpc.Service2ImplBase {
             Calendar.ds.service2.ResponseMessage reply = Calendar.ds.service2.ResponseMessage.newBuilder().setCode(1).build();
             responseObserver.onNext(reply);
             responseObserver.onCompleted();
-        } catch (Exception e) {
-            // Handle exceptions and send error responses
-            responseObserver.onError(e);
+        } catch (StatusRuntimeException e) {
+            // Handle exception related to deadlines, metadata, or authentication
+            Status status = e.getStatus();
+            if (status.getCode() == Status.Code.DEADLINE_EXCEEDED) {
+                responseObserver.onError(Status.DEADLINE_EXCEEDED.withDescription("Request deadline exceeded").asRuntimeException());
+            } else if (status.getCode() == Status.Code.UNAUTHENTICATED) {
+                responseObserver.onError(Status.UNAUTHENTICATED.withDescription("Unauthenticated request").asRuntimeException());
+            } else {
+                responseObserver.onError(e);
+            }
         }
     }
 
@@ -103,9 +119,16 @@ public class Service2 extends Service2Grpc.Service2ImplBase {
             }
             responseObserver.onNext(reply);
             responseObserver.onCompleted();
-        } catch (Exception e) {
-            // Handle exceptions and send error responses
-            responseObserver.onError(e);
+        } catch (StatusRuntimeException e) {
+            // Handle exception related to deadlines, metadata, or authentication
+            Status status = e.getStatus();
+            if (status.getCode() == Status.Code.DEADLINE_EXCEEDED) {
+                responseObserver.onError(Status.DEADLINE_EXCEEDED.withDescription("Request deadline exceeded").asRuntimeException());
+            } else if (status.getCode() == Status.Code.UNAUTHENTICATED) {
+                responseObserver.onError(Status.UNAUTHENTICATED.withDescription("Unauthenticated request").asRuntimeException());
+            } else {
+                responseObserver.onError(e);
+            }
         }
 
     }

@@ -3,11 +3,13 @@ package Reminder.client;
 import Calendar.ds.service2.Service2Grpc;
 import Calendar.ds.service2.eventId;
 import GUI.MainGUI;
+import Login.ds.service1.RequestMessage;
 import Reminder.ds.service3.ReminderId;
 import Reminder.ds.service3.ResponseMessage;
 import Reminder.ds.service3.Service3Grpc;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+import io.grpc.stub.StreamObserver;
 
 import javax.jmdns.JmDNS;
 import javax.jmdns.ServiceInfo;
@@ -99,12 +101,13 @@ public class ReminderGUI extends JFrame {
                 int[] selectedRows = table.getSelectedRows();
                 for (int i = 0; i < selectedRows.length; i++) {
                     int selectedRow = selectedRows[i];
-                    Object id = table.getValueAt(selectedRow, 0);
+                    Object id1 = table.getValueAt(selectedRow, 0);
+                    int id = Integer.parseInt(id1.toString());
                     ManagedChannel channel = createChannel();
                     try {
                         System.out.println("RPC get reminder to be invoked ...");
                         Service3Grpc.Service3BlockingStub service3BlockingStub = Service3Grpc.newBlockingStub(channel);
-                        ReminderId build = ReminderId.newBuilder().addID(1).build();
+                        ReminderId build = ReminderId.newBuilder().addID(id).build();
                         ResponseMessage response = service3BlockingStub.getReminder(build);
                         String message = response.getMessage();
                         JOptionPane.showMessageDialog(null, message);
@@ -126,6 +129,24 @@ public class ReminderGUI extends JFrame {
                 int[] selectedRows = table.getSelectedRows();
                 for (int i = selectedRows.length - 1; i >= 0; i--) {
                     tableModel.removeRow(selectedRows[i]);
+                    int selectedRow = selectedRows[i];
+                    Object id1 = table.getValueAt(selectedRow, 0);
+                    int id = Integer.parseInt(id1.toString());
+                    ManagedChannel channel = createChannel();
+                    try {
+                        System.out.println("RPC delete reminder to be invoked ...");
+                        Service3Grpc.Service3BlockingStub service3BlockingStub = Service3Grpc.newBlockingStub(channel);
+                        ReminderId build = ReminderId.newBuilder().setID(0,id).build();
+
+                        JOptionPane.showMessageDialog(null, "haha");
+                    } finally {
+                        channel.shutdown();
+                        try {
+                            channel.awaitTermination(5, TimeUnit.SECONDS);
+                        } catch (InterruptedException error) {
+                            error.printStackTrace();
+                        }
+                    }
                 }
             }
         });
