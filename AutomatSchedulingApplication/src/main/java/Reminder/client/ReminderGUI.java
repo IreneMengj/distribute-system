@@ -12,7 +12,9 @@ import io.grpc.ManagedChannelBuilder;
 import io.grpc.stub.StreamObserver;
 
 import javax.jmdns.JmDNS;
+import javax.jmdns.ServiceEvent;
 import javax.jmdns.ServiceInfo;
+import javax.jmdns.ServiceListener;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -45,6 +47,9 @@ public class ReminderGUI extends JFrame {
     private JTable reminderTable;
     private JTable table;
     private MainGUI mainGUI;
+
+    static int port;
+    static String resolvedIP;
 
     public ReminderGUI() {
 
@@ -165,28 +170,62 @@ public class ReminderGUI extends JFrame {
     public ManagedChannel createChannel () {
         // Discover gRPC service with JmDNS
 
-        JmDNS jmdns = null;
-        InetAddress inetAddress = null;
-        try {
-            jmdns = JmDNS.create();
-            inetAddress = InetAddress.getLocalHost();
-        } catch (UnknownHostException unknownHostException) {
-            unknownHostException.printStackTrace();
-        } catch (IOException ioException) {
-            ioException.printStackTrace();
-        }
-        String serviceType = "_grpc._tcp.local.";
-        String serviceName = "service3";
-        ServiceInfo serviceInfo = jmdns.getServiceInfo(serviceType, serviceName);
-        if (serviceInfo == null) {
-            System.err.println("Could not find service with name " + serviceName);
-            return null;
-        }
+//        JmDNS jmdns = null;
+//        InetAddress inetAddress = null;
+//        try {
+//            jmdns = JmDNS.create();
+//            inetAddress = InetAddress.getLocalHost();
+//        } catch (UnknownHostException unknownHostException) {
+//            unknownHostException.printStackTrace();
+//        } catch (IOException ioException) {
+//            ioException.printStackTrace();
+//        }
+//        String serviceType = "_grpc._tcp.local.";
+//        String serviceName = "service3";
+//        ServiceInfo serviceInfo = jmdns.getServiceInfo(serviceType, serviceName);
+//        if (serviceInfo == null) {
+//            System.err.println("Could not find service with name " + serviceName);
+//            return null;
+//        }
+        JMDNS();
         // Use the address and port to create the ManagedChannel
-        ManagedChannel channel = ManagedChannelBuilder.forAddress(inetAddress.getHostAddress(), serviceInfo.getPort())
-                .usePlaintext()
-                .build();
+        ManagedChannel channel = ManagedChannelBuilder.forAddress(resolvedIP, port).usePlaintext().build();
         return channel;
+    }
+
+
+    private static class SampleListener implements ServiceListener {
+        public void serviceAdded(ServiceEvent event) {
+            System.out.println("Service added: " + event.getInfo());
+        }
+        public void serviceRemoved(ServiceEvent event) {
+            System.out.println("Service removed: " + event.getInfo());
+        }
+        @SuppressWarnings("deprecation")
+        public void serviceResolved(ServiceEvent event) {
+            System.out.println("Service resolved: " + event.getInfo());
+            ServiceInfo info = event.getInfo();
+            port = info.getPort();
+            resolvedIP = info.getHostAddress();
+            System.out.println("IP Resolved - " + resolvedIP + ":" + port);
+        }
+    }
+
+    public static void JMDNS() {
+        try {
+            // Create a JmDNS instance
+            JmDNS jmdns = JmDNS.create(InetAddress.getLocalHost());
+
+            // Add a service listener
+            jmdns.addServiceListener("_http._tcp.local.", new SampleListener());
+
+//            // Wait a bit
+//            Thread.sleep(20000);
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
     }
 
     public static void main(String[] args) {

@@ -11,6 +11,7 @@ import io.grpc.stub.StreamObserver;
 import javax.jmdns.JmDNS;
 import javax.jmdns.ServiceInfo;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,20 +22,28 @@ public class Service3 extends Service3Grpc.Service3ImplBase {
     public static ArrayList<Reminder.Builder> list = new ArrayList<>();
 
     public static void main(String[] args) throws InterruptedException, IOException {
-        // Register service with JmDNS
-        JmDNS jmdns = JmDNS.create();
-        ServiceInfo serviceInfo = ServiceInfo.create("_grpc._tcp.local.", "service3", 50053, "");
-        jmdns.registerService(serviceInfo);
+
         // Start gRPC server
-        Service3 service3 = new Service3();
+      Service3 service3 = new Service3();
+      Server server;
+        try {
+            JMDNS();
+            server = ServerBuilder.forPort(50053).addService(service3).build().start();
+            System.out.println("Service-3 started, listening on " + 50053);
+            server.awaitTermination();
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+  }
+//        catch (InterruptedException e) {
+////            e.printStackTrace();
+////        }
 
-        Server server = ServerBuilder.forPort(serviceInfo.getPort())
-                .addService(service3)
-                .build()
-                .start();
+//        Server server = ServerBuilder.forPort(serviceInfo.getPort())
+//                .addService(service3)
+//                .build()
+//                .start();
 
-        System.out.println("Service-3 started, listening on " + serviceInfo.getPort());
-        server.awaitTermination();
     }
 
 
@@ -160,5 +169,26 @@ public class Service3 extends Service3Grpc.Service3ImplBase {
                 responseObserver.onError(e);
             }
         }
+    }
+
+
+    public static void JMDNS() {
+        try {
+            // Create a JmDNS instance
+            JmDNS jmdns = JmDNS.create(InetAddress.getLocalHost());
+
+            // Register a service
+            ServiceInfo serviceInfo = ServiceInfo.create("_http._tcp.local.", "service3",50053 ,"");
+            jmdns.registerService(serviceInfo);
+
+            // Wait a bit
+//            Thread.sleep(20000);
+
+            // Unregister all services
+            //jmdns.unregisterAllServices();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+
     }
 }

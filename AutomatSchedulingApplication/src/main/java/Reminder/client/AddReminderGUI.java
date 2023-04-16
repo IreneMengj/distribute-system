@@ -12,7 +12,9 @@ import io.grpc.ManagedChannelBuilder;
 import io.grpc.stub.StreamObserver;
 
 import javax.jmdns.JmDNS;
+import javax.jmdns.ServiceEvent;
 import javax.jmdns.ServiceInfo;
+import javax.jmdns.ServiceListener;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -33,6 +35,11 @@ public class AddReminderGUI extends JFrame {
     private JSpinner timeSpinner;
     private JButton okButton;
     private ReminderGUI reminderGUI;
+    static int port;
+    static String resolvedIP;
+    private static final String SERVICE_TYPE = "_http._tcp.local.";
+    private static final String SERVICE_NAME = "service3";
+
 
     private DefaultTableModel tableModel;
 
@@ -65,29 +72,15 @@ public class AddReminderGUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 // 获取输入的信息
                 String title = titleField.getText();
-                String ID =descField.getText();
+                String ID = descField.getText();
 
                 LocalDateTime time = LocalDateTime.parse(timeEditor.getFormat().format(timeSpinner.getValue()), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
-                // Discover gRPC service with JmDNS
-                JmDNS jmdns = null;
-                InetAddress inetAddress = null;
-                try {
-                    jmdns = JmDNS.create();
-                    inetAddress = InetAddress.getLocalHost();
-                } catch (UnknownHostException unknownHostException) {
-                    unknownHostException.printStackTrace();
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
-                }
-                String serviceType = "_grpc._tcp.local.";
-                String serviceName = "service3";
-                ServiceInfo serviceInfo = jmdns.getServiceInfo(serviceType, serviceName);
-                if (serviceInfo == null) {
-                    System.err.println("Could not find service with name " + serviceName);
-                    return;
-                }
-                ManagedChannel channel = ManagedChannelBuilder.forAddress(inetAddress.getHostAddress(), serviceInfo.getPort()).usePlaintext().build();
+
+                JMDNS();
+                // Use the address and port to create the ManagedChannel
+                ManagedChannel channel = ManagedChannelBuilder.forAddress(resolvedIP, port).usePlaintext().build();
+//                ManagedChannel channel = ManagedChannelBuilder.forAddress(inetAddress.getHostAddress(), serviceInfo.getPort()).usePlaintext().build();
                 //preparing message to send
                 Reminder request = Reminder.newBuilder()
                         .setID(Integer.parseInt(ID))
@@ -98,7 +91,7 @@ public class AddReminderGUI extends JFrame {
                         .setSec(String.valueOf(time.getSecond()))
                         .build();
 
-                 // Call gRPC service methods here
+                // Call gRPC service methods here
                 Service3Grpc.Service3Stub service3Stub = Service3Grpc.newStub(channel);
                 System.out.println("RPC set reminder to be invoked ...");
                 service3Stub.setReminder(request, new StreamObserver<Response>() {
@@ -106,10 +99,10 @@ public class AddReminderGUI extends JFrame {
                     public void onNext(Response response) {
                         // Handle response from gRPC service
                         int code = response.getCode();
-                        if(code==1){
-                            JOptionPane.showMessageDialog(null,response.getMessage());
-                        }else{
-                            JOptionPane.showMessageDialog(null,response.getMessage());
+                        if (code == 1) {
+                            JOptionPane.showMessageDialog(null, response.getMessage());
+                        } else {
+                            JOptionPane.showMessageDialog(null, response.getMessage());
                         }
 
                     }
@@ -172,4 +165,50 @@ public class AddReminderGUI extends JFrame {
 
     }
 
+
+    public static void JMDNS() {
+        try {
+            // 创建JmDNS实例
+            JmDNS jmdns = JmDNS.create();
+
+            // 创建服务监听器
+            ServiceListener listener = new ServiceListener() {
+                @Override
+                public void serviceAdded(ServiceEvent event) {
+                    System.out.println("Service added: " + event.getName());
+                }
+
+                @Override
+                public void serviceRemoved(ServiceEvent event) {
+                    System.out.println("Service removed: " + event.getName());
+                }
+
+                @Override
+                public void serviceResolved(ServiceEvent event) {
+                    System.out.println("Service resolved: " + event.getName());
+
+                    ServiceInfo info = event.getInfo();
+                    int port = info.getPort();
+
+                    System.out.println("Service address: " + resolvedIP);
+                    System.out.println("Service port: " + port);
+                }
+            };
+
+            // 添加服务监听器
+            jmdns.addServiceListener(SERVICE_TYPE, listener);
+
+            ServiceInfo[] serviceInfos = jmdns.list(SERVICE_TYPE);
+            for (ServiceInfo info : serviceInfos) {
+                System.out.println("## resolve service " + info.getName()  + " : " + info.getURL());
+            }
+
+            // 关闭JmDNS实例
+            jmdns.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
+
