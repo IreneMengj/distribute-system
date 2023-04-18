@@ -4,8 +4,8 @@ import Login.ds.service1.RequestMessage;
 import Login.ds.service1.ResponseMessage;
 import Login.ds.service1.Service1Grpc;
 
+
 import com.google.protobuf.Empty;
-import com.sun.tools.javadoc.Start;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.Status;
@@ -14,45 +14,28 @@ import io.grpc.stub.StreamObserver;
 
 import javax.jmdns.JmDNS;
 import javax.jmdns.ServiceInfo;
+import javax.swing.*;
 import java.io.IOException;
-import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.Set;
 
 public class Service1 extends Service1Grpc.Service1ImplBase {
     public static void main(String[] args) throws InterruptedException, IOException {
-//        // Register service with JmDNS
-//        JmDNS jmdns = JmDNS.create();
-//        ServiceInfo serviceInfo = ServiceInfo.create("_grpc._tcp.local.", "service1", 50051, "");
-//        jmdns.registerService(serviceInfo);
-////       Start gRPC server
-//        Service1 service1 = new Service1();
-//
-//        int port = 50051;
-//
-//        Server server = ServerBuilder.forPort(port)
-//                .addService(service1)
-//                .build()
-//                .start();
-//
-//        System.out.println("Service-1 started, listening on " + 50051);
-//
-//
-//        server.awaitTermination();
+        // Start gRPC server
+        // Register service with JmDNS
+        JmDNS jmdns = JmDNS.create();
+        ServiceInfo serviceInfo = ServiceInfo.create("_grpc._tcp.local.", "service1", 50051, "");
+        jmdns.registerService(serviceInfo);
+
+        Service1 service1 = new Service1();
+        Server server;
         try {
-            // 创建jmDNS实例
-            JmDNS jmdns = JmDNS.create(InetAddress.getLocalHost());
-
-            // 创建ServiceInfo对象
-            ServiceInfo serviceInfo = ServiceInfo.create("_grpc._tcp.local.", "service1", 50051, "");
-
-            // 注册服务
-            jmdns.registerService(serviceInfo);
+            server = ServerBuilder.forPort(50051).addService(service1).build().start();
             System.out.println("Service-1 started, listening on " + 50051);
-        } catch (IOException e) {
+            server.awaitTermination();
+        } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
 
@@ -130,8 +113,11 @@ public class Service1 extends Service1Grpc.Service1ImplBase {
                 ResponseMessage reply;
                 //preparing the response message
                 if (!map.containsKey(username)) {
+                    if(username.length()<8){
+                        reply = ResponseMessage.newBuilder().setCode(2).build();
+                    }else{
                     map.put(username, password);
-                    reply = ResponseMessage.newBuilder().setCode(1).build();
+                    reply = ResponseMessage.newBuilder().setCode(1).build();}
                 } else {
                     reply = ResponseMessage.newBuilder().setCode(0).build();
                 }
@@ -168,13 +154,28 @@ public class Service1 extends Service1Grpc.Service1ImplBase {
 
     @Override
     public void isLogin(Empty request, StreamObserver<ResponseMessage> responseObserver) {
-        ResponseMessage reply;
-        if (flag) {
-            reply = ResponseMessage.newBuilder().setCode(1).build();
-        } else {
-            reply = ResponseMessage.newBuilder().setCode(0).build();
+        try {
+            ResponseMessage reply;
+            if (flag) {
+                reply = ResponseMessage.newBuilder().setCode(1).build();
+            } else {
+                reply = ResponseMessage.newBuilder().setCode(0).build();
+            }
+            responseObserver.onNext(reply);
+            responseObserver.onCompleted();
+        } catch (StatusRuntimeException e) {
+            // Handle exception related to deadlines, metadata, or authentication
+            Status status = e.getStatus();
+            if (status.getCode() == Status.Code.CANCELLED) {
+                JOptionPane.showMessageDialog(null, "The request was cancelled.");
+            } else if (status.getCode() == Status.Code.DEADLINE_EXCEEDED) {
+                responseObserver.onError(Status.DEADLINE_EXCEEDED.withDescription("Request deadline exceeded").asRuntimeException());
+            } else if (status.getCode() == Status.Code.UNAUTHENTICATED) {
+                responseObserver.onError(Status.UNAUTHENTICATED.withDescription("Unauthenticated request").asRuntimeException());
+            } else {
+                responseObserver.onError(e);
+            }
         }
-        responseObserver.onNext(reply);
-        responseObserver.onCompleted();
+
     }
 }

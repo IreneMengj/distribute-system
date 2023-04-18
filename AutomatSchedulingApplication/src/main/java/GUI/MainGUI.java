@@ -84,6 +84,7 @@ public class MainGUI extends JFrame {
         setVisible(true);
         loginGUI.dispose();
         viewAppGUI.dispose();
+        reminderGUI.dispose();
     }
 
     public static void main(String[] args) {

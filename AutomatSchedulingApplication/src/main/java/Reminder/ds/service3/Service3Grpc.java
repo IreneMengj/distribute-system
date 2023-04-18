@@ -25,7 +25,7 @@ public final class Service3Grpc {
       fullMethodName = SERVICE_NAME + '/' + "setReminder",
       requestType = Reminder.class,
       responseType = Response.class,
-      methodType = io.grpc.MethodDescriptor.MethodType.SERVER_STREAMING)
+      methodType = io.grpc.MethodDescriptor.MethodType.BIDI_STREAMING)
   public static io.grpc.MethodDescriptor<Reminder,
       Response> getSetReminderMethod() {
     io.grpc.MethodDescriptor<Reminder, Response> getSetReminderMethod;
@@ -34,7 +34,7 @@ public final class Service3Grpc {
         if ((getSetReminderMethod = Service3Grpc.getSetReminderMethod) == null) {
           Service3Grpc.getSetReminderMethod = getSetReminderMethod =
               io.grpc.MethodDescriptor.<Reminder, Response>newBuilder()
-              .setType(io.grpc.MethodDescriptor.MethodType.SERVER_STREAMING)
+              .setType(io.grpc.MethodDescriptor.MethodType.BIDI_STREAMING)
               .setFullMethodName(generateFullMethodName(SERVICE_NAME, "setReminder"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
@@ -87,7 +87,7 @@ public final class Service3Grpc {
       fullMethodName = SERVICE_NAME + '/' + "deleteReminder",
       requestType = ReminderId.class,
       responseType = ResponseMessage.class,
-      methodType = io.grpc.MethodDescriptor.MethodType.BIDI_STREAMING)
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
   public static io.grpc.MethodDescriptor<ReminderId,
       ResponseMessage> getDeleteReminderMethod() {
     io.grpc.MethodDescriptor<ReminderId, ResponseMessage> getDeleteReminderMethod;
@@ -96,7 +96,7 @@ public final class Service3Grpc {
         if ((getDeleteReminderMethod = Service3Grpc.getDeleteReminderMethod) == null) {
           Service3Grpc.getDeleteReminderMethod = getDeleteReminderMethod =
               io.grpc.MethodDescriptor.<ReminderId, ResponseMessage>newBuilder()
-              .setType(io.grpc.MethodDescriptor.MethodType.BIDI_STREAMING)
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(SERVICE_NAME, "deleteReminder"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
@@ -164,9 +164,9 @@ public final class Service3Grpc {
 
     /**
      */
-    public void setReminder(Reminder request,
-                            io.grpc.stub.StreamObserver<Response> responseObserver) {
-      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getSetReminderMethod(), responseObserver);
+    public io.grpc.stub.StreamObserver<Reminder> setReminder(
+        io.grpc.stub.StreamObserver<Response> responseObserver) {
+      return io.grpc.stub.ServerCalls.asyncUnimplementedStreamingCall(getSetReminderMethod(), responseObserver);
     }
 
     /**
@@ -178,16 +178,16 @@ public final class Service3Grpc {
 
     /**
      */
-    public io.grpc.stub.StreamObserver<ReminderId> deleteReminder(
-        io.grpc.stub.StreamObserver<ResponseMessage> responseObserver) {
-      return io.grpc.stub.ServerCalls.asyncUnimplementedStreamingCall(getDeleteReminderMethod(), responseObserver);
+    public void deleteReminder(ReminderId request,
+                               io.grpc.stub.StreamObserver<ResponseMessage> responseObserver) {
+      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getDeleteReminderMethod(), responseObserver);
     }
 
     @Override public final io.grpc.ServerServiceDefinition bindService() {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
           .addMethod(
             getSetReminderMethod(),
-            io.grpc.stub.ServerCalls.asyncServerStreamingCall(
+            io.grpc.stub.ServerCalls.asyncBidiStreamingCall(
               new MethodHandlers<
                 Reminder,
                 Response>(
@@ -201,7 +201,7 @@ public final class Service3Grpc {
                   this, METHODID_GET_REMINDER)))
           .addMethod(
             getDeleteReminderMethod(),
-            io.grpc.stub.ServerCalls.asyncBidiStreamingCall(
+            io.grpc.stub.ServerCalls.asyncUnaryCall(
               new MethodHandlers<
                 ReminderId,
                 ResponseMessage>(
@@ -229,10 +229,10 @@ public final class Service3Grpc {
 
     /**
      */
-    public void setReminder(Reminder request,
-                            io.grpc.stub.StreamObserver<Response> responseObserver) {
-      io.grpc.stub.ClientCalls.asyncServerStreamingCall(
-          getChannel().newCall(getSetReminderMethod(), getCallOptions()), request, responseObserver);
+    public io.grpc.stub.StreamObserver<Reminder> setReminder(
+        io.grpc.stub.StreamObserver<Response> responseObserver) {
+      return io.grpc.stub.ClientCalls.asyncBidiStreamingCall(
+          getChannel().newCall(getSetReminderMethod(), getCallOptions()), responseObserver);
     }
 
     /**
@@ -245,10 +245,10 @@ public final class Service3Grpc {
 
     /**
      */
-    public io.grpc.stub.StreamObserver<ReminderId> deleteReminder(
-        io.grpc.stub.StreamObserver<ResponseMessage> responseObserver) {
-      return io.grpc.stub.ClientCalls.asyncBidiStreamingCall(
-          getChannel().newCall(getDeleteReminderMethod(), getCallOptions()), responseObserver);
+    public void deleteReminder(ReminderId request,
+                               io.grpc.stub.StreamObserver<ResponseMessage> responseObserver) {
+      io.grpc.stub.ClientCalls.asyncUnaryCall(
+          getChannel().newCall(getDeleteReminderMethod(), getCallOptions()), request, responseObserver);
     }
   }
 
@@ -271,17 +271,16 @@ public final class Service3Grpc {
 
     /**
      */
-    public java.util.Iterator<Response> setReminder(
-        Reminder request) {
-      return io.grpc.stub.ClientCalls.blockingServerStreamingCall(
-          getChannel(), getSetReminderMethod(), getCallOptions(), request);
+    public ResponseMessage getReminder(ReminderId request) {
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getGetReminderMethod(), getCallOptions(), request);
     }
 
     /**
      */
-    public ResponseMessage getReminder(ReminderId request) {
+    public ResponseMessage deleteReminder(ReminderId request) {
       return io.grpc.stub.ClientCalls.blockingUnaryCall(
-          getChannel(), getGetReminderMethod(), getCallOptions(), request);
+          getChannel(), getDeleteReminderMethod(), getCallOptions(), request);
     }
   }
 
@@ -309,11 +308,19 @@ public final class Service3Grpc {
       return io.grpc.stub.ClientCalls.futureUnaryCall(
           getChannel().newCall(getGetReminderMethod(), getCallOptions()), request);
     }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<ResponseMessage> deleteReminder(
+        ReminderId request) {
+      return io.grpc.stub.ClientCalls.futureUnaryCall(
+          getChannel().newCall(getDeleteReminderMethod(), getCallOptions()), request);
+    }
   }
 
-  private static final int METHODID_SET_REMINDER = 0;
-  private static final int METHODID_GET_REMINDER = 1;
-  private static final int METHODID_DELETE_REMINDER = 2;
+  private static final int METHODID_GET_REMINDER = 0;
+  private static final int METHODID_DELETE_REMINDER = 1;
+  private static final int METHODID_SET_REMINDER = 2;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -332,12 +339,12 @@ public final class Service3Grpc {
     @SuppressWarnings("unchecked")
     public void invoke(Req request, io.grpc.stub.StreamObserver<Resp> responseObserver) {
       switch (methodId) {
-        case METHODID_SET_REMINDER:
-          serviceImpl.setReminder((Reminder) request,
-              (io.grpc.stub.StreamObserver<Response>) responseObserver);
-          break;
         case METHODID_GET_REMINDER:
           serviceImpl.getReminder((ReminderId) request,
+              (io.grpc.stub.StreamObserver<ResponseMessage>) responseObserver);
+          break;
+        case METHODID_DELETE_REMINDER:
+          serviceImpl.deleteReminder((ReminderId) request,
               (io.grpc.stub.StreamObserver<ResponseMessage>) responseObserver);
           break;
         default:
@@ -350,9 +357,9 @@ public final class Service3Grpc {
     public io.grpc.stub.StreamObserver<Req> invoke(
         io.grpc.stub.StreamObserver<Resp> responseObserver) {
       switch (methodId) {
-        case METHODID_DELETE_REMINDER:
-          return (io.grpc.stub.StreamObserver<Req>) serviceImpl.deleteReminder(
-              (io.grpc.stub.StreamObserver<ResponseMessage>) responseObserver);
+        case METHODID_SET_REMINDER:
+          return (io.grpc.stub.StreamObserver<Req>) serviceImpl.setReminder(
+              (io.grpc.stub.StreamObserver<Response>) responseObserver);
         default:
           throw new AssertionError();
       }

@@ -13,7 +13,6 @@ service Service2 {
     rpc addEvent(Appointment) returns (stream Response) {}
     rpc deleteEvent(eventId) returns (ResponseMessage) {}
     rpc updateEvent(Appointment) returns (ResponseMessage) {}
-    rpc getEvents(google.protobuf.Empty) returns (stream Appointment) {}
 }
 
 message eventId {

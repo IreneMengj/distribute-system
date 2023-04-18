@@ -9,6 +9,7 @@ import io.grpc.stub.StreamObserver;
 
 import javax.jmdns.JmDNS;
 import javax.jmdns.ServiceInfo;
+import javax.swing.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,6 @@ public class Service2 extends Service2Grpc.Service2ImplBase {
         jmdns.registerService(serviceInfo);
         // Start gRPC server
         Service2 service2 = new Service2();
-
         Server server = ServerBuilder.forPort(serviceInfo.getPort())
                 .addService(service2)
                 .build()
@@ -57,7 +57,9 @@ public class Service2 extends Service2Grpc.Service2ImplBase {
         } catch (StatusRuntimeException e) {
             // Handle exception related to deadlines, metadata, or authentication
             Status status = e.getStatus();
-            if (status.getCode() == Status.Code.DEADLINE_EXCEEDED) {
+            if (status.getCode() == Status.Code.CANCELLED) {
+                JOptionPane.showMessageDialog(null, "The request was cancelled.");}
+            else if (status.getCode() == Status.Code.DEADLINE_EXCEEDED) {
                 responseObserver.onError(Status.DEADLINE_EXCEEDED.withDescription("Request deadline exceeded").asRuntimeException());
             } else if (status.getCode() == Status.Code.UNAUTHENTICATED) {
                 responseObserver.onError(Status.UNAUTHENTICATED.withDescription("Unauthenticated request").asRuntimeException());
@@ -90,7 +92,9 @@ public class Service2 extends Service2Grpc.Service2ImplBase {
         } catch (StatusRuntimeException e) {
             // Handle exception related to deadlines, metadata, or authentication
             Status status = e.getStatus();
-            if (status.getCode() == Status.Code.DEADLINE_EXCEEDED) {
+            if (status.getCode() == Status.Code.CANCELLED) {
+                JOptionPane.showMessageDialog(null, "The request was cancelled.");}
+            else if (status.getCode() == Status.Code.DEADLINE_EXCEEDED) {
                 responseObserver.onError(Status.DEADLINE_EXCEEDED.withDescription("Request deadline exceeded").asRuntimeException());
             } else if (status.getCode() == Status.Code.UNAUTHENTICATED) {
                 responseObserver.onError(Status.UNAUTHENTICATED.withDescription("Unauthenticated request").asRuntimeException());
@@ -122,7 +126,9 @@ public class Service2 extends Service2Grpc.Service2ImplBase {
         } catch (StatusRuntimeException e) {
             // Handle exception related to deadlines, metadata, or authentication
             Status status = e.getStatus();
-            if (status.getCode() == Status.Code.DEADLINE_EXCEEDED) {
+            if (status.getCode() == Status.Code.CANCELLED) {
+                JOptionPane.showMessageDialog(null, "The request was cancelled.");}
+            else if (status.getCode() == Status.Code.DEADLINE_EXCEEDED) {
                 responseObserver.onError(Status.DEADLINE_EXCEEDED.withDescription("Request deadline exceeded").asRuntimeException());
             } else if (status.getCode() == Status.Code.UNAUTHENTICATED) {
                 responseObserver.onError(Status.UNAUTHENTICATED.withDescription("Unauthenticated request").asRuntimeException());

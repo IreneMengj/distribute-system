@@ -11,9 +11,9 @@ import "google/protobuf/empty.proto";
 // Interface exported by the server.
 service Service3 {
   
-  rpc setReminder(Reminder) returns (stream Response) {}
+  rpc setReminder(stream Reminder) returns (stream Response) {}
   rpc getReminder(ReminderId) returns (ResponseMessage) {}
-  rpc deleteReminder(stream ReminderId) returns(stream ResponseMessage){}
+  rpc deleteReminder(ReminderId) returns(ResponseMessage){}
     
 }
 

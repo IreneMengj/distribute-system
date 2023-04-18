@@ -55,13 +55,13 @@ public final class Service3Impl {
       "\"\020\n\002ID\022\n\n\002ID\030\001 \001(\005\"h\n\010Reminder\022\014\n\004year\030\001" +
       " \001(\t\022\r\n\005month\030\002 \001(\t\022\013\n\003day\030\003 \001(\t\022\014\n\004hour" +
       "\030\004 \001(\t\022\013\n\003min\030\005 \001(\t\022\013\n\003sec\030\006 \001(\t\022\n\n\002ID\030\007" +
-      " \001(\0052\320\001\n\010Service3\0229\n\013setReminder\022\022.servi" +
-      "ce3.Reminder\032\022.service3.Response\"\0000\001\022@\n\013" +
-      "getReminder\022\024.service3.ReminderId\032\031.serv" +
-      "ice3.ResponseMessage\"\000\022G\n\016deleteReminder" +
-      "\022\024.service3.ReminderId\032\031.service3.Respon" +
-      "seMessage\"\000(\0010\001B&\n\024Reminder.ds.service3B" +
-      "\014Service3ImplP\001b\006proto3"
+      " \001(\0052\316\001\n\010Service3\022;\n\013setReminder\022\022.servi" +
+      "ce3.Reminder\032\022.service3.Response\"\000(\0010\001\022@" +
+      "\n\013getReminder\022\024.service3.ReminderId\032\031.se" +
+      "rvice3.ResponseMessage\"\000\022C\n\016deleteRemind" +
+      "er\022\024.service3.ReminderId\032\031.service3.Resp" +
+      "onseMessage\"\000B&\n\024Reminder.ds.service3B\014S" +
+      "ervice3ImplP\001b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,

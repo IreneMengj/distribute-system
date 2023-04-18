@@ -7,6 +7,8 @@ import GUI.MainGUI;
 import Login.ds.service1.Service1Grpc;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+import io.grpc.Status;
+import io.grpc.StatusRuntimeException;
 
 import javax.jmdns.JmDNS;
 import javax.jmdns.ServiceInfo;
@@ -78,6 +80,7 @@ public class ViewAppointmentGUI extends JFrame {
                     JOptionPane.showMessageDialog(null, "Please log in first");
                     return;
                 }
+                channel.shutdown();
                 addAppointmentGUI = new AddAppointmentGUI(ViewAppointmentGUI.this);
                 addAppointmentGUI.displayAppointmentGUI("add", null);
             }
@@ -88,6 +91,7 @@ public class ViewAppointmentGUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // 获取选中行的索引
+
                 int[] selectedRows = table.getSelectedRows();
 
                 // 如果没有选中行或选中多行，则弹出提示框并返回
@@ -136,7 +140,20 @@ public class ViewAppointmentGUI extends JFrame {
                         } else {
                             JOptionPane.showMessageDialog(null, "Delete unsuccessfully.");
                         }
-                    } finally {
+                    } catch (StatusRuntimeException ex) {
+                        // Handle exception related to deadlines, metadata, or authentication
+                        Status status = ex.getStatus();
+                        if (status.getCode() == Status.Code.CANCELLED) {
+                            JOptionPane.showMessageDialog(null, "The request was cancelled.");}
+                        else if (status.getCode() == Status.Code.DEADLINE_EXCEEDED) {
+                            JOptionPane.showMessageDialog(null, "The request exceeded the deadline.");
+                        } else if (status.getCode() == Status.Code.UNAUTHENTICATED) {
+                            JOptionPane.showMessageDialog(null, "Unauthenticated request");
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Error caught: "+ex.getMessage());
+                        }
+                    }
+                    finally {
                         channel.shutdown();
                         try {
                             channel.awaitTermination(5, TimeUnit.SECONDS);
@@ -156,7 +173,11 @@ public class ViewAppointmentGUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // show the First GUI
-                mainGUI.showMainGUI();
+                try{
+                mainGUI.showMainGUI();}
+                catch (Exception ex){
+                    JOptionPane.showMessageDialog(null,"Error caught: "+ex.getMessage());
+                }
             }
         });
 
@@ -199,7 +220,7 @@ public class ViewAppointmentGUI extends JFrame {
                 row[4] = newData[3];
 
                 // Update the row in the table model
-                for (int j = 1; j <= 4; j++) {
+                for (int j = 1; j <= 3; j++) {
                     model.setValueAt(row[j], i, j);
                 }
 
@@ -212,7 +233,6 @@ public class ViewAppointmentGUI extends JFrame {
     public void editingAppointment(int id, Object[] newAppointment) {
         // Update the row in the table model
         setData(id, newAppointment);
-
     }
 
 
@@ -226,7 +246,6 @@ public class ViewAppointmentGUI extends JFrame {
 
     public ManagedChannel createChannel () {
         // Discover gRPC service with JmDNS
-
         JmDNS jmdns = null;
         InetAddress inetAddress = null;
         try {
@@ -254,7 +273,6 @@ public class ViewAppointmentGUI extends JFrame {
 
     public static void main(String[] args) {
         ViewAppointmentGUI gui = new ViewAppointmentGUI();
-
     }
 }
 

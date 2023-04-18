@@ -20,8 +20,8 @@ import Login.ds.service1.RequestMessage;
 import Login.ds.service1.ResponseMessage;
 import Login.ds.service1.Service1Grpc;
 
-import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
+import io.grpc.*;
+import io.grpc.stub.MetadataUtils;
 import io.grpc.stub.StreamObserver;
 
 
@@ -31,6 +31,8 @@ public class LoginGUI extends JFrame implements ActionListener {
     private JTextField entry1, entry2, reply;
     private JComboBox<String> dropdown;
     private MainGUI mainGUI;
+    String serviceType = "_grpc._tcp.local.";
+    String serviceName = "service1";
 
     public JPanel getService1JPanel() {
         JPanel panel = new JPanel(new GridLayout(0, 2, 5, 5));
@@ -82,7 +84,11 @@ public class LoginGUI extends JFrame implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // show the First GUI
-                mainGUI.showMainGUI();
+                try {
+                    mainGUI.showMainGUI();
+                }catch (NullPointerException ex){
+                    JOptionPane.showMessageDialog(null,"Error caught: "+ex.getMessage());
+                }
             }
         });
 
@@ -94,7 +100,6 @@ public class LoginGUI extends JFrame implements ActionListener {
         setLocationRelativeTo(null);
     }
 
-
     @Override
     public void actionPerformed(ActionEvent e) {
         JComboBox<String> dropdown = (JComboBox<String>) e.getSource();
@@ -104,22 +109,23 @@ public class LoginGUI extends JFrame implements ActionListener {
         InetAddress inetAddress = null;
         try {
             jmdns = JmDNS.create();
-            inetAddress = InetAddress.getLocalHost();
+           inetAddress = InetAddress.getLocalHost();
         } catch (UnknownHostException unknownHostException) {
             unknownHostException.printStackTrace();
         } catch (IOException ioException) {
             ioException.printStackTrace();
         }
-        String serviceType = "_grpc._tcp.local.";
-        String serviceName = "service1";
+
         ServiceInfo serviceInfo = jmdns.getServiceInfo(serviceType, serviceName);
         if (serviceInfo == null) {
-            System.err.println("Could not find service with name " + serviceName);
+            JOptionPane.showMessageDialog(null,"Could not find service with name " + serviceName);
             return;
         }
+
         ManagedChannel channel = ManagedChannelBuilder.forAddress(inetAddress.getHostAddress(), serviceInfo.getPort()).usePlaintext().build();
         try {
             // Call gRPC service methods here
+            // asynchronism stub
             Service1Grpc.Service1Stub service1Stub = Service1Grpc.newStub(channel);
             //preparing message to send
             String username = entry1.getText();
@@ -144,7 +150,17 @@ public class LoginGUI extends JFrame implements ActionListener {
                     @Override
                     public void onError(Throwable t) {
                         // Handle error
-                        reply.setText("An error occurred: " + t.getMessage());
+                        // Handle error
+                        Status status = Status.fromThrowable(t);
+                        if (status.getCode() == Status.Code.CANCELLED) {
+                            reply.setText("The request was cancelled.");
+                        } else if (status.getCode() == Status.Code.DEADLINE_EXCEEDED) {
+                            reply.setText("The request deadline was exceeded.");
+                        } else if (status.getCode() == Status.Code.UNAUTHENTICATED) {
+                            reply.setText("The request was not authenticated.");
+                        } else {
+                            reply.setText("An error occurred: " + t.getMessage());
+                        }
                     }
 
                     @Override
@@ -152,9 +168,10 @@ public class LoginGUI extends JFrame implements ActionListener {
                         // Handle completion
                     }
                 };
+
                 StreamObserver<RequestMessage> requestObserver = service1Stub.login(responseObserver);
                 requestObserver.onNext(request);
-// Call onNext() multiple times to send multiple requests
+                // Call onNext() multiple times to send multiple requests
                 requestObserver.onCompleted();
 
             } else if (selectedOption.equals("Sign up")) {
@@ -167,15 +184,26 @@ public class LoginGUI extends JFrame implements ActionListener {
                         int code = response.getCode();
                         if (code == 1) {
                             reply.setText("Sign up successfully");
-                        } else {
+                        } else if(code==0) {
                             reply.setText("Username taken. Try again.");
+                        } else {
+                            reply.setText("The length must be over 8");
                         }
                     }
 
                     @Override
                     public void onError(Throwable t) {
                         // Handle error
-                        reply.setText("An error occurred: " + t.getMessage());
+                        Status status = Status.fromThrowable(t);
+                        if (status.getCode() == Status.Code.CANCELLED) {
+                            reply.setText("The request was cancelled.");
+                        } else if (status.getCode() == Status.Code.DEADLINE_EXCEEDED) {
+                            reply.setText("The request deadline was exceeded.");
+                        } else if (status.getCode() == Status.Code.UNAUTHENTICATED) {
+                            reply.setText("The request was not authenticated.");
+                        } else {
+                            reply.setText("An error occurred: " + t.getMessage());
+                        }
                     }
 
                     @Override
@@ -183,9 +211,10 @@ public class LoginGUI extends JFrame implements ActionListener {
                         // Handle completion
                     }
                 };
+
                 StreamObserver<RequestMessage> requestObserver = service1Stub.signup(responseObserver);
                 requestObserver.onNext(request);
-// Call onNext() multiple times to send multiple requests
+                // Call onNext() multiple times to send multiple requests
                 requestObserver.onCompleted();
             }
 

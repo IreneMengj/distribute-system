@@ -1,14 +1,14 @@
 package Reminder.client;
 
-import Calendar.ds.service2.Service2Grpc;
-import Calendar.ds.service2.eventId;
+
 import GUI.MainGUI;
-import Login.ds.service1.RequestMessage;
 import Reminder.ds.service3.ReminderId;
 import Reminder.ds.service3.ResponseMessage;
 import Reminder.ds.service3.Service3Grpc;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+import io.grpc.Status;
+import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 
 import javax.jmdns.JmDNS;
@@ -16,22 +16,18 @@ import javax.jmdns.ServiceEvent;
 import javax.jmdns.ServiceInfo;
 import javax.jmdns.ServiceListener;
 import javax.swing.*;
-import javax.swing.table.DefaultTableCellRenderer;
+
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableColumnModel;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+
 import java.io.IOException;
-import java.net.Inet4Address;
+
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public class ReminderGUI extends JFrame {
@@ -47,6 +43,8 @@ public class ReminderGUI extends JFrame {
     private JTable reminderTable;
     private JTable table;
     private MainGUI mainGUI;
+    String serviceType = "_grpc._tcp.local.";
+    String serviceName = "service3";
 
     static int port;
     static String resolvedIP;
@@ -133,7 +131,6 @@ public class ReminderGUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 int[] selectedRows = table.getSelectedRows();
                 for (int i = selectedRows.length - 1; i >= 0; i--) {
-                    tableModel.removeRow(selectedRows[i]);
                     int selectedRow = selectedRows[i];
                     Object id1 = table.getValueAt(selectedRow, 0);
                     int id = Integer.parseInt(id1.toString());
@@ -141,10 +138,25 @@ public class ReminderGUI extends JFrame {
                     try {
                         System.out.println("RPC delete reminder to be invoked ...");
                         Service3Grpc.Service3BlockingStub service3BlockingStub = Service3Grpc.newBlockingStub(channel);
-                        ReminderId build = ReminderId.newBuilder().setID(0,id).build();
+                        // Here, we are calling the Remote reverseStream method. Using onNext, client sends a stream of messages.
+                        ReminderId request = ReminderId.newBuilder().addID(id).build();
+                        ResponseMessage responseMessage = service3BlockingStub.deleteReminder(request);
+                        JOptionPane.showMessageDialog(null,responseMessage.getMessage());
+                    }catch (StatusRuntimeException ex) {
+                        // Handle exception related to deadlines, metadata, or authentication
+                        Status status = ex.getStatus();
+                        if (status.getCode() == Status.Code.CANCELLED) {
+                            JOptionPane.showMessageDialog(null, "The request was cancelled.");}
+                        else if (status.getCode() == Status.Code.DEADLINE_EXCEEDED) {
+                            JOptionPane.showMessageDialog(null, "Request deadline exceeded");
+                        } else if (status.getCode() == Status.Code.UNAUTHENTICATED) {
+                            JOptionPane.showMessageDialog(null, "Unauthenticated request");
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Error caught"+ex.getMessage());
+                        }
+                    }
 
-                        JOptionPane.showMessageDialog(null, "haha");
-                    } finally {
+                    finally {
                         channel.shutdown();
                         try {
                             channel.awaitTermination(5, TimeUnit.SECONDS);
@@ -152,6 +164,21 @@ public class ReminderGUI extends JFrame {
                             error.printStackTrace();
                         }
                     }
+                    tableModel.removeRow(selectedRows[i]);
+                }
+            }
+        });
+
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // show the Main GUI
+                try{
+                    dispose();
+                    mainGUI.showMainGUI();
+                }
+                catch (Exception ex){
+                    JOptionPane.showMessageDialog(null,"Error caught: "+ex.getMessage());
                 }
             }
         });
@@ -169,27 +196,24 @@ public class ReminderGUI extends JFrame {
 
     public ManagedChannel createChannel () {
         // Discover gRPC service with JmDNS
+        JmDNS jmdns = null;
+        InetAddress inetAddress = null;
+        try {
+            jmdns = JmDNS.create();
+            inetAddress = InetAddress.getLocalHost();
+        } catch (UnknownHostException unknownHostException) {
+            unknownHostException.printStackTrace();
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        }
 
-//        JmDNS jmdns = null;
-//        InetAddress inetAddress = null;
-//        try {
-//            jmdns = JmDNS.create();
-//            inetAddress = InetAddress.getLocalHost();
-//        } catch (UnknownHostException unknownHostException) {
-//            unknownHostException.printStackTrace();
-//        } catch (IOException ioException) {
-//            ioException.printStackTrace();
-//        }
-//        String serviceType = "_grpc._tcp.local.";
-//        String serviceName = "service3";
-//        ServiceInfo serviceInfo = jmdns.getServiceInfo(serviceType, serviceName);
-//        if (serviceInfo == null) {
-//            System.err.println("Could not find service with name " + serviceName);
-//            return null;
-//        }
-        JMDNS();
+        ServiceInfo serviceInfo = jmdns.getServiceInfo(serviceType, serviceName);
+        if (serviceInfo == null) {
+            System.err.println("Could not find service with name " + serviceName);
+            return null;
+        }
         // Use the address and port to create the ManagedChannel
-        ManagedChannel channel = ManagedChannelBuilder.forAddress(resolvedIP, port).usePlaintext().build();
+        ManagedChannel channel = ManagedChannelBuilder.forAddress(inetAddress.getHostAddress(), serviceInfo.getPort()).usePlaintext().build();
         return channel;
     }
 
@@ -211,22 +235,7 @@ public class ReminderGUI extends JFrame {
         }
     }
 
-    public static void JMDNS() {
-        try {
-            // Create a JmDNS instance
-            JmDNS jmdns = JmDNS.create(InetAddress.getLocalHost());
 
-            // Add a service listener
-            jmdns.addServiceListener("_http._tcp.local.", new SampleListener());
-
-//            // Wait a bit
-//            Thread.sleep(20000);
-
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-
-    }
 
     public static void main(String[] args) {
         ReminderGUI gui = new ReminderGUI();

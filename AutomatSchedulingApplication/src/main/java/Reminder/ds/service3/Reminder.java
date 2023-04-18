@@ -308,24 +308,24 @@ private static final long serialVersionUID = 0L;
   @Override
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
-//    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(year_)) {
+
       com.google.protobuf.GeneratedMessageV3.writeString(output, 1, year_);
-//    }
-//    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(month_)) {
+
+
       com.google.protobuf.GeneratedMessageV3.writeString(output, 2, month_);
-//    }
-//    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(day_)) {
+
+
       com.google.protobuf.GeneratedMessageV3.writeString(output, 3, day_);
-//    }
-//    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(hour_)) {
+
+
       com.google.protobuf.GeneratedMessageV3.writeString(output, 4, hour_);
-//    }
-//    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(min_)) {
+
+
       com.google.protobuf.GeneratedMessageV3.writeString(output, 5, min_);
-//    }
-//    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(sec_)) {
+
+
       com.google.protobuf.GeneratedMessageV3.writeString(output, 6, sec_);
-//    }
+
     if (iD_ != 0) {
       output.writeInt32(7, iD_);
     }
@@ -338,24 +338,24 @@ private static final long serialVersionUID = 0L;
     if (size != -1) return size;
 
     size = 0;
-//    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(year_)) {
+
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, year_);
-//    }
-//    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(month_)) {
+
+
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, month_);
-//    }
-//    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(day_)) {
+
+
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, day_);
-//    }
-//    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(hour_)) {
+
+
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, hour_);
-//    }
-//    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(min_)) {
+
+
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, min_);
-//    }
-//    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(sec_)) {
+
+
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(6, sec_);
-//    }
+
     if (iD_ != 0) {
       size += com.google.protobuf.CodedOutputStream
         .computeInt32Size(7, iD_);
