@@ -1,6 +1,6 @@
-package Calendar.service;
+package Appointment.service;
 
-import Calendar.ds.service2.*;
+import Appointment.ds.service2.*;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.Status;
@@ -12,7 +12,7 @@ import javax.jmdns.ServiceInfo;
 import javax.swing.*;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
+
 
 public class Service2 extends Service2Grpc.Service2ImplBase {
     public static void main(String[] args) throws InterruptedException, IOException {
@@ -46,11 +46,11 @@ public class Service2 extends Service2Grpc.Service2ImplBase {
             Appointment.Builder builder = appointment.toBuilder().setId(id).setTitle(title).setDetail(desc).setOccurTime(time).setReminder(reminder
             );
             list.add(builder);
-            Calendar.ds.service2.Response reply;
+            Appointment.ds.service2.Response reply;
             if (title.equals("")) {
-                reply = Calendar.ds.service2.Response.newBuilder().setCode(0).build();
+                reply = Appointment.ds.service2.Response.newBuilder().setCode(0).build();
             } else {
-                reply = Calendar.ds.service2.Response.newBuilder().setCode(1).build();
+                reply = Appointment.ds.service2.Response.newBuilder().setCode(1).build();
             }
             responseObserver.onNext(reply);
             responseObserver.onCompleted();
@@ -71,7 +71,7 @@ public class Service2 extends Service2Grpc.Service2ImplBase {
 
 
     @Override
-    public void updateEvent(Appointment request, StreamObserver<Calendar.ds.service2.ResponseMessage> responseObserver) {
+    public void updateEvent(Appointment request, StreamObserver<Appointment.ds.service2.ResponseMessage> responseObserver) {
         try {
             int id = request.getId();
             String title = request.getTitle();
@@ -86,7 +86,7 @@ public class Service2 extends Service2Grpc.Service2ImplBase {
                     b.setReminder(reminder);
                 }
             }
-            Calendar.ds.service2.ResponseMessage reply = Calendar.ds.service2.ResponseMessage.newBuilder().setCode(1).build();
+            Appointment.ds.service2.ResponseMessage reply = Appointment.ds.service2.ResponseMessage.newBuilder().setCode(1).build();
             responseObserver.onNext(reply);
             responseObserver.onCompleted();
         } catch (StatusRuntimeException e) {
@@ -105,7 +105,7 @@ public class Service2 extends Service2Grpc.Service2ImplBase {
     }
 
     @Override
-    public void deleteEvent(eventId request, StreamObserver<Calendar.ds.service2.ResponseMessage> responseObserver) {
+    public void deleteEvent(eventId request, StreamObserver<Appointment.ds.service2.ResponseMessage> responseObserver) {
         try {
             int id = request.getId();
             boolean flag = false;
@@ -115,11 +115,11 @@ public class Service2 extends Service2Grpc.Service2ImplBase {
                     break;
                 }
             }
-            Calendar.ds.service2.ResponseMessage reply;
+            Appointment.ds.service2.ResponseMessage reply;
             if (flag) {
-                reply = Calendar.ds.service2.ResponseMessage.newBuilder().setCode(1).build();
+                reply = Appointment.ds.service2.ResponseMessage.newBuilder().setCode(1).build();
             } else {
-                reply = Calendar.ds.service2.ResponseMessage.newBuilder().setCode(0).build();
+                reply = Appointment.ds.service2.ResponseMessage.newBuilder().setCode(0).build();
             }
             responseObserver.onNext(reply);
             responseObserver.onCompleted();

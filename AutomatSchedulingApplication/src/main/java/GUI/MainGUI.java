@@ -1,6 +1,6 @@
 package GUI;
 
-import Calendar.client.ViewAppointmentGUI;
+import Appointment.client.ViewAppointmentGUI;
 import Login.client.LoginGUI;
 import Reminder.client.ReminderGUI;
 

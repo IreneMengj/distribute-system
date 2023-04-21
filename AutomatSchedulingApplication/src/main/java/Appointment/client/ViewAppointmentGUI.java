@@ -1,8 +1,8 @@
-package Calendar.client;
+package Appointment.client;
 
-import Calendar.ds.service2.ResponseMessage;
-import Calendar.ds.service2.Service2Grpc;
-import Calendar.ds.service2.eventId;
+import Appointment.ds.service2.ResponseMessage;
+import Appointment.ds.service2.Service2Grpc;
+import Appointment.ds.service2.eventId;
 import GUI.MainGUI;
 import Login.ds.service1.Service1Grpc;
 import io.grpc.ManagedChannel;
@@ -20,7 +20,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;

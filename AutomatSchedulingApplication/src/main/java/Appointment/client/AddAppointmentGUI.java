@@ -1,22 +1,18 @@
-package Calendar.client;
+package Appointment.client;
 
-import Calendar.ds.service2.Appointment;
-import Calendar.ds.service2.Response;
-import Calendar.ds.service2.ResponseMessage;
-import Calendar.ds.service2.Service2Grpc;
+import Appointment.ds.service2.Appointment;
+import Appointment.ds.service2.Response;
+import Appointment.ds.service2.ResponseMessage;
+import Appointment.ds.service2.Service2Grpc;
 
 
-import Login.ds.service1.Service1Grpc;
-import com.google.protobuf.Empty;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 
 import javax.jmdns.JmDNS;
-import javax.jmdns.ServiceEvent;
 import javax.jmdns.ServiceInfo;
-import javax.jmdns.ServiceListener;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -24,8 +20,6 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Iterator;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class AddAppointmentGUI extends JFrame {
     private static int nextId = 1;

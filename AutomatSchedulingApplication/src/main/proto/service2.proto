@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 option java_multiple_files = true;
-option java_package = "Calendar.ds.service2";
+option java_package = "Appointment.ds.service2";
 option java_outer_classname = "Service2Impl";
 
 package service2;

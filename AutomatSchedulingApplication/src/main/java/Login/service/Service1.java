@@ -113,7 +113,7 @@ public class Service1 extends Service1Grpc.Service1ImplBase {
                 ResponseMessage reply;
                 //preparing the response message
                 if (!map.containsKey(username)) {
-                    if(username.length()<8){
+                    if(username.length()<8||password.length()<8){
                         reply = ResponseMessage.newBuilder().setCode(2).build();
                     }else{
                     map.put(username, password);

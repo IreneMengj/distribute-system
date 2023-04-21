@@ -187,7 +187,7 @@ public class LoginGUI extends JFrame implements ActionListener {
                         } else if(code==0) {
                             reply.setText("Username taken. Try again.");
                         } else {
-                            reply.setText("The length must be over 8");
+                            reply.setText("Both length must be over 8");
                         }
                     }
 
