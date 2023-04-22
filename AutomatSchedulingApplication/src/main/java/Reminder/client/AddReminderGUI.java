@@ -87,17 +87,20 @@ public class AddReminderGUI extends JFrame {
                     System.err.println("Could not find service with name " + serviceName);
                     return;
                 }
+                ManagedChannel channel = null;
                 // Use the address and port to create the ManagedChannel
-                ManagedChannel channel = ManagedChannelBuilder.forAddress(inetAddress.getHostAddress(), serviceInfo.getPort())
-                        .usePlaintext()
-                        .build();
+                try {
+                    channel = ManagedChannelBuilder.forAddress(inetAddress.getHostAddress(), serviceInfo.getPort())
+                            .usePlaintext()
+                            .build();
 
-                // Add metadata to the channel
-                Metadata metadata = new Metadata();
-                metadata.put(Metadata.Key.of("token", Metadata.ASCII_STRING_MARSHALLER), "my-token");
 
-                Reminder request = null;
-// preparing message to send
+                    // Add metadata to the channel
+                    Metadata metadata = new Metadata();
+                    metadata.put(Metadata.Key.of("token", Metadata.ASCII_STRING_MARSHALLER), "my-token");
+
+                    Reminder request = null;
+                    // preparing message to send
 
                     try {
                         int id = Integer.parseInt(ID);
@@ -118,7 +121,6 @@ public class AddReminderGUI extends JFrame {
                         JOptionPane.showMessageDialog(null, "ID should be a positive integer");
                         return;
                     }
-
 
 
                     // Call gRPC service methods here
@@ -160,57 +162,64 @@ public class AddReminderGUI extends JFrame {
                     requestObserver.onNext(request);
                     // Call onNext() multiple times to send multiple requests
                     requestObserver.onCompleted();
+                } finally {
                     channel.shutdown();
-
-                    // Send the add reminder request
-                    Object[] rowData = {ID, title, time};
-                    tableModel.addRow(rowData);
-                    // Close the window
-                    dispose();
+                    try {
+                        channel.awaitTermination(5, TimeUnit.SECONDS);
+                    } catch (InterruptedException error) {
+                        error.printStackTrace();
+                    }
                 }
-            });
-            // Set the location and size of the component
-            JPanel panel = new JPanel(new GridBagLayout());
-            GridBagConstraints c = new GridBagConstraints();
-            c.insets =new
 
-            Insets(5,5,5,5); // 设置组件之间的间距
+                // Send the add reminder request
+                Object[] rowData = {ID, title, time};
+                tableModel.addRow(rowData);
+                // Close the window
+                dispose();
+            }
+        });
+        // Set the location and size of the component
+        JPanel panel = new JPanel(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        c.insets = new
 
-            c.gridx =0;
-            c.gridy =0;
-        panel.add(descLabel,c);
-            c.gridx =1;
-            c.gridy =0;
-        panel.add(descField,c);
-            c.gridx =0;
-            c.gridy =1;
-        panel.add(titleLabel,c);
-            c.gridx =1;
-            c.gridy =1;
-        panel.add(titleField,c);
-            c.gridx =0;
-            c.gridy =2;
-        panel.add(timeLabel,c);
-            c.gridx =1;
-            c.gridy =2;
-        panel.add(timeSpinner,c);
-            c.gridx =1;
-            c.gridy =3;
-        panel.add(okButton,c);
+                Insets(5, 5, 5, 5); // 设置组件之间的间距
 
-            getContentPane().
+        c.gridx = 0;
+        c.gridy = 0;
+        panel.add(descLabel, c);
+        c.gridx = 1;
+        c.gridy = 0;
+        panel.add(descField, c);
+        c.gridx = 0;
+        c.gridy = 1;
+        panel.add(titleLabel, c);
+        c.gridx = 1;
+        c.gridy = 1;
+        panel.add(titleField, c);
+        c.gridx = 0;
+        c.gridy = 2;
+        panel.add(timeLabel, c);
+        c.gridx = 1;
+        c.gridy = 2;
+        panel.add(timeSpinner, c);
+        c.gridx = 1;
+        c.gridy = 3;
+        panel.add(okButton, c);
 
-            add(panel);
+        getContentPane().
 
-            pack();
+                add(panel);
 
-            setLocationRelativeTo(null);
+        pack();
 
-            setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
 
-        }
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
     }
+
+}
 
 
 

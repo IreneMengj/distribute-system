@@ -46,11 +46,11 @@ public class Service2 extends Service2Grpc.Service2ImplBase {
             Appointment.Builder builder = appointment.toBuilder().setId(id).setTitle(title).setDetail(desc).setOccurTime(time).setReminder(reminder
             );
             list.add(builder);
-            Appointment.ds.service2.Response reply;
+            Response reply;
             if (title.equals("")) {
-                reply = Appointment.ds.service2.Response.newBuilder().setCode(0).build();
+                reply = Response.newBuilder().setCode(0).build();
             } else {
-                reply = Appointment.ds.service2.Response.newBuilder().setCode(1).build();
+                reply = Response.newBuilder().setCode(1).build();
             }
             responseObserver.onNext(reply);
             responseObserver.onCompleted();
@@ -71,7 +71,7 @@ public class Service2 extends Service2Grpc.Service2ImplBase {
 
 
     @Override
-    public void updateEvent(Appointment request, StreamObserver<Appointment.ds.service2.ResponseMessage> responseObserver) {
+    public void updateEvent(Appointment request, StreamObserver<ResponseMessage> responseObserver) {
         try {
             int id = request.getId();
             String title = request.getTitle();
@@ -86,7 +86,7 @@ public class Service2 extends Service2Grpc.Service2ImplBase {
                     b.setReminder(reminder);
                 }
             }
-            Appointment.ds.service2.ResponseMessage reply = Appointment.ds.service2.ResponseMessage.newBuilder().setCode(1).build();
+            ResponseMessage reply = ResponseMessage.newBuilder().setCode(1).build();
             responseObserver.onNext(reply);
             responseObserver.onCompleted();
         } catch (StatusRuntimeException e) {
@@ -105,7 +105,7 @@ public class Service2 extends Service2Grpc.Service2ImplBase {
     }
 
     @Override
-    public void deleteEvent(eventId request, StreamObserver<Appointment.ds.service2.ResponseMessage> responseObserver) {
+    public void deleteEvent(eventId request, StreamObserver<ResponseMessage> responseObserver) {
         try {
             int id = request.getId();
             boolean flag = false;
@@ -115,11 +115,11 @@ public class Service2 extends Service2Grpc.Service2ImplBase {
                     break;
                 }
             }
-            Appointment.ds.service2.ResponseMessage reply;
+            ResponseMessage reply;
             if (flag) {
-                reply = Appointment.ds.service2.ResponseMessage.newBuilder().setCode(1).build();
+                reply = ResponseMessage.newBuilder().setCode(1).build();
             } else {
-                reply = Appointment.ds.service2.ResponseMessage.newBuilder().setCode(0).build();
+                reply = ResponseMessage.newBuilder().setCode(0).build();
             }
             responseObserver.onNext(reply);
             responseObserver.onCompleted();

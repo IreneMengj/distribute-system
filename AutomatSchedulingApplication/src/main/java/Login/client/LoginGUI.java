@@ -186,6 +186,10 @@ public class LoginGUI extends JFrame implements ActionListener {
                             reply.setText("Sign up successfully");
                         } else if(code==0) {
                             reply.setText("Username taken. Try again.");
+                        } else if(code==3){
+                            JOptionPane.showMessageDialog(null,
+                                    "Password should have at least one digit,one uppercase," +
+                                            "one lowercase and one special character ");
                         } else {
                             reply.setText("Both length must be over 8");
                         }

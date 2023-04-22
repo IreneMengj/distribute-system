@@ -73,16 +73,31 @@ public class ViewAppointmentGUI extends JFrame {
                 ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 50051)
                         .usePlaintext()
                         .build();
-                Service1Grpc.Service1BlockingStub service1BlockingStub = Service1Grpc.newBlockingStub(channel);
-                Login.ds.service1.ResponseMessage service1Response = service1BlockingStub.isLogin(null);
-                if (service1Response.getCode() == 0) {
-                    JOptionPane.showMessageDialog(null, "Please log in first");
-                    return;
+                try {
+                    Service1Grpc.Service1BlockingStub service1BlockingStub = Service1Grpc.newBlockingStub(channel);
+                    Login.ds.service1.ResponseMessage service1Response = service1BlockingStub.isLogin(null);
+                    if (service1Response.getCode() == 0) {
+                        JOptionPane.showMessageDialog(null, "Please log in first");
+                        return;
+                    }
+                    channel.shutdown();
+                    addAppointmentGUI = new AddAppointmentGUI(ViewAppointmentGUI.this);
+                    addAppointmentGUI.displayAppointmentGUI("add", null);
+                } catch (StatusRuntimeException ex) {
+                    // Handle exception related to deadlines, metadata, or authentication
+                    Status status = ex.getStatus();
+                    if (status.getCode() == Status.Code.CANCELLED) {
+                        JOptionPane.showMessageDialog(null, "The request was cancelled.");
+                    } else if (status.getCode() == Status.Code.DEADLINE_EXCEEDED) {
+                        JOptionPane.showMessageDialog(null, "The request exceeded the deadline.");
+                    } else if (status.getCode() == Status.Code.UNAUTHENTICATED) {
+                        JOptionPane.showMessageDialog(null, "Unauthenticated request");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Error caught: " + ex.getMessage());
+                    }
                 }
-                channel.shutdown();
-                addAppointmentGUI = new AddAppointmentGUI(ViewAppointmentGUI.this);
-                addAppointmentGUI.displayAppointmentGUI("add", null);
             }
+
         });
 
         JButton editButton = new JButton("Edit");
@@ -143,16 +158,15 @@ public class ViewAppointmentGUI extends JFrame {
                         // Handle exception related to deadlines, metadata, or authentication
                         Status status = ex.getStatus();
                         if (status.getCode() == Status.Code.CANCELLED) {
-                            JOptionPane.showMessageDialog(null, "The request was cancelled.");}
-                        else if (status.getCode() == Status.Code.DEADLINE_EXCEEDED) {
+                            JOptionPane.showMessageDialog(null, "The request was cancelled.");
+                        } else if (status.getCode() == Status.Code.DEADLINE_EXCEEDED) {
                             JOptionPane.showMessageDialog(null, "The request exceeded the deadline.");
                         } else if (status.getCode() == Status.Code.UNAUTHENTICATED) {
                             JOptionPane.showMessageDialog(null, "Unauthenticated request");
                         } else {
-                            JOptionPane.showMessageDialog(null, "Error caught: "+ex.getMessage());
+                            JOptionPane.showMessageDialog(null, "Error caught: " + ex.getMessage());
                         }
-                    }
-                    finally {
+                    } finally {
                         channel.shutdown();
                         try {
                             channel.awaitTermination(5, TimeUnit.SECONDS);
@@ -172,10 +186,10 @@ public class ViewAppointmentGUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // show the First GUI
-                try{
-                mainGUI.showMainGUI();}
-                catch (Exception ex){
-                    JOptionPane.showMessageDialog(null,"Error caught: "+ex.getMessage());
+                try {
+                    mainGUI.showMainGUI();
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Error caught: " + ex.getMessage());
                 }
             }
         });
@@ -243,7 +257,7 @@ public class ViewAppointmentGUI extends JFrame {
     }
 
 
-    public ManagedChannel createChannel () {
+    public ManagedChannel createChannel() {
         // Discover gRPC service with JmDNS
         JmDNS jmdns = null;
         InetAddress inetAddress = null;

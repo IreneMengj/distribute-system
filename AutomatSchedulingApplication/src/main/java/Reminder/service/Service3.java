@@ -144,7 +144,10 @@ public class Service3 extends Service3Grpc.Service3ImplBase {
                     ResponseMessage reply;
                     if (now.isAfter(parse)) {
                         reply = ResponseMessage.newBuilder().setMessage("This task is not now!").build();
-                    } else {
+                    } else if(now.isBefore(parse)){
+                        reply = ResponseMessage.newBuilder().setMessage("This task has past!").build();
+                    }
+                    else {
                         reply = ResponseMessage.newBuilder().setMessage("It's time to do this task!").build();
                     }
                     responseObserver.onNext(reply);

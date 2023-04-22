@@ -54,9 +54,9 @@ public final class Service2Impl {
       "ment\032\022.service2.Response\"\0000\001\022=\n\013deleteEv" +
       "ent\022\021.service2.eventId\032\031.service2.Respon" +
       "seMessage\"\000\022A\n\013updateEvent\022\025.service2.Ap" +
-      "pointment\032\031.service2.ResponseMessage\"\000B&" +
-      "\n\024Calendar.ds.service2B\014Service2ImplP\001b\006" +
-      "proto3"
+      "pointment\032\031.service2.ResponseMessage\"\000B)" +
+      "\n\027Appointment.ds.service2B\014Service2ImplP" +
+      "\001b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,

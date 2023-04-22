@@ -115,7 +115,10 @@ public class Service1 extends Service1Grpc.Service1ImplBase {
                 if (!map.containsKey(username)) {
                     if(username.length()<8||password.length()<8){
                         reply = ResponseMessage.newBuilder().setCode(2).build();
-                    }else{
+                    }else if (!password.matches(".*[A-Z].*") || !password.matches(".*[a-z].*")
+                            || !password.matches(".*\\W.*") || !password.matches(".*\\d.*")) {
+                        reply = ResponseMessage.newBuilder().setCode(3).build();
+                    } else{
                     map.put(username, password);
                     reply = ResponseMessage.newBuilder().setCode(1).build();}
                 } else {
@@ -130,10 +133,15 @@ public class Service1 extends Service1Grpc.Service1ImplBase {
                 if (t instanceof StatusRuntimeException) {
                     StatusRuntimeException e = (StatusRuntimeException) t;
                     Status status = e.getStatus();
-                    if (status.getCode() == Status.Code.DEADLINE_EXCEEDED) {
-                        responseObserver.onError(Status.DEADLINE_EXCEEDED.withDescription("Request deadline exceeded").asRuntimeException());
+                    if (status.getCode() == Status.Code.CANCELLED) {
+                        JOptionPane.showMessageDialog(null,
+                                "The request was cancelled.");}
+                    else if (status.getCode() == Status.Code.DEADLINE_EXCEEDED) {
+                        responseObserver.onError(Status.DEADLINE_EXCEEDED.
+                                withDescription("Request deadline exceeded").asRuntimeException());
                     } else if (status.getCode() == Status.Code.UNAUTHENTICATED) {
-                        responseObserver.onError(Status.UNAUTHENTICATED.withDescription("Unauthenticated request").asRuntimeException());
+                        responseObserver.onError(Status.UNAUTHENTICATED.
+                                withDescription("Unauthenticated request").asRuntimeException());
                     } else {
                         responseObserver.onError(e);
                     }
