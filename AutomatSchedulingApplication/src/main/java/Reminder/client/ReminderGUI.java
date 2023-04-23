@@ -5,10 +5,8 @@ import GUI.MainGUI;
 import Reminder.ds.service3.ReminderId;
 import Reminder.ds.service3.ResponseMessage;
 import Reminder.ds.service3.Service3Grpc;
-import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
-import io.grpc.Status;
-import io.grpc.StatusRuntimeException;
+import io.grpc.*;
+import io.grpc.stub.MetadataUtils;
 import io.grpc.stub.StreamObserver;
 
 import javax.jmdns.JmDNS;
@@ -111,6 +109,12 @@ public class ReminderGUI extends JFrame {
                         System.out.println("RPC get reminder to be invoked ...");
                         Service3Grpc.Service3BlockingStub service3BlockingStub = Service3Grpc.newBlockingStub(channel);
                         ReminderId build = ReminderId.newBuilder().addID(id).build();
+                        Metadata.Key<String> AUTHORIZATION_KEY = Metadata.Key.of("Authorization",
+                                Metadata.ASCII_STRING_MARSHALLER);
+                        // Create the metadata object
+                        Metadata metadata = new Metadata();
+                        metadata.put(AUTHORIZATION_KEY, "nice day");
+                        service3BlockingStub= MetadataUtils.attachHeaders(service3BlockingStub, metadata);
                         ResponseMessage response = service3BlockingStub.withDeadlineAfter(50,TimeUnit.SECONDS).getReminder(build);
                         String message = response.getMessage();
                         JOptionPane.showMessageDialog(null, message);
@@ -152,6 +156,12 @@ public class ReminderGUI extends JFrame {
                         Service3Grpc.Service3BlockingStub service3BlockingStub = Service3Grpc.newBlockingStub(channel);
                         // Here, we are calling the Remote reverseStream method. Using onNext, client sends a stream of messages.
                         ReminderId request = ReminderId.newBuilder().addID(id).build();
+                        Metadata.Key<String> AUTHORIZATION_KEY = Metadata.Key.of("Authorization",
+                                Metadata.ASCII_STRING_MARSHALLER);
+                        // Create the metadata object
+                        Metadata metadata = new Metadata();
+                        metadata.put(AUTHORIZATION_KEY, "nice day");
+                        service3BlockingStub= MetadataUtils.attachHeaders(service3BlockingStub, metadata);
                         ResponseMessage responseMessage = service3BlockingStub.withDeadlineAfter(50,TimeUnit.SECONDS).deleteReminder(request);
                         JOptionPane.showMessageDialog(null,responseMessage.getMessage());
                     }catch (StatusRuntimeException ex) {

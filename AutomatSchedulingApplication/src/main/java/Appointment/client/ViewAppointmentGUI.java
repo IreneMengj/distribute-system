@@ -5,10 +5,8 @@ import Appointment.ds.service2.Service2Grpc;
 import Appointment.ds.service2.eventId;
 import GUI.MainGUI;
 import Login.ds.service1.Service1Grpc;
-import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
-import io.grpc.Status;
-import io.grpc.StatusRuntimeException;
+import io.grpc.*;
+import io.grpc.stub.MetadataUtils;
 
 import javax.jmdns.JmDNS;
 import javax.jmdns.ServiceInfo;
@@ -146,6 +144,12 @@ public class ViewAppointmentGUI extends JFrame {
                         Service2Grpc.Service2BlockingStub blockingStub = Service2Grpc.newBlockingStub(channel);
                         eventId request = eventId.newBuilder().setId(id).build();
                         System.out.println("RPC delete appointment to be invoked ...");
+                        Metadata.Key<String> AUTHORIZATION_KEY = Metadata.Key.of("Authorization",
+                                Metadata.ASCII_STRING_MARSHALLER);
+                        // Create the metadata object
+                        Metadata metadata = new Metadata();
+                        metadata.put(AUTHORIZATION_KEY, "nice day");
+                        blockingStub= MetadataUtils.attachHeaders(blockingStub, metadata);
                         ResponseMessage responseMessage = blockingStub.withDeadlineAfter(5,TimeUnit.SECONDS).deleteEvent(request);
                         int code = responseMessage.getCode();
                         if (code == 1) {
