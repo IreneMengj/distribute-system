@@ -30,7 +30,6 @@ public class Service3 extends Service3Grpc.Service3ImplBase {
         JmDNS jmdns = JmDNS.create();
         ServiceInfo serviceInfo = ServiceInfo.create("_grpc._tcp.local.", "service3", 50053, "");
         jmdns.registerService(serviceInfo);
-
         Service3 service3 = new Service3();
         Server server;
         try {
@@ -47,6 +46,7 @@ public class Service3 extends Service3Grpc.Service3ImplBase {
         StreamObserver<Reminder> requestObserver = new StreamObserver<Reminder>() {
             @Override
             public void onNext(Reminder reminder) {
+
                 Reminder r = new Reminder();
                 Reminder.Builder builder = r.toBuilder().setID(reminder.getID()).setYear(reminder.getYear()).setMonth(reminder.getMonth()).setDay(reminder.getDay()).setHour(reminder.getHour()).setMin(reminder.getMin()).setSec(reminder.getSec());
                 boolean add = Service3.list.add(builder);
@@ -132,20 +132,27 @@ public class Service3 extends Service3Grpc.Service3ImplBase {
                     }
                     String day = b.getDay();
                     String hour = b.getHour();
+                    if (hour.length() == 1) {
+                        hour = "0" + hour;
+                    }
                     String min = b.getMin();
+                    if (min.length() == 1) {
+                        min = "0" + min;
+                    }
                     String sec = b.getSec();
                     if (sec.length() == 1) {
                         sec = "0" + sec;
                     }
                     String reminderTime = year + "-" + month + "-" + "03" + " " + hour + ":" + min + ":" + sec; // Set the time when the prompt is triggered
                     LocalDateTime now = LocalDateTime.now();
+
                     String format = "yyyy-MM-dd HH:mm:ss"; // Specifies the date-time format
                     LocalDateTime parse = LocalDateTime.parse(reminderTime, DateTimeFormatter.ofPattern(format));
                     ResponseMessage reply;
                     if (now.isAfter(parse)) {
+                        reply = ResponseMessage.newBuilder().setMessage("This task has passed!").build();}
+                    else if(now.isBefore(parse)){
                         reply = ResponseMessage.newBuilder().setMessage("This task is not now!").build();
-                    } else if(now.isBefore(parse)){
-                        reply = ResponseMessage.newBuilder().setMessage("This task has past!").build();
                     }
                     else {
                         reply = ResponseMessage.newBuilder().setMessage("It's time to do this task!").build();

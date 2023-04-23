@@ -6,10 +6,8 @@ import Appointment.ds.service2.ResponseMessage;
 import Appointment.ds.service2.Service2Grpc;
 
 
-import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
-import io.grpc.Status;
-import io.grpc.StatusRuntimeException;
+import io.grpc.*;
+import io.grpc.stub.MetadataUtils;
 
 import javax.jmdns.JmDNS;
 import javax.jmdns.ServiceInfo;
@@ -20,6 +18,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Iterator;
+import java.util.concurrent.TimeUnit;
 
 public class AddAppointmentGUI extends JFrame {
     private static int nextId = 1;
@@ -125,7 +124,7 @@ public class AddAppointmentGUI extends JFrame {
                         System.out.println("RPC add appointment to be invoked ...");
 
                         // Get the response code from the gRPC service
-                        Iterator<Response> response = blockingStub.addEvent(request);
+                        Iterator<Response> response = blockingStub.withDeadlineAfter(50, TimeUnit.SECONDS).addEvent(request);
                         int code = response.next().getCode();
                         String reply;
                         if (code == 1) {
@@ -149,7 +148,14 @@ public class AddAppointmentGUI extends JFrame {
                         System.out.println("RPC edit appointment to be invoked ...");
 
                         // Get the response code from the gRPC service
-                        ResponseMessage responseMessage = blockingStub.updateEvent(request);
+                        Metadata.Key<String> AUTHORIZATION_KEY = Metadata.Key.of("Authorization",
+                                Metadata.ASCII_STRING_MARSHALLER);
+                        // Create the metadata object
+                        Metadata metadata = new Metadata();
+                        metadata.put(AUTHORIZATION_KEY, "nice day");
+                        blockingStub= MetadataUtils.attachHeaders(blockingStub, metadata);
+                        ResponseMessage responseMessage = blockingStub.withDeadlineAfter(
+                                50,TimeUnit.SECONDS).updateEvent(request);
                         int code = responseMessage.getCode();
                         String reply;
                         if (code == 1) {

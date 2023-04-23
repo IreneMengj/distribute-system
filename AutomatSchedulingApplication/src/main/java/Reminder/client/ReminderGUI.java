@@ -111,10 +111,22 @@ public class ReminderGUI extends JFrame {
                         System.out.println("RPC get reminder to be invoked ...");
                         Service3Grpc.Service3BlockingStub service3BlockingStub = Service3Grpc.newBlockingStub(channel);
                         ReminderId build = ReminderId.newBuilder().addID(id).build();
-                        ResponseMessage response = service3BlockingStub.getReminder(build);
+                        ResponseMessage response = service3BlockingStub.withDeadlineAfter(50,TimeUnit.SECONDS).getReminder(build);
                         String message = response.getMessage();
                         JOptionPane.showMessageDialog(null, message);
-                    } finally {
+                    } catch (StatusRuntimeException ex) {
+                        // Handle exception related to deadlines, metadata, or authentication
+                        Status status = ex.getStatus();
+                        if (status.getCode() == Status.Code.CANCELLED) {
+                            JOptionPane.showMessageDialog(null, "The request was cancelled.");}
+                        else if (status.getCode() == Status.Code.DEADLINE_EXCEEDED) {
+                            JOptionPane.showMessageDialog(null, "Request deadline exceeded");
+                        } else if (status.getCode() == Status.Code.UNAUTHENTICATED) {
+                            JOptionPane.showMessageDialog(null, "Unauthenticated request");
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Error caught"+ex.getMessage());
+                        }
+                    }finally {
                         channel.shutdown();
                         try {
                             channel.awaitTermination(5, TimeUnit.SECONDS);
@@ -140,7 +152,7 @@ public class ReminderGUI extends JFrame {
                         Service3Grpc.Service3BlockingStub service3BlockingStub = Service3Grpc.newBlockingStub(channel);
                         // Here, we are calling the Remote reverseStream method. Using onNext, client sends a stream of messages.
                         ReminderId request = ReminderId.newBuilder().addID(id).build();
-                        ResponseMessage responseMessage = service3BlockingStub.deleteReminder(request);
+                        ResponseMessage responseMessage = service3BlockingStub.withDeadlineAfter(50,TimeUnit.SECONDS).deleteReminder(request);
                         JOptionPane.showMessageDialog(null,responseMessage.getMessage());
                     }catch (StatusRuntimeException ex) {
                         // Handle exception related to deadlines, metadata, or authentication

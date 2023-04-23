@@ -1,16 +1,15 @@
 package Appointment.service;
 
 import Appointment.ds.service2.*;
-import io.grpc.Server;
-import io.grpc.ServerBuilder;
-import io.grpc.Status;
-import io.grpc.StatusRuntimeException;
+import io.grpc.*;
+import io.grpc.stub.MetadataUtils;
 import io.grpc.stub.StreamObserver;
 
 import javax.jmdns.JmDNS;
 import javax.jmdns.ServiceInfo;
 import javax.swing.*;
 import java.io.IOException;
+import java.net.SocketAddress;
 import java.util.ArrayList;
 
 
@@ -21,6 +20,9 @@ public class Service2 extends Service2Grpc.Service2ImplBase {
         ServiceInfo serviceInfo = ServiceInfo.create("_grpc._tcp.local.", "service2", 50052, "");
         jmdns.registerService(serviceInfo);
         // Start gRPC server
+        // Create the captureMetadata interceptor to capture metadata from the client request
+        Metadata.Key<String> customKey = Metadata.Key.of("Authentication", Metadata.ASCII_STRING_MARSHALLER);
+
         Service2 service2 = new Service2();
         Server server = ServerBuilder.forPort(serviceInfo.getPort())
                 .addService(service2)
@@ -73,6 +75,7 @@ public class Service2 extends Service2Grpc.Service2ImplBase {
     @Override
     public void updateEvent(Appointment request, StreamObserver<ResponseMessage> responseObserver) {
         try {
+            // Get the authorization metadata from the client request
             int id = request.getId();
             String title = request.getTitle();
             String occurTime = request.getOccurTime();

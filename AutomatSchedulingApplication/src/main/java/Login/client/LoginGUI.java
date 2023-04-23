@@ -87,7 +87,8 @@ public class LoginGUI extends JFrame implements ActionListener {
                 try {
                     mainGUI.showMainGUI();
                 }catch (NullPointerException ex){
-                    JOptionPane.showMessageDialog(null,"Error caught: "+ex.getMessage());
+                    JOptionPane.showMessageDialog(null,
+                            "Error caught: "+ex.getMessage());
                 }
             }
         });

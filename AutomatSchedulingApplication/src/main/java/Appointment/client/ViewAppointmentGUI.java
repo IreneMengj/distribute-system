@@ -146,7 +146,7 @@ public class ViewAppointmentGUI extends JFrame {
                         Service2Grpc.Service2BlockingStub blockingStub = Service2Grpc.newBlockingStub(channel);
                         eventId request = eventId.newBuilder().setId(id).build();
                         System.out.println("RPC delete appointment to be invoked ...");
-                        ResponseMessage responseMessage = blockingStub.deleteEvent(request);
+                        ResponseMessage responseMessage = blockingStub.withDeadlineAfter(5,TimeUnit.SECONDS).deleteEvent(request);
                         int code = responseMessage.getCode();
                         if (code == 1) {
                             JOptionPane.showMessageDialog(null, "Delete successfully.");
